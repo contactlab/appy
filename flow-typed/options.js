@@ -2,7 +2,14 @@
 
 declare type RequestOptions = {
   method: 'GET' | 'POST' | 'PUT' | 'DELETE',
-  headers: StaticHeaders & ConfigHeaders,
   mode: string,
-  body?: string | Object | any[]
+  headers: Headers,
+  body ? : string | Object | any[]
+}
+
+declare type OptionsConfig = {
+  method: 'GET' | 'POST' | 'PUT' | 'DELETE',
+  mode: string,
+  headers: HeadersConfig,
+  body ? : string | Object | any[]
 }
