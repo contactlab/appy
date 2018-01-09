@@ -1,0 +1,20 @@
+import test from 'ava';
+import sinon from 'sinon';
+import {
+  get
+} from '../index';
+
+const URI = 'my/api/endpoint';
+const MODE = 'cors';
+const HEADERS = {
+  'Accept': 'application/json',
+  'Content-type': 'application/json'
+};
+
+test.before('mock fetch', () => {
+  global.fetch = fakeFetch;
+});
+
+test('prova', t => {
+  console.log('prova')
+});
