@@ -1,0 +1,18 @@
+{
+  "name": "api-lib",
+  "version": "0.0.1",
+  "description": "Simple and modular api calls",
+  "main": "index.js",
+  "author": "Laura Santalucia",
+  "license": "MIT",
+  "scripts": {
+    "flow": "flow"
+  },
+  "dependencies": {
+    "ava": "0.24.0",
+    "flow-bin": "0.63.1",
+    "nyc": "11.4.1",
+    "sinon": "^4.1.4",
+    "whatwg-fetch": "^2.0.3"
+  }
+}
