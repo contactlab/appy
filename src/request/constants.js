@@ -1,6 +1,6 @@
 // @flow
 
-export const HEADERS: StaticHeaders = {
+export const HEADERS: DefaultHeaders = {
   'Accept': 'application/json',
   'Content-type': 'application/json'
 }
