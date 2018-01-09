@@ -29,6 +29,6 @@ const evolveHeadersAndBody = (o: OptionsConfig): Maybe < RequestOptions > =>
 
 export default (o: OptionsConfig): RequestOptions =>
   Maybe.fromNullable(o)
-  .orElse(() => Maybe.of(DEFAULTS))
+  .orElse(() => Maybe.of({}))
   .chain(evolveHeadersAndBody)
   .get();
