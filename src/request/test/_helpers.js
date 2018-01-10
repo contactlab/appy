@@ -4,7 +4,3 @@ export const response = (data, success, status) => ({
   ok: success,
   status: status || (success ? 200 : 500)
 });
-
-export const fakeFetch = () => ({
-  then: f => f(response({}, true))
-});

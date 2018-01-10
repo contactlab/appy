@@ -1,26 +1,22 @@
 import test from 'ava';
 import sinon from 'sinon';
 import myFetch from '../index';
-import {
-  fakeFetch
-} from './_helpers';
 
-const URI = 'my/api/endpoint';
+const URI = 'http://me';
 const MODE = 'cors';
 const HEADERS = {
   'Accept': 'application/json',
   'Content-type': 'application/json'
 };
-
-test.before('mock "fetch"', t => {
-  global.fetch = fakeFetch;
-});
+const handleError = t => e => {
+  t.is(e.name, 'FetchError');
+}
 
 test.beforeEach('provide spy on "fetch"', t => {
   t.context.spy = sinon.spy(global, 'fetch');
 });
 
-test.afterEach('provide spy on "fetch"', t => {
+test.afterEach('restore spy on "fetch"', t => {
   t.context.spy.restore();
 });
 
@@ -32,7 +28,7 @@ test('methods exist', t => {
 });
 
 test('.get()', t => {
-  myFetch.get(URI);
+  myFetch.get(URI).catch(handleError(t));
   t.true(t.context.spy.calledWith(URI, {
     method: 'GET',
     mode: 'cors',
@@ -50,7 +46,7 @@ test('.get() with some header', t => {
         'Custom-Header': 'custom-header'
       }
     }
-  });
+  }).catch(handleError(t));
   t.true(t.context.spy.calledWith(URI, {
     method: 'GET',
     mode: 'cors',
@@ -67,7 +63,7 @@ test('.post() with token', t => {
     headers: {
       token: 'myToken'
     }
-  });
+  }).catch(handleError(t));
   t.true(t.context.spy.calledWith(URI, {
     method: 'POST',
     mode: 'cors',
@@ -87,7 +83,7 @@ test('.put() with body', t => {
     body: {
       a: 1
     }
-  });
+  }).catch(handleError(t));
   t.true(t.context.spy.calledWith(URI, {
     method: 'PUT',
     mode: 'cors',
@@ -101,7 +97,7 @@ test('.put() with body', t => {
 });
 
 test('.delete()', t => {
-  myFetch.delete(URI);
+  myFetch.delete(URI).catch(handleError(t));
   t.true(t.context.spy.calledWith(URI, {
     method: 'DELETE',
     mode: 'cors',

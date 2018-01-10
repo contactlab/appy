@@ -1,8 +1,8 @@
 // @flow
 
+import 'isomorphic-fetch';
 import type { InitOptionsConfig } from './lib/options';
 import type { NormalizedResponse } from './lib/handle-response';
-import 'whatwg-fetch';
 import options from './lib/options';
 import handleResponse from './lib/handle-response';
 
