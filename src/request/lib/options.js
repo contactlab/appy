@@ -3,7 +3,6 @@
 import Maybe from 'data.maybe';
 import headers from './headers';
 import {
-  METHOD_GET,
   MODE
 } from '../constants';
 
@@ -27,7 +26,7 @@ const withMethod = (method: string) => (o: InitOptionsConfig): OptionsConfig => 
 });
 
 
-export default (method: string = METHOD_GET) => (o: ?InitOptionsConfig): RequestOptions =>
+export default (method: string = 'GET') => (o: ?InitOptionsConfig): RequestOptions =>
   Maybe.fromNullable(o)
     .orElse(() => Maybe.of({}))
     .chain(evolveHeadersAndBody)

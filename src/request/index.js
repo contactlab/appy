@@ -3,12 +3,6 @@
 import 'whatwg-fetch';
 import options from './lib/options';
 import handleResponse from './lib/handle-response';
-import {
-  METHOD_GET,
-  METHOD_POST,
-  METHOD_PUT,
-  METHOD_DELETE
-} from './constants';
 
 const f = (method: string) => {
   const opts = options(method);
@@ -18,8 +12,8 @@ const f = (method: string) => {
 }
 
 export default {
-  get: f(METHOD_GET),
-  post: f(METHOD_POST),
-  put: f(METHOD_PUT),
-  delete: f(METHOD_DELETE)
+  get: f('GET'),
+  post: f('POST'),
+  put: f('PUT'),
+  delete: f('DELETE')
 };
