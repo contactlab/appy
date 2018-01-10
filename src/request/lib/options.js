@@ -1,10 +1,24 @@
 // @flow
 
+import type { Headers, HeadersConfig } from './headers';
 import Maybe from 'data.maybe';
 import headers from './headers';
 import {
   MODE
 } from '../constants';
+
+type OptionsConfig = {
+  method: string,
+  mode: string,
+  headers: HeadersConfig,
+  body?: string | Object | any[]
+}
+
+export type InitOptionsConfig = {
+  mode: string,
+  headers: HeadersConfig,
+  body?: string | Object | any[]
+}
 
 const withHeaders = o => ({
   mode: MODE,

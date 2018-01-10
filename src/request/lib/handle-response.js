@@ -1,5 +1,14 @@
 // @flow
 
+type Payload = {
+  message?: string
+}
+
+export type NormalizedResponse = {
+  status: number,
+  payload: Payload
+}
+
 const toPayload = (t: string): Payload => {
   try {
     return JSON.parse(t);

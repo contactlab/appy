@@ -4,47 +4,66 @@ import Maybe from 'data.maybe';
 import {
   HEADERS,
   HEADER_ID,
-  HEADER_VERSION,
-  HEADER_TOKEN
+  HEADER_VERSION
 } from '../constants';
 
-const simpleHeader = (key: string, value: ? string) => (headers: Headers): Maybe < Headers > =>
+type DefaultHeaders = {
+  'Accept': string,
+  'Content-type': string
+}
+
+type CustomHeaders = {
+  'Contactlab-ClientId'?: string,
+  'Contactlab-ClientVersion'?: string,
+  'Authorization'?: string
+};
+
+export type Headers = DefaultHeaders & CustomHeaders;
+
+export type HeadersConfig = {
+  id?: string,
+  version?: string,
+  token?: string,
+  custom?: Object
+}
+
+const simpleHeader = (key: string, value: ?string) => (headers: Headers): Maybe<Headers> =>
   Maybe.fromNullable(value)
-  .map(v => ({
-    ...headers,
-    [key]: value
-  }))
-  .orElse(() => Maybe.of(headers));
+    .map(v => ({
+      ...headers,
+      [key]: value
+    }))
+    .orElse(() => Maybe.of(headers));
 
-const tokenHeader = (t: ? string) => (headers: Headers): Maybe < Headers > =>
+const tokenHeader = (t: ?string) => (headers: Headers): Maybe<Headers> =>
   Maybe.fromNullable(t)
-  .map(v => ({
-    ...headers,
-    [HEADER_TOKEN]: `Bearer ${v}`
-  }))
-  .orElse(() => Maybe.of(headers));
+    .map(v => ({
+      ...headers,
+      'Authorization': `Bearer ${v}`
+    }))
+    .orElse(() => Maybe.of(headers));
 
-const extraHeaders = (o: ? Object) => (headers: Headers): Maybe < Headers > =>
+const extraHeaders = (o: ?Object) => (headers: Headers): Maybe<Headers> =>
   Maybe.fromNullable(o)
-  .map(v => ({
-    ...headers,
-    ...v
-  }))
-  .orElse(() => Maybe.of(headers));
+    .map(v => ({
+      ...headers,
+      ...v
+    }))
+    .orElse(() => Maybe.of(headers));
 
 const headers = ({
     id,
-    version,
-    token,
-    extra
-  }): Maybe < Headers > =>
+  version,
+  token,
+  extra
+  }): Maybe<Headers> =>
   Maybe.of(HEADERS)
-  .chain(simpleHeader(HEADER_ID, id))
-  .chain(simpleHeader(HEADER_VERSION, version))
-  .chain(tokenHeader(token))
-  .chain(extraHeaders(extra));
+    .chain(simpleHeader(HEADER_ID, id))
+    .chain(simpleHeader(HEADER_VERSION, version))
+    .chain(tokenHeader(token))
+    .chain(extraHeaders(extra));
 
-export default (config: ? HeadersConfig): Headers =>
+export default (config: ?HeadersConfig): Headers =>
   Maybe.fromNullable(config)
-  .chain(headers)
-  .getOrElse(HEADERS);
+    .chain(headers)
+    .getOrElse(HEADERS);
