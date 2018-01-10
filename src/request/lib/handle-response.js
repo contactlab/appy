@@ -10,12 +10,12 @@ const toPayload = (t: string): Payload => {
   }
 };
 
-const normalize = (ok: boolean, status: number) => (payload: Payload): NomarlizedResponse =>
+const normalize = (ok: boolean, status: number) => (payload: Payload): Promise<NormalizedResponse> =>
   ok
     ? Promise.resolve({ status, payload })
     : Promise.reject({ status, payload });
 
-export default (r: Response): Promise<NomarlizedResponse> =>
+export default (r: Response): Promise<NormalizedResponse> =>
   r.text()
     .then(toPayload)
     .then(normalize(r.ok, r.status));

@@ -17,7 +17,7 @@ declare type Payload = {
   message?: string
 }
 
-declare type NomarlizedResponse = {
+declare type NormalizedResponse = {
   status: number,
   payload: Payload
 }
