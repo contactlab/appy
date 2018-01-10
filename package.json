@@ -13,7 +13,7 @@
     "babel-core": "6.26.0",
     "babel-plugin-syntax-object-rest-spread": "6.13.0",
     "babel-plugin-transform-object-rest-spread": "6.26.0",
-    "babel-preset-es2015": "6.24.1",
+    "babel-preset-env": "1.6.1",
     "babel-preset-flow": "6.23.0",
     "babel-register": "6.26.0",
     "data.maybe": "1.2.2",
@@ -21,14 +21,14 @@
     "nyc": "11.4.1",
     "redux": "3.7.2",
     "sinon": "4.1.4",
-    "whatwg-fetch": "^2.0.3"
+    "whatwg-fetch": "2.0.3"
   },
   "babel": {
     "comments": false,
     "compact": true,
     "presets": [
       "flow",
-      "es2015"
+      "env"
     ],
     "plugins": [
       "syntax-object-rest-spread",
