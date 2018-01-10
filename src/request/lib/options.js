@@ -3,32 +3,33 @@
 import Maybe from 'data.maybe';
 import headers from './headers';
 import {
-  MODE,
-  METHOD_GET
+  METHOD_GET,
+  MODE
 } from '../constants';
 
-const DEFAULTS = {
-  method: METHOD_GET,
-  mode: MODE
-};
-
 const withHeaders = o => ({
-  ...DEFAULTS,
+  mode: MODE,
   ...o,
   headers: headers(o.headers)
 });
 
-const evolveHeadersAndBody = (o: OptionsConfig): Maybe < RequestOptions > =>
+const evolveHeadersAndBody = (o: OptionsConfig): Maybe<RequestOptions> =>
   Maybe.fromNullable(o.body)
-  .map(body => ({
-    ...withHeaders(o),
-    body: JSON.stringify(body)
-  }))
-  .orElse(() => Maybe.of(withHeaders(o)));
+    .map(body => ({
+      ...withHeaders(o),
+      body: JSON.stringify(body)
+    }))
+    .orElse(() => Maybe.of(withHeaders(o)));
+
+const withMethod = (method: string) => (o: InitOptionsConfig): OptionsConfig => ({
+  ...o,
+  method
+});
 
 
-export default (o: OptionsConfig): RequestOptions =>
+export default (method: string = METHOD_GET) => (o: ?InitOptionsConfig): RequestOptions =>
   Maybe.fromNullable(o)
-  .orElse(() => Maybe.of({}))
-  .chain(evolveHeadersAndBody)
-  .get();
+    .orElse(() => Maybe.of({}))
+    .chain(evolveHeadersAndBody)
+    .map(withMethod(method))
+    .get();

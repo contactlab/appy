@@ -10,14 +10,12 @@ import {
   METHOD_DELETE
 } from './constants';
 
-const withMethod = (method: string, o: InitOptionsConfig): OptionsConfig => ({
-  ...o,
-  method
-});
-
-const f = (method: string) => (uri: string, o: InitOptionsConfig): Promise<NormalizedResponse> =>
-  fetch(uri, options(withMethod(method, o)))
-    .then(handleResponse)
+const f = (method: string) => {
+  const opts = options(method);
+  return (uri: string, o: ?InitOptionsConfig): Promise<NormalizedResponse> =>
+    fetch(uri, opts(o))
+      .then(handleResponse)
+}
 
 export default {
   get: f(METHOD_GET),
