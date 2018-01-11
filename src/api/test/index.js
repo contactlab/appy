@@ -1,7 +1,6 @@
 import test from 'ava';
 import sinon from 'sinon';
 import api from '../index';
-import { fakeToken, fakeTokenClear } from './_helpers';
 
 const ENDPOINT = '/me';
 const baseUri = 'http://localhost:3000';
@@ -13,7 +12,6 @@ test.beforeEach('provide spy on "fetch"', t => {
 
 test.afterEach('provide spy on "fetch"', t => {
   t.context.spy.restore();
-  fakeTokenClear();
 });
 
 test('methods exist', t => {
