@@ -21,16 +21,17 @@
     "isomorphic-fetch": "2.2.1"
   },
   "devDependencies": {
-    "flow-bin": "0.63.1",
-    "nyc": "11.4.1",
     "ava": "0.24.0",
+    "babel-cli": "6.26.0",
     "babel-core": "6.26.0",
     "babel-plugin-syntax-object-rest-spread": "6.13.0",
     "babel-plugin-transform-object-rest-spread": "6.26.0",
     "babel-preset-env": "1.6.1",
     "babel-preset-flow": "6.23.0",
     "babel-register": "6.26.0",
+    "flow-bin": "0.63.1",
     "flow-copy-source": "1.2.1",
+    "nyc": "11.4.1",
     "sinon": "4.1.4"
   },
   "babel": {
