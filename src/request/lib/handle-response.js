@@ -4,7 +4,7 @@ type Payload = {
   message?: string
 }
 
-export type NormalizedResponse = {
+export type NormResponse = {
   status: number,
   payload: Payload
 }
@@ -19,12 +19,12 @@ const toPayload = (t: string): Payload => {
   }
 };
 
-const normalize = (ok: boolean, status: number) => (payload: Payload): Promise<NormalizedResponse> =>
+const normalize = (ok: boolean, status: number) => (payload: Payload): Promise<NormResponse> =>
   ok
     ? Promise.resolve({ status, payload })
     : Promise.reject({ status, payload });
 
-export default (r: Response): Promise<NormalizedResponse> =>
+export default (r: Response): Promise<NormResponse> =>
   r.text()
     .then(toPayload)
     .then(normalize(r.ok, r.status));

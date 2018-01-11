@@ -1,14 +1,15 @@
 // @flow
 
+import type { Init } from './lib/options';
+import type { NormResponse } from './lib/handle-response';
+
 import 'isomorphic-fetch';
-import type { InitOptionsConfig } from './lib/options';
-import type { NormalizedResponse } from './lib/handle-response';
 import options from './lib/options';
 import handleResponse from './lib/handle-response';
 
 const f = (method: string) => {
   const opts = options(method);
-  return (uri: string, o: ?InitOptionsConfig): Promise<NormalizedResponse> =>
+  return (uri: string, o: ?Init): Promise<NormResponse> =>
     fetch(uri, opts(o))
       .then(handleResponse)
 }

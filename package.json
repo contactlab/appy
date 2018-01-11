@@ -2,14 +2,27 @@
   "name": "api-lib",
   "version": "0.0.1",
   "description": "Simple and modular api calls",
-  "main": "index.js",
+  "main": "dist/index.js",
   "author": "Laura Santalucia",
   "license": "MIT",
+  "files": [
+    "dist"
+  ],
   "scripts": {
+    "pretest": "flow",
     "test": "nyc ava",
-    "flow-copy": "flow-copy-source -v src/ flow-typed/"
+    "flow-copy": "flow-copy-source -v src dist",
+    "build": "babel src -d dist",
+    "postbuild": "yarn run flow-copy",
+    "prepublish": "yarn run build"
   },
   "dependencies": {
+    "data.maybe": "1.2.2",
+    "isomorphic-fetch": "2.2.1"
+  },
+  "devDependencies": {
+    "flow-bin": "0.63.1",
+    "nyc": "11.4.1",
     "ava": "0.24.0",
     "babel-core": "6.26.0",
     "babel-plugin-syntax-object-rest-spread": "6.13.0",
@@ -17,12 +30,7 @@
     "babel-preset-env": "1.6.1",
     "babel-preset-flow": "6.23.0",
     "babel-register": "6.26.0",
-    "data.maybe": "1.2.2",
-    "flow-bin": "0.63.1",
     "flow-copy-source": "1.2.1",
-    "isomorphic-fetch": "2.2.1",
-    "nyc": "11.4.1",
-    "redux": "3.7.2",
     "sinon": "4.1.4"
   },
   "babel": {
@@ -42,10 +50,15 @@
       "./src/**/test/*.js"
     ],
     "failFast": true,
-    "failWithouAssertions": false,
+    "failWithoutAssertions": true,
     "babel": "inherit",
     "require": [
       "babel-register"
+    ]
+  },
+  "nyc": {
+    "exclude": [
+      "**/test/*.js"
     ]
   }
 }

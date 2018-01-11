@@ -1,20 +1,19 @@
 // @flow
 
 import type { Headers, HeadersConfig } from './headers';
+
 import Maybe from 'data.maybe';
 import headers from './headers';
 import {
   MODE
 } from '../constants';
 
-type OptionsConfig = {
-  method: string,
-  mode: string,
-  headers: HeadersConfig,
-  body?: string | Object | any[]
+type Options = Init & {
+  method: string
 }
 
-export type InitOptionsConfig = {
+export type Init = {
+  method?: string,
   mode: string,
   headers: HeadersConfig,
   body?: string | Object | any[]
@@ -26,7 +25,7 @@ const withHeaders = o => ({
   headers: headers(o.headers)
 });
 
-const evolveHeadersAndBody = (o: OptionsConfig): Maybe<RequestOptions> =>
+const evolveHeadersAndBody = (o: Options): Maybe<RequestOptions> =>
   Maybe.fromNullable(o.body)
     .map(body => ({
       ...withHeaders(o),
@@ -34,13 +33,19 @@ const evolveHeadersAndBody = (o: OptionsConfig): Maybe<RequestOptions> =>
     }))
     .orElse(() => Maybe.of(withHeaders(o)));
 
-const withMethod = (method: string) => (o: InitOptionsConfig): OptionsConfig => ({
-  ...o,
-  method
-});
+const withMethod = (method: ?string) => (o: Init): Options => 
+  Maybe.fromNullable(method)
+    .map(m => ({
+      ...o,
+      method
+    }))
+    .getOrElse({
+      ...o,
+      method: 'GET'
+    });
 
 
-export default (method: string = 'GET') => (o: ?InitOptionsConfig): RequestOptions =>
+export default (method: ?string) => (o: ?Init): RequestOptions =>
   Maybe.fromNullable(o)
     .orElse(() => Maybe.of({}))
     .chain(evolveHeadersAndBody)

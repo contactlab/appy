@@ -1,11 +1,11 @@
 // @flow
 
-import type { InitOptionsConfig } from '../request/lib/options';
+import type { Init } from '../request/lib/options';
 import request from '../request';
 
-type ApiConfig = {
+type Config = {
   baseUri: string,
-  options?: InitOptionsConfig
+  options?: Init
 };
 
 type Api = {
@@ -14,7 +14,7 @@ type Api = {
 
 const concatStrings = (s1: string, s2: string): string => `${s1}${s2}`;
 
-const api = ({ baseUri, options }: ApiConfig): Api =>
+const api = ({ baseUri, options }: Config): Api =>
   Object.keys(request)
     .reduce((acc, key) => ({
       ...acc,
