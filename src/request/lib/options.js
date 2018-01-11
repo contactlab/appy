@@ -4,23 +4,19 @@ import type { Headers, HeadersConfig } from './headers';
 
 import Maybe from 'data.maybe';
 import headers from './headers';
-import {
-  MODE
-} from '../constants';
 
 type Options = Init & {
-  method: string
+  method: string,
+  mode: 'cors'
 }
 
 export type Init = {
-  method?: string,
-  mode: string,
   headers: HeadersConfig,
   body?: string | Object | any[]
 }
 
 const withHeaders = o => ({
-  mode: MODE,
+  mode: 'cors',
   ...o,
   headers: headers(o.headers)
 });

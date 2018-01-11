@@ -5,5 +5,3 @@ export const HEADERS = {
 
 export const HEADER_ID = 'Contactlab-ClientId';
 export const HEADER_VERSION = 'Contactlab-ClientVersion';
-
-export const MODE = 'cors';
