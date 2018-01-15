@@ -19,7 +19,7 @@ const toPayload = (t: string): Payload => {
   }
 };
 
-const normalize = (ok: boolean, status: number) => (payload: Payload): Promise<NormResponse> =>
+const normalize = ({ok, status}: Response) => (payload: Payload): Promise<NormResponse> =>
   ok
     ? Promise.resolve({ status, payload })
     : Promise.reject({ status, payload });
@@ -27,4 +27,4 @@ const normalize = (ok: boolean, status: number) => (payload: Payload): Promise<N
 export default (r: Response): Promise<NormResponse> =>
   r.text()
     .then(toPayload)
-    .then(normalize(r.ok, r.status));
+    .then(normalize(r));

@@ -7,12 +7,10 @@ import 'isomorphic-fetch';
 import options from './lib/options';
 import handleResponse from './lib/handle-response';
 
-const f = (method: string) => {
-  const opts = options(method);
-  return (uri: string, o: ?Init): Promise<NormResponse> =>
-    fetch(uri, opts(o))
-      .then(handleResponse)
-}
+const f = (method: string) => 
+  (uri: string, o: ?Init): Promise<NormResponse> =>
+    fetch(uri, options(method)(o))
+      .then(handleResponse);
 
 export default {
   get: f('GET'),
