@@ -2,17 +2,26 @@
 
 import Maybe from 'data.maybe';
 
+type RequestBody = string | URLSearchParams | FormData | Blob | ArrayBuffer | $ArrayBufferView;
+
+type Method = 'GET' | 'POST' | 'PUT' | 'DELETE';
+
 export type Init = {
   headers: Object,
-  body?: string | Object | any[]
+  body?: RequestBody;
 }
 
 type Options = Init & {
-  method: string,
+  method: Method,
   mode: 'cors'
 }
 
-const withMethodAndMode = (method: ?string) => (o: Init): Maybe<RequestOptions> => 
+const DEFAULT_HEADERS = {
+  'Accept': 'application/json',
+  'Content-type': 'application/json'
+};
+
+const withMethodAndMode = (method: ?string) => (o: Init): Maybe<RequestOptions> =>
   Maybe.fromNullable(method)
     .orElse(() => Maybe.of('GET'))
     .map(method => ({
@@ -21,11 +30,19 @@ const withMethodAndMode = (method: ?string) => (o: Init): Maybe<RequestOptions> 
       method
     }));
 
+const safeStringify = (x: RequestBody): string => {
+  try {
+    return JSON.stringify(x)
+  } catch (e) {
+    return '';
+  }
+};
+
 const evolveBody = (o: Options): Maybe<RequestOptions> =>
   Maybe.fromNullable(o.body)
     .map(body => ({
       ...o,
-      body: JSON.stringify(body)
+      body: safeStringify(body)
     }))
     .orElse(() => Maybe.of(o));
 
@@ -33,8 +50,7 @@ const secureHeaders = (o: Options): Maybe<RequestOptions> =>
   Maybe.fromNullable(o.headers)
     .orElse(() => Maybe.of({}))
     .map(h => ({
-      'Accept': 'application/json',
-      'Content-type': 'application/json',    
+      ...DEFAULT_HEADERS,
       ...h
     }))
     .map(headers => ({
@@ -44,7 +60,7 @@ const secureHeaders = (o: Options): Maybe<RequestOptions> =>
 
 
 
-const options = (method: string) => (o: ?Init): RequestOptions =>
+const options = (method: Method) => (o: ?Init): RequestOptions =>
   Maybe.fromNullable(o)
     .orElse(() => Maybe.of({}))
     .chain(withMethodAndMode(method))
