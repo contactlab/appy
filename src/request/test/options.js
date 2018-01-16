@@ -1,10 +1,8 @@
 import test from 'ava';
 import options from '../lib/options';
 
-const opts = options();
-
 test('default options', t => {
-  t.deepEqual(opts(), {
+  t.deepEqual(options()(), {
     method: 'GET',
     mode: 'cors',
     headers: {
@@ -12,7 +10,7 @@ test('default options', t => {
       'Content-type': 'application/json'
     }
   });
-  t.deepEqual(opts(null), {
+  t.deepEqual(options(null)(null), {
     method: 'GET',
     mode: 'cors',
     headers: {
@@ -23,12 +21,10 @@ test('default options', t => {
 });
 
 test('GET - token & extra headers', t => {
-  t.deepEqual(opts({
+  t.deepEqual(options('GET')({
     headers: {
-      token: 'myToken',
-      extra: {
-        'extra-value': '1'
-      }
+      'Authorization': 'Bearer myToken',
+      'extra-value': '1'
     }
   }), {
       method: 'GET',
@@ -47,7 +43,7 @@ test('POST - cors & id header', t => {
     method: 'POST',
     mode: 'opaque',
     headers: {
-      id: 'pluto'
+      'Contactlab-ClientId': 'pluto'
     }
   }), {
       method: 'POST',
@@ -64,7 +60,7 @@ test('PUT - body & version header', t => {
   t.deepEqual(options('PUT')({
     method: 'PUT',
     headers: {
-      version: '1.0.0'
+      'Contactlab-ClientVersion': '1.0.0'
     },
     body: {
       nome: 'pippo',

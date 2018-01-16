@@ -42,9 +42,7 @@ test('.get()', t => {
 test('.get() with some header', t => {
   myFetch.get(URI, {
     headers: {
-      extra: {
-        'Custom-Header': 'custom-header'
-      }
+      'Custom-Header': 'custom-header'
     }
   }).catch(handleError(t));
   t.true(t.context.spy.calledWith(URI, {
@@ -61,7 +59,7 @@ test('.get() with some header', t => {
 test('.post() with token', t => {
   myFetch.post(URI, {
     headers: {
-      token: 'myToken'
+      'Authorization': 'Bearer myToken'
     }
   }).catch(handleError(t));
   t.true(t.context.spy.calledWith(URI, {
@@ -78,7 +76,7 @@ test('.post() with token', t => {
 test('.put() with body', t => {
   myFetch.put(URI, {
     headers: {
-      token: 'myToken'
+      'Authorization': 'Bearer myToken'
     },
     body: {
       a: 1

@@ -12,9 +12,11 @@ const f = (method: string) =>
     fetch(uri, options(method)(o))
       .then(handleResponse);
 
-export default {
+const request = {
   get: f('GET'),
   post: f('POST'),
   put: f('PUT'),
   delete: f('DELETE')
 };
+
+export default request;

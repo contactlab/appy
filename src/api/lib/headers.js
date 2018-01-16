@@ -7,18 +7,13 @@ import {
   HEADER_VERSION
 } from '../constants';
 
-type DefaultHeaders = {
-  'Accept': string,
-  'Content-type': string
-}
-
 type CustomHeaders = {
   'Contactlab-ClientId'?: string,
   'Contactlab-ClientVersion'?: string,
   'Authorization'?: string
 };
 
-export type Headers = DefaultHeaders & CustomHeaders;
+type Headers = {};
 
 export type HeadersConfig = {
   id?: string,

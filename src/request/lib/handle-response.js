@@ -24,7 +24,9 @@ const normalize = ({ok, status}: Response) => (payload: Payload): Promise<NormRe
     ? Promise.resolve({ status, payload })
     : Promise.reject({ status, payload });
 
-export default (r: Response): Promise<NormResponse> =>
+const handleResponse = (r: Response): Promise<NormResponse> =>
   r.text()
     .then(toPayload)
     .then(normalize(r));
+
+export default handleResponse;

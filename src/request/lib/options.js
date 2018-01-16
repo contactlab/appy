@@ -1,49 +1,55 @@
 // @flow
 
-import type { Headers, HeadersConfig } from './headers';
-
 import Maybe from 'data.maybe';
-import headers from './headers';
+
+export type Init = {
+  headers: Object,
+  body?: string | Object | any[]
+}
 
 type Options = Init & {
   method: string,
   mode: 'cors'
 }
 
-export type Init = {
-  headers: HeadersConfig,
-  body?: string | Object | any[]
-}
-
-const withHeaders = o => ({
-  mode: 'cors',
-  ...o,
-  headers: headers(o.headers)
-});
-
-const evolveHeadersAndBody = (o: Options): Maybe<RequestOptions> =>
-  Maybe.fromNullable(o.body)
-    .map(body => ({
-      ...withHeaders(o),
-      body: JSON.stringify(body)
-    }))
-    .orElse(() => Maybe.of(withHeaders(o)));
-
-const withMethod = (method: ?string) => (o: Init): Options => 
+const withMethodAndMode = (method: ?string) => (o: Init): Maybe<RequestOptions> => 
   Maybe.fromNullable(method)
-    .map(m => ({
+    .orElse(() => Maybe.of('GET'))
+    .map(method => ({
+      mode: 'cors',
       ...o,
       method
-    }))
-    .getOrElse({
+    }));
+
+const evolveBody = (o: Options): Maybe<RequestOptions> =>
+  Maybe.fromNullable(o.body)
+    .map(body => ({
       ...o,
-      method: 'GET'
-    });
+      body: JSON.stringify(body)
+    }))
+    .orElse(() => Maybe.of(o));
+
+const secureHeaders = (o: Options): Maybe<RequestOptions> =>
+  Maybe.fromNullable(o.headers)
+    .orElse(() => Maybe.of({}))
+    .map(h => ({
+      'Accept': 'application/json',
+      'Content-type': 'application/json',    
+      ...h
+    }))
+    .map(headers => ({
+      ...o,
+      headers
+    }));
 
 
-export default (method: ?string) => (o: ?Init): RequestOptions =>
+
+const options = (method: string) => (o: ?Init): RequestOptions =>
   Maybe.fromNullable(o)
     .orElse(() => Maybe.of({}))
-    .chain(evolveHeadersAndBody)
-    .map(withMethod(method))
+    .chain(withMethodAndMode(method))
+    .chain(evolveBody)
+    .chain(secureHeaders)
     .get();
+
+export default options;
