@@ -16,11 +16,6 @@ type Options = Init & {
   mode: 'cors'
 }
 
-const DEFAULT_HEADERS = {
-  'Accept': 'application/json',
-  'Content-type': 'application/json'
-};
-
 const withMethodAndMode = (method: ?string) => (o: Init): Maybe<RequestOptions> =>
   Maybe.fromNullable(method)
     .orElse(() => Maybe.of('GET'))
@@ -49,10 +44,6 @@ const evolveBody = (o: Options): Maybe<RequestOptions> =>
 const secureHeaders = (o: Options): Maybe<RequestOptions> =>
   Maybe.fromNullable(o.headers)
     .orElse(() => Maybe.of({}))
-    .map(h => ({
-      ...DEFAULT_HEADERS,
-      ...h
-    }))
     .map(headers => ({
       ...o,
       headers

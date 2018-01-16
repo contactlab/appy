@@ -5,18 +5,12 @@ test('default options', t => {
   t.deepEqual(options()(), {
     method: 'GET',
     mode: 'cors',
-    headers: {
-      'Accept': 'application/json',
-      'Content-type': 'application/json'
-    }
+    headers: {}
   });
   t.deepEqual(options(null)(null), {
     method: 'GET',
     mode: 'cors',
-    headers: {
-      'Accept': 'application/json',
-      'Content-type': 'application/json'
-    }
+    headers: {}
   });
 });
 
@@ -30,8 +24,6 @@ test('GET - token & extra headers', t => {
       method: 'GET',
       mode: 'cors',
       headers: {
-        'Accept': 'application/json',
-        'Content-type': 'application/json',
         'Authorization': 'Bearer myToken',
         'extra-value': '1'
       }
@@ -49,8 +41,6 @@ test('POST - cors & id header', t => {
       method: 'POST',
       mode: 'opaque',
       headers: {
-        'Accept': 'application/json',
-        'Content-type': 'application/json',
         'Contactlab-ClientId': 'pluto'
       }
     })
@@ -70,10 +60,30 @@ test('PUT - body & version header', t => {
       method: 'PUT',
       mode: 'cors',
       headers: {
-        'Accept': 'application/json',
-        'Content-type': 'application/json',
         'Contactlab-ClientVersion': '1.0.0'
       },
       body: '{"nome":"pippo","cognome":"pluto"}'
+    })
+});
+
+test('PUT - incorrect body', t => {
+  const john = new Object();
+  const mary = new Object();
+  john.sister = mary;
+  mary.brother = john;
+
+  t.deepEqual(options('PUT')({
+    method: 'PUT',
+    headers: {
+      'Contactlab-ClientVersion': '1.0.0'
+    },
+    body: john
+  }), {
+      method: 'PUT',
+      mode: 'cors',
+      headers: {
+        'Contactlab-ClientVersion': '1.0.0'
+      },
+      body: ''
     })
 });

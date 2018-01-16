@@ -5,7 +5,8 @@ import type { Init } from '../../request/lib/options';
 import Maybe from 'data.maybe';
 import {
   HEADER_ID,
-  HEADER_VERSION
+  HEADER_VERSION,
+  DEFAULT_HEADERS
 } from '../constants';
 
 type Headers = {
@@ -31,6 +32,11 @@ export type HeadersConfig = {
   token: string
 }
 
+const addDefaults = h => ({
+  ...DEFAULT_HEADERS,
+  ...h
+});
+
 const addToken = (t: string) => (h: Headers): TokenHeader => ({
   ...h,
   'Authorization': `Bearer ${t}`
@@ -51,6 +57,7 @@ const customHeaders = ({
   }) => (o: Init): CustomInit =>
     Maybe.fromNullable(o.headers)
       .orElse(() => Maybe.of({}))
+      .map(addDefaults)
       .map(addToken(token))
       .map(addCustom(HEADER_ID, id))
       .map(addCustom(HEADER_VERSION, version))

@@ -32,10 +32,7 @@ test('.get()', t => {
   t.true(t.context.spy.calledWith(URI, {
     method: 'GET',
     mode: 'cors',
-    headers: {
-      'Accept': 'application/json',
-      'Content-type': 'application/json'
-    }
+    headers: {}
   }))
 });
 
@@ -49,8 +46,6 @@ test('.get() with some header', t => {
     method: 'GET',
     mode: 'cors',
     headers: {
-      'Accept': 'application/json',
-      'Content-type': 'application/json',
       'Custom-Header': 'custom-header'
     }
   }))
@@ -66,8 +61,6 @@ test('.post() with token', t => {
     method: 'POST',
     mode: 'cors',
     headers: {
-      'Accept': 'application/json',
-      'Content-type': 'application/json',
       'Authorization': 'Bearer myToken'
     }
   }))
@@ -86,8 +79,6 @@ test('.put() with body', t => {
     method: 'PUT',
     mode: 'cors',
     headers: {
-      'Accept': 'application/json',
-      'Content-type': 'application/json',
       'Authorization': 'Bearer myToken'
     },
     body: '{"a":1}'
@@ -99,9 +90,6 @@ test('.delete()', t => {
   t.true(t.context.spy.calledWith(URI, {
     method: 'DELETE',
     mode: 'cors',
-    headers: {
-      'Accept': 'application/json',
-      'Content-type': 'application/json'
-    }
+    headers: {}
   }))
 });
