@@ -4,7 +4,7 @@ import Maybe from 'data.maybe';
 
 type RequestBody = string | URLSearchParams | FormData | Blob | ArrayBuffer | $ArrayBufferView;
 
-type Method = 'GET' | 'POST' | 'PUT' | 'DELETE';
+export type Method = 'GET' | 'POST' | 'PUT' | 'DELETE';
 
 export type Init = {
   headers: Object,

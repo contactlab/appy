@@ -1,13 +1,13 @@
 // @flow
 
-import type { Init } from './lib/options';
+import type { Init, Method } from './lib/options';
 import type { NormResponse } from './lib/handle-response';
 
 import 'isomorphic-fetch';
 import options from './lib/options';
 import handleResponse from './lib/handle-response';
 
-const f = (method: string) => 
+const f = (method: Method) =>
   (uri: string, o: ?Init): Promise<NormResponse> =>
     fetch(uri, options(method)(o))
       .then(handleResponse);
