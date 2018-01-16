@@ -1514,6 +1514,10 @@ formatio@1.2.0, formatio@^1.2.0:
   dependencies:
     samsam "1.x"
 
+fp-ts@0.6.8:
+  version "0.6.8"
+  resolved "https://registry.yarnpkg.com/fp-ts/-/fp-ts-0.6.8.tgz#3b4ac3251f3565b2aefceffd787eb06c30c04b52"
+
 fs-extra@^3.0.1:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/fs-extra/-/fs-extra-3.0.1.tgz#3794f378c58b342ea7dbbb23095109c4b3b62291"

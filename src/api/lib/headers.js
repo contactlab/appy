@@ -1,8 +1,9 @@
 // @flow
 
 import type { Init } from '../../request/lib/options';
+import type { Option } from 'fp-ts/lib/Option.js.flow';
 
-import Maybe from 'data.maybe';
+import { fromNullable, some, getOrElseValue } from 'fp-ts/lib/Option';
 import {
   HEADER_ID,
   HEADER_VERSION,
@@ -41,20 +42,20 @@ const addDefaults = (t: string) => (h: Headers): DefaultHeaders => ({
 });
 
 const addCustom = (key: string, value: ?string) => (h: DefaultHeaders): CustomHeaders =>
-  Maybe.fromNullable(value)
+  fromNullable(value)
     .map(v => ({
       ...h,
       [key]: value
     }))
-    .getOrElse(h);
+    .getOrElseValue(h);
 
 const customHeaders = ({
   id,
   version,
   token
   }) => (o: Init): CustomInit =>
-    Maybe.fromNullable(o.headers)
-      .orElse(() => Maybe.of({}))
+    fromNullable(o.headers)
+      .alt(some({}))
       .map(addDefaults(token))
       .map(addCustom(HEADER_ID, id))
       .map(addCustom(HEADER_VERSION, version))
@@ -64,9 +65,9 @@ const customHeaders = ({
       }));
 
 const headers = (config: HeadersConfig, o: ?Init): CustomInit =>
-  Maybe.fromNullable(o)
-    .orElse(() => Maybe.of({}))
+  fromNullable(o)
+    .alt(some({}))
     .chain(customHeaders(config))
-    .get();
+    .getOrElseValue({});
 
 export default headers;

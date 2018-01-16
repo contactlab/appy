@@ -1,13 +1,17 @@
 // @flow
 
-import Maybe from 'data.maybe';
+import type { Option } from 'fp-ts/lib/Option.js.flow';
+
+import { fromNullable, some, getOrElseValue } from 'fp-ts/lib/Option';
 
 type RequestBody = string | URLSearchParams | FormData | Blob | ArrayBuffer | $ArrayBufferView;
 
 export type Method = 'GET' | 'POST' | 'PUT' | 'DELETE';
 
 export type Init = {
-  headers: Object,
+  headers?: {
+    [key: string]: string
+  },
   body?: RequestBody;
 }
 
@@ -16,9 +20,9 @@ type Options = Init & {
   mode: 'cors'
 }
 
-const withMethodAndMode = (method: ?string) => (o: Init): Maybe<RequestOptions> =>
-  Maybe.fromNullable(method)
-    .orElse(() => Maybe.of('GET'))
+const withMethodAndMode = (method: ?string) => (o: Init): Option<RequestOptions> =>
+  fromNullable(method)
+    .alt(some('GET'))
     .map(method => ({
       mode: 'cors',
       ...o,
@@ -33,20 +37,23 @@ const safeStringify = (x: RequestBody): string => {
   }
 };
 
-const evolveBody = (o: Options): Maybe<RequestOptions> =>
-  Maybe.fromNullable(o.body)
+const evolveBody = (o: RequestOptions): Option<RequestOptions> =>
+  fromNullable(o.body)
     .map(body => ({
       ...o,
       body: safeStringify(body)
     }))
-    .orElse(() => Maybe.of(o));
+    .alt(some(o));
 
 
 const options = (method: Method) => (o: ?Init): RequestOptions =>
-  Maybe.fromNullable(o)
-    .orElse(() => Maybe.of({}))
+  fromNullable(o)
+    .alt(some({}))
     .chain(withMethodAndMode(method))
     .chain(evolveBody)
-    .get();
+    .fold(
+    (n): RequestOptions => ({}),
+    (s) => s
+    );
 
 export default options;

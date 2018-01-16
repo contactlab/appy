@@ -2,16 +2,20 @@
 
 import type { Init } from '../request/lib/options';
 import type { HeadersConfig } from './lib/headers';
+import type { Option } from 'fp-ts/lib/Option.js.flow';
 
-import Maybe from 'data.maybe';
+import { fromNullable, some, getOrElseValue } from 'fp-ts/lib/Option';
 import headers from './lib/headers';
 import request from '../request';
 import {
   TOKEN_REJECT
 } from './constants';
 
-type Config = HeadersConfig & {
-  baseUri: string
+type Config = {
+  baseUri: string,
+  id?: string,
+  version?: string,
+  token?: string
 };
 
 type Api = {
@@ -31,19 +35,21 @@ const compApi = ({ baseUri, version, id, token }: Config): Api =>
     .reduce((acc, key) => ({
       ...acc,
       [key]: (uri: string, options: ?Init): Promise<*> =>
-        Maybe.fromNullable(token)
+        fromNullable(token)
           .map((token: string) => request[key](
             concatStrings(baseUri, uri),
             headers({ version, id, token }, options)
           ))
-          .getOrElse(reject(TOKEN_REJECT))
+          .getOrElseValue(reject(TOKEN_REJECT))
     }), {});
 
 const api = (config: ?Config): Api =>
-  Maybe.fromNullable(config)
-    .orElse(() => Maybe.of({}))
+  fromNullable(config)
+    .alt(some({
+      baseUri: ''
+    }))
     .map(compApi)
-    .get();
+    .getOrElseValue({})
 
 
 export default api;
