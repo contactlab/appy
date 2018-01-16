@@ -4,13 +4,11 @@ import options from '../lib/options';
 test('default options', t => {
   t.deepEqual(options()(), {
     method: 'GET',
-    mode: 'cors',
-    headers: {}
+    mode: 'cors'
   });
   t.deepEqual(options(null)(null), {
     method: 'GET',
-    mode: 'cors',
-    headers: {}
+    mode: 'cors'
   });
 });
 

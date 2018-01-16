@@ -39,7 +39,7 @@ const compApi = ({ baseUri, version, id, token }: Config): Api =>
           .getOrElse(reject(TOKEN_REJECT))
     }), {});
 
-const api = (config: Config): Api =>
+const api = (config: ?Config): Api =>
   Maybe.fromNullable(config)
     .orElse(() => Maybe.of({}))
     .map(compApi)

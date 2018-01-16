@@ -4,10 +4,7 @@ import myFetch from '../index';
 
 const URI = 'http://me';
 const MODE = 'cors';
-const HEADERS = {
-  'Accept': 'application/json',
-  'Content-type': 'application/json'
-};
+
 const handleError = t => e => {
   t.is(e.name, 'FetchError');
 }
@@ -31,8 +28,7 @@ test('.get()', t => {
   myFetch.get(URI).catch(handleError(t));
   t.true(t.context.spy.calledWith(URI, {
     method: 'GET',
-    mode: 'cors',
-    headers: {}
+    mode: 'cors'
   }))
 });
 
@@ -89,7 +85,6 @@ test('.delete()', t => {
   myFetch.delete(URI).catch(handleError(t));
   t.true(t.context.spy.calledWith(URI, {
     method: 'DELETE',
-    mode: 'cors',
-    headers: {}
+    mode: 'cors'
   }))
 });

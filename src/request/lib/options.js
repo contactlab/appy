@@ -41,22 +41,12 @@ const evolveBody = (o: Options): Maybe<RequestOptions> =>
     }))
     .orElse(() => Maybe.of(o));
 
-const secureHeaders = (o: Options): Maybe<RequestOptions> =>
-  Maybe.fromNullable(o.headers)
-    .orElse(() => Maybe.of({}))
-    .map(headers => ({
-      ...o,
-      headers
-    }));
-
-
 
 const options = (method: Method) => (o: ?Init): RequestOptions =>
   Maybe.fromNullable(o)
     .orElse(() => Maybe.of({}))
     .chain(withMethodAndMode(method))
     .chain(evolveBody)
-    .chain(secureHeaders)
     .get();
 
 export default options;
