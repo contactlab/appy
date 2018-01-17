@@ -28,10 +28,10 @@ test('interface', t => {
 });
 
 test('.get() without token', t => {
-  const myFetch = api({ baseUri });
-  myFetch.get(ENDPOINT)
-    .catch(err => {
-      t.deepEqual(err, {
+  api({ baseUri })
+    .get(ENDPOINT)
+    .catch(e => {
+      t.deepEqual(e, {
         payload: {
           message: 'Token is required'
         }
@@ -42,8 +42,8 @@ test('.get() without token', t => {
 });
 
 test('.get()', t => {
-  const myFetch = api({ baseUri, token });
-  const p = myFetch.get(ENDPOINT)
+  api({ baseUri, token })
+    .get(ENDPOINT)
     .catch(handleError(t));
 
   t.true(t.context.spy.calledWith(URI, {
@@ -58,12 +58,12 @@ test('.get()', t => {
 });
 
 test('.post() with id & init headers', t => {
-  const myFetch = api({ baseUri, token, id: 'pippo' });
-  myFetch.post(ENDPOINT, {
-    headers: {
-      'X-Custom': 'Header'
-    }
-  })
+  api({ baseUri, token, id: 'pippo' })
+    .post(ENDPOINT, {
+      headers: {
+        'X-Custom': 'Header'
+      }
+    })
     .catch(handleError(t));
 
   t.true(t.context.spy.calledWith(URI, {
@@ -80,8 +80,8 @@ test('.post() with id & init headers', t => {
 });
 
 test('.delete() with id & version', t => {
-  const myFetch = api({ baseUri, token, id: 'pippo', version: '1.0.0' });
-  myFetch.delete(ENDPOINT, {})
+  api({ baseUri, token, id: 'pippo', version: '1.0.0' })
+    .delete(ENDPOINT, {})
     .catch(handleError(t));
 
   t.true(t.context.spy.calledWith(URI, {
@@ -98,10 +98,10 @@ test('.delete() with id & version', t => {
 });
 
 test('.put() with body', t => {
-  const myFetch = api({ baseUri, token });
-  myFetch.put(ENDPOINT, {
-    body: { a: 1 }
-  })
+  api({ baseUri, token })
+    .put(ENDPOINT, {
+      body: { a: 1 }
+    })
     .catch(handleError(t));
 
   t.true(t.context.spy.calledWith(URI, {
