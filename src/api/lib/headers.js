@@ -1,6 +1,6 @@
 // @flow
 
-import type { Init } from '../../request/lib/options';
+import type { RequestBody, Init } from '../../request/lib/options';
 import type { Option } from 'fp-ts/lib/Option.js.flow';
 
 import { fromNullable, some, getOrElseValue } from 'fp-ts/lib/Option';
@@ -18,22 +18,23 @@ type DefaultHeaders = Headers & {
   'Accept': string,
   'Content-type': string,
   'Authorization': string
-}
+};
 
 type CustomHeaders = DefaultHeaders & {
   'Contactlab-ClientId'?: string,
   'Contactlab-ClientVersion'?: string
 };
 
-type CustomInit = Init & {
-  headers: CustomHeaders
+type CustomInit = {
+  body?: RequestBody,
+  headers?: CustomHeaders
 };
 
 export type HeadersConfig = {
   id?: string,
   version?: string,
   token: string
-}
+};
 
 const addDefaults = (t: string) => (h: Headers): DefaultHeaders => ({
   ...DEFAULT_HEADERS,
@@ -53,7 +54,7 @@ const customHeaders = ({
   id,
   version,
   token
-  }) => (o: Init): CustomInit =>
+  }) => (o: Init): Option<CustomInit> =>
     fromNullable(o.headers)
       .alt(some({}))
       .map(addDefaults(token))

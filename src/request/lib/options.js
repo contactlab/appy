@@ -4,7 +4,7 @@ import type { Option } from 'fp-ts/lib/Option.js.flow';
 
 import { fromNullable, some, getOrElseValue } from 'fp-ts/lib/Option';
 
-type RequestBody = string | URLSearchParams | FormData | Blob | ArrayBuffer | $ArrayBufferView;
+export type RequestBody = string | URLSearchParams | FormData | Blob | ArrayBuffer | $ArrayBufferView;
 
 export type Method = 'GET' | 'POST' | 'PUT' | 'DELETE';
 
@@ -51,9 +51,6 @@ const options = (method: Method) => (o: ?Init): RequestOptions =>
     .alt(some({}))
     .chain(withMethodAndMode(method))
     .chain(evolveBody)
-    .fold(
-    (n): RequestOptions => ({}),
-    (s) => s
-    );
+    .getOrElseValue({});
 
 export default options;
