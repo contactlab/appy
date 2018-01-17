@@ -7,9 +7,9 @@ const baseUri = 'http://localhost:3000';
 const URI = `${baseUri}${ENDPOINT}`;
 const token = 'myToken';
 
-const handleError = t => e => {
+const handleError = t => e => 
   t.is(e.name, 'FetchError');
-}
+
 
 test.beforeEach('provide spy on "fetch"', t => {
   t.context.spy = sinon.spy(global, 'fetch');
@@ -30,13 +30,9 @@ test('interface', t => {
 test('.get() without token', t => {
   api({ baseUri })
     .get(ENDPOINT)
-    .catch(e => {
-      t.deepEqual(e, {
-        payload: {
-          message: 'Token is required'
-        }
-      })
-    });
+    .catch(e => 
+      t.is(e, '"token" is required')
+    );
 
   t.false(t.context.spy.called);
 });

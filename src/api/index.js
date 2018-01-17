@@ -19,28 +19,27 @@ type Config = {
 };
 
 type ApiKey = 'get' | 'post' | 'put' | 'delete';
-
+type ApiFn = (a: string, b: ?RequestOptions) => Promise<*>;
 type Api = {
-  [ApiKey]: (a: string, b: RequestOptions) => Promise<*>
+  [ApiKey]: ApiFn
 }
 
 const concatStrings = (s1: string, s2: string): string => `${s1}${s2}`;
 
-const reject = (message: string) => Promise.reject({
-  payload: {
-    message
-  }
-});
-
-const compRequest = ({ baseUri, version, id, token }: Config) => 
-  r =>
-    (uri: string, options: ?RequestOptions): Promise<*> =>
-      fromNullable(token)
-        .map(token => r(
-          concatStrings(baseUri, uri),
-          headers({ version, id, token }, options)
-        ))
-        .getOrElseValue(reject(TOKEN_REJECT))
+const compRequest = ({ baseUri, version, id, token }: Config) => (r): ApiFn =>
+  (uri, options) =>
+    fromNullable(token)
+      .map(token => r(
+        concatStrings(baseUri, uri),
+        headers({ version, id, token }, options)
+      ))
+      .fold(
+        n => 
+          new Promise(() => {
+            throw TOKEN_REJECT
+          }),
+        s => s
+      );
 
 const compApi = (config: Config): Api =>
   Object.keys(request)
