@@ -1,9 +1,11 @@
 // @flow
 
-import type { RequestBody, Init } from '../../request/lib/options';
+import type { RequestBody } from '../../request/lib/options';
 import type { Option } from 'fp-ts/lib/Option.js.flow';
 
 import { fromNullable, some, getOrElseValue } from 'fp-ts/lib/Option';
+import { Lens } from 'monocle-ts'
+import merge from '../../request/lib/merge';
 import {
   HEADER_ID,
   HEADER_VERSION,
@@ -25,47 +27,40 @@ type CustomHeaders = DefaultHeaders & {
   'Contactlab-ClientVersion'?: string
 };
 
-type CustomInit = {
-  body?: RequestBody,
-  headers?: CustomHeaders
-};
-
 export type HeadersConfig = {
   id?: string,
   version?: string,
   token: string
 };
 
-const addDefaults = (t: string) => (h: Headers): DefaultHeaders => ({
-  ...DEFAULT_HEADERS,
-  ...h,
-  'Authorization': `Bearer ${t}`
-});
+const addDefaults = (t: string) => (h: Headers): DefaultHeaders => 
+  Lens.fromNullableProp('Authorization')
+    .set(`Bearer ${t}`)(merge(DEFAULT_HEADERS, h));
 
 const addCustom = (key: string, value: ?string) => (h: DefaultHeaders): CustomHeaders =>
   fromNullable(value)
-    .map(v => ({
-      ...h,
-      [key]: value
-    }))
+    .map(v => 
+      Lens.fromNullableProp(key)
+        .set(v)(h)
+    )
     .getOrElseValue(h);
 
 const customHeaders = ({
   id,
   version,
   token
-  }) => (o: Init): Option<CustomInit> =>
+  }) => (o: RequestOptions): Option<RequestOptions> =>
     fromNullable(o.headers)
       .alt(some({}))
       .map(addDefaults(token))
       .map(addCustom(HEADER_ID, id))
       .map(addCustom(HEADER_VERSION, version))
-      .map(headers => ({
-        ...o,
-        headers
-      }));
+      .map(headers => 
+        Lens.fromProp('headers')
+          .set(headers)(o)  
+      );
 
-const headers = (config: HeadersConfig, o: ?Init): CustomInit =>
+const headers = (config: HeadersConfig, o: ?RequestOptions): RequestOptions =>
   fromNullable(o)
     .alt(some({}))
     .chain(customHeaders(config))

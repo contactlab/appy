@@ -18,14 +18,13 @@
   },
   "dependencies": {
     "fp-ts": "0.6.8",
-    "isomorphic-fetch": "2.2.1"
+    "isomorphic-fetch": "2.2.1",
+    "monocle-ts": "0.5.2"
   },
   "devDependencies": {
     "ava": "0.24.0",
     "babel-cli": "6.26.0",
     "babel-core": "6.26.0",
-    "babel-plugin-syntax-object-rest-spread": "6.13.0",
-    "babel-plugin-transform-object-rest-spread": "6.26.0",
     "babel-preset-env": "1.6.1",
     "babel-preset-flow": "6.23.0",
     "babel-register": "6.26.0",
@@ -40,10 +39,6 @@
     "presets": [
       "flow",
       "env"
-    ],
-    "plugins": [
-      "syntax-object-rest-spread",
-      "transform-object-rest-spread"
     ]
   },
   "ava": {
