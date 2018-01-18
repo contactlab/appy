@@ -2,57 +2,55 @@
 
 import type { HeadersConfig } from './lib/headers';
 import type { Option } from 'fp-ts/lib/Option.js.flow';
+import type {NormResponse} from '../request/lib/handle-response';
+import type {Req, RequestKey, RequestFn} from '../request';
 
 import { fromNullable, some, getOrElseValue } from 'fp-ts/lib/Option';
 import { Lens } from 'monocle-ts'
 import headers from './lib/headers';
 import request from '../request';
 import {
-  TOKEN_REJECT
+  CONFIG_REJECT
 } from './constants';
 
-type Config = {
+type Config = {|
   baseUri: string,
   id?: string,
   version?: string,
-  token?: string
-};
+  token: string
+|};
 
-type ApiKey = 'get' | 'post' | 'put' | 'delete';
-type ApiFn = (a: string, b: ?RequestOptions) => Promise<*>;
-type Api = {
-  [ApiKey]: ApiFn
-}
+type ConfigError = {|
+  error: string
+|};
 
-const concatStrings = (s1: string, s2: string): string => `${s1}${s2}`;
+type ApiFn = (a: string, b: ?RequestOptions) => Promise<NormResponse | ConfigError>;
 
-const compRequest = ({ baseUri, version, id, token }: Config) => (r): ApiFn =>
-  fromNullable(token)
-    .map(token => (uri, options) => r(
-      concatStrings(baseUri, uri),
-      headers({ version, id, token }, options)
-    ))
+const concatStrings = (xs: Array<mixed>): string =>
+  xs
+    .filter(s => typeof s !== 'undefined' && s !== null)
+    .map(String)
+    .join('');
+
+const compRequest = (config: Config, fn: RequestFn): ApiFn =>
+  fromNullable(config)
+    .chain(({baseUri, id, token, version}) => 
+      fromNullable(token)
+        .map(token => (uri, options) => fn(
+          concatStrings([baseUri, uri]),
+          headers({ version, id, token }, options)
+        ))
+    )
     .fold(
-      n => 
-        () => new Promise((res, rej) => {
-          rej(TOKEN_REJECT)
-        }),
+      _ => () => Promise.reject({error: CONFIG_REJECT}),
       s => s
     );
 
-const compApi = (config: Config): Api =>
+const compApi = (config: Config): Req<ApiFn> =>
   Object.keys(request)
-    .reduce((acc, key) => 
-      Lens.fromProp(key)
-        .modify(compRequest(config))(acc),
-      request);
+    .reduce((acc: Object, key: RequestKey) => 
+      Lens.fromNullableProp(key)
+        .set(compRequest(config, request[key]))(acc),
+      {});
 
-const api = (config: ?Config): Api =>
-  fromNullable(config)
-    .alt(some({
-      baseUri: ''
-    }))
-    .map(compApi)
-    .getOrElseValue({})
-
-export default api;
+export default compApi;

@@ -33,9 +33,9 @@ export type HeadersConfig = {
   token: string
 };
 
-const addDefaults = (t: string) => (h: Headers): DefaultHeaders => 
+const addToken = (t: string) => (h: Headers): DefaultHeaders => 
   Lens.fromNullableProp('Authorization')
-    .set(`Bearer ${t}`)(merge(DEFAULT_HEADERS, h));
+    .set(`Bearer ${t}`)(h);
 
 const addCustom = (key: string, value: ?string) => (h: DefaultHeaders): CustomHeaders =>
   fromNullable(value)
@@ -45,14 +45,11 @@ const addCustom = (key: string, value: ?string) => (h: DefaultHeaders): CustomHe
     )
     .getOrElseValue(h);
 
-const customHeaders = ({
-  id,
-  version,
-  token
-  }) => (o: RequestOptions): Option<RequestOptions> =>
+const customHeaders = ({ id, version, token }) => (o: RequestOptions): Option<RequestOptions> =>
     fromNullable(o.headers)
       .alt(some({}))
-      .map(addDefaults(token))
+      .map(h => merge(DEFAULT_HEADERS, h))
+      .map(addToken(token))
       .map(addCustom(HEADER_ID, id))
       .map(addCustom(HEADER_VERSION, version))
       .map(headers => 

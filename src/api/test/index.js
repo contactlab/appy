@@ -27,11 +27,21 @@ test('interface', t => {
   t.is(typeof myFetch.delete, 'function', 'Should should have a "delete" method');
 });
 
+test('api() without config', t => {
+  api()
+    .get(ENDPOINT)
+    .catch(e => 
+      t.is(e, 'Config error')
+    );
+
+  t.false(t.context.spy.called);
+});
+
 test('.get() without token', t => {
   api({ baseUri })
     .get(ENDPOINT)
     .catch(e => 
-      t.is(e, '"token" is required')
+      t.is(e, 'Config error')
     );
 
   t.false(t.context.spy.called);
@@ -43,6 +53,22 @@ test('.get()', t => {
     .catch(handleError(t));
 
   t.true(t.context.spy.calledWith(URI, {
+    method: 'GET',
+    mode: 'cors',
+    headers: {
+      'Accept': 'application/json',
+      'Content-type': 'application/json',
+      'Authorization': 'Bearer myToken'
+    }
+  }));
+});
+
+test('.get() - no `baseUri`', t => {
+  api({ token })
+    .get(ENDPOINT)
+    .catch(handleError(t));
+
+  t.true(t.context.spy.calledWith(ENDPOINT, {
     method: 'GET',
     mode: 'cors',
     headers: {

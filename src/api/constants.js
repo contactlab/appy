@@ -6,4 +6,4 @@ export const DEFAULT_HEADERS = {
   'Content-type': 'application/json'
 };
 
-export const TOKEN_REJECT = '"token" is required';
+export const CONFIG_REJECT = 'Configuration error';

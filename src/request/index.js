@@ -7,12 +7,18 @@ import 'isomorphic-fetch';
 import options from './lib/options';
 import handleResponse from './lib/handle-response';
 
-const f = (method: Method) =>
-  (uri: string, o: ?RequestOptions): Promise<NormResponse> =>
+export type RequestKey = 'get' | 'post' | 'put' | 'delete';
+export type RequestFn = (a: string, b: ?RequestOptions) => Promise<NormResponse>;
+export type Req<T> = {
+  [RequestKey]: T
+};
+
+const f = (method: Method): RequestFn =>
+  (uri, o): Promise<NormResponse> =>
     fetch(uri, options(method)(o))
       .then(handleResponse);
 
-const request = {
+const request: Req<RequestFn> = {
   get: f('GET'),
   post: f('POST'),
   put: f('PUT'),
