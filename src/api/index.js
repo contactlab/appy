@@ -27,19 +27,18 @@ type Api = {
 const concatStrings = (s1: string, s2: string): string => `${s1}${s2}`;
 
 const compRequest = ({ baseUri, version, id, token }: Config) => (r): ApiFn =>
-  (uri, options) =>
-    fromNullable(token)
-      .map(token => r(
-        concatStrings(baseUri, uri),
-        headers({ version, id, token }, options)
-      ))
-      .fold(
-        n => 
-          new Promise(() => {
-            throw TOKEN_REJECT
-          }),
-        s => s
-      );
+  fromNullable(token)
+    .map(token => (uri, options) => r(
+      concatStrings(baseUri, uri),
+      headers({ version, id, token }, options)
+    ))
+    .fold(
+      n => 
+        () => new Promise((res, rej) => {
+          rej(TOKEN_REJECT)
+        }),
+      s => s
+    );
 
 const compApi = (config: Config): Api =>
   Object.keys(request)
