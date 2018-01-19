@@ -3,11 +3,10 @@ import sinon from 'sinon';
 import myFetch from '../index';
 
 const URI = 'http://me';
-const MODE = 'cors';
 
 const handleError = t => e => {
   t.is(e.name, 'FetchError');
-}
+};
 
 test.beforeEach('provide spy on "fetch"', t => {
   t.context.spy = sinon.spy(global, 'fetch');
@@ -29,7 +28,7 @@ test('.get()', t => {
   t.true(t.context.spy.calledWith(URI, {
     method: 'GET',
     mode: 'cors'
-  }))
+  }));
 });
 
 test('.get() with some header', t => {
@@ -44,7 +43,7 @@ test('.get() with some header', t => {
     headers: {
       'Custom-Header': 'custom-header'
     }
-  }))
+  }));
 });
 
 test('.post() with token', t => {
@@ -59,7 +58,7 @@ test('.post() with token', t => {
     headers: {
       'Authorization': 'Bearer myToken'
     }
-  }))
+  }));
 });
 
 test('.put() with body', t => {
@@ -78,7 +77,7 @@ test('.put() with body', t => {
       'Authorization': 'Bearer myToken'
     },
     body: '{"a":1}'
-  }))
+  }));
 });
 
 test('.delete()', t => {
@@ -86,5 +85,5 @@ test('.delete()', t => {
   t.true(t.context.spy.calledWith(URI, {
     method: 'DELETE',
     mode: 'cors'
-  }))
+  }));
 });

@@ -2,8 +2,8 @@
 
 import type { Option } from 'fp-ts/lib/Option.js.flow';
 
-import { fromNullable, some, getOrElseValue } from 'fp-ts/lib/Option';
-import { Lens } from 'monocle-ts'
+import { fromNullable, some } from 'fp-ts/lib/Option';
+import { Lens } from 'monocle-ts';
 
 export type RequestBody = string | URLSearchParams | FormData | Blob | ArrayBuffer | $ArrayBufferView;
 
@@ -27,7 +27,7 @@ const secureMode = (o: RequestOptions): Option<RequestOptions> =>
 
 const safeStringify = (x: any): string => {
   try {
-    return JSON.stringify(x)
+    return JSON.stringify(x);
   } catch (e) {
     return '';
   }

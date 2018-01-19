@@ -15,7 +15,7 @@ const toPayload = (t: string): Payload => {
   } catch (e) {
     return {
       message: t
-    }
+    };
   }
 };
 

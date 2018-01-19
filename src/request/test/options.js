@@ -19,13 +19,13 @@ test('GET - token & extra headers', t => {
       'extra-value': '1'
     }
   }), {
-      method: 'GET',
-      mode: 'cors',
-      headers: {
-        'Authorization': 'Bearer myToken',
-        'extra-value': '1'
-      }
-    })
+    method: 'GET',
+    mode: 'cors',
+    headers: {
+      'Authorization': 'Bearer myToken',
+      'extra-value': '1'
+    }
+  });
 });
 
 test('POST - cors & id header', t => {
@@ -36,12 +36,12 @@ test('POST - cors & id header', t => {
       'Contactlab-ClientId': 'pluto'
     }
   }), {
-      method: 'POST',
-      mode: 'opaque',
-      headers: {
-        'Contactlab-ClientId': 'pluto'
-      }
-    })
+    method: 'POST',
+    mode: 'opaque',
+    headers: {
+      'Contactlab-ClientId': 'pluto'
+    }
+  });
 });
 
 test('PUT - body & version header', t => {
@@ -55,13 +55,13 @@ test('PUT - body & version header', t => {
       cognome: 'pluto'
     }
   }), {
-      method: 'PUT',
-      mode: 'cors',
-      headers: {
-        'Contactlab-ClientVersion': '1.0.0'
-      },
-      body: '{"nome":"pippo","cognome":"pluto"}'
-    })
+    method: 'PUT',
+    mode: 'cors',
+    headers: {
+      'Contactlab-ClientVersion': '1.0.0'
+    },
+    body: '{"nome":"pippo","cognome":"pluto"}'
+  });
 });
 
 test('PUT - incorrect body', t => {
@@ -77,11 +77,11 @@ test('PUT - incorrect body', t => {
     },
     body: john
   }), {
-      method: 'PUT',
-      mode: 'cors',
-      headers: {
-        'Contactlab-ClientVersion': '1.0.0'
-      },
-      body: ''
-    })
+    method: 'PUT',
+    mode: 'cors',
+    headers: {
+      'Contactlab-ClientVersion': '1.0.0'
+    },
+    body: ''
+  });
 });

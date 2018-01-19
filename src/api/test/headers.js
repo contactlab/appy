@@ -7,12 +7,12 @@ test('default header', t => {
   t.deepEqual(headers({
     token
   }), {
-      headers: {
-        'Accept': 'application/json',
-        'Content-type': 'application/json',
-        'Authorization': `Bearer ${token}`
-      }
-    });
+    headers: {
+      'Accept': 'application/json',
+      'Content-type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    }
+  });
 });
 
 test('id header', t => {
@@ -21,13 +21,13 @@ test('id header', t => {
     token,
     id
   }), {
-      headers: {
-        'Accept': 'application/json',
-        'Content-type': 'application/json',
-        'Contactlab-ClientId': id,
-        'Authorization': `Bearer ${token}`
-      }
-    });
+    headers: {
+      'Accept': 'application/json',
+      'Content-type': 'application/json',
+      'Contactlab-ClientId': id,
+      'Authorization': `Bearer ${token}`
+    }
+  });
 });
 
 test('version header', t => {
@@ -36,30 +36,30 @@ test('version header', t => {
     token,
     version
   }), {
-      headers: {
-        'Accept': 'application/json',
-        'Content-type': 'application/json',
-        'Contactlab-ClientVersion': version,
-        'Authorization': `Bearer ${token}`
-      }
-    });
+    headers: {
+      'Accept': 'application/json',
+      'Content-type': 'application/json',
+      'Contactlab-ClientVersion': version,
+      'Authorization': `Bearer ${token}`
+    }
+  });
 });
 
 test('extra headers', t => {
   t.deepEqual(headers({
     token
   }, {
-      headers: {
-        'custom1': 'pippo',
-        'custom2': 'pluto'
-      }
-    }), {
-      headers: {
-        'Accept': 'application/json',
-        'Content-type': 'application/json',
-        'Authorization': `Bearer ${token}`,
-        'custom1': 'pippo',
-        'custom2': 'pluto'
-      }
-    });
+    headers: {
+      'custom1': 'pippo',
+      'custom2': 'pluto'
+    }
+  }), {
+    headers: {
+      'Accept': 'application/json',
+      'Content-type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+      'custom1': 'pippo',
+      'custom2': 'pluto'
+    }
+  });
 });

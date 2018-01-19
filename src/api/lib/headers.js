@@ -1,10 +1,9 @@
 // @flow
 
-import type { RequestBody } from '../../request/lib/options';
 import type { Option } from 'fp-ts/lib/Option.js.flow';
 
-import { fromNullable, some, getOrElseValue } from 'fp-ts/lib/Option';
-import { Lens } from 'monocle-ts'
+import { fromNullable, some } from 'fp-ts/lib/Option';
+import { Lens } from 'monocle-ts';
 import merge from '../../merge';
 import {
   HEADER_ID,
@@ -46,7 +45,7 @@ const addCustom = (key: string, value: ?string) => (h: DefaultHeaders): CustomHe
     .getOrElseValue(h);
 
 const customHeaders = ({ id, version, token }) => (o: RequestOptions): Option<RequestOptions> =>
-    fromNullable(o.headers)
+  fromNullable(o.headers)
       .alt(some({}))
       .map(h => merge(DEFAULT_HEADERS, h))
       .map(addToken(token))

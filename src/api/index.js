@@ -1,12 +1,10 @@
 // @flow
 
-import type { HeadersConfig } from './lib/headers';
-import type { Option } from 'fp-ts/lib/Option.js.flow';
 import type {NormResponse} from '../request/lib/handle-response';
 import type {Req, RequestKey, RequestFn} from '../request';
 
-import { fromNullable, some, getOrElseValue } from 'fp-ts/lib/Option';
-import { Lens } from 'monocle-ts'
+import { fromNullable } from 'fp-ts/lib/Option';
+import { Lens } from 'monocle-ts';
 import headers from './lib/headers';
 import request from '../request';
 import {
@@ -42,7 +40,7 @@ const compRequest = (config: Config, fn: RequestFn): ApiFn =>
         ))
     )
     .fold(
-      _ => () => Promise.reject({error: CONFIG_REJECT}),
+      () => () => Promise.reject({error: CONFIG_REJECT}),
       s => s
     );
 
@@ -51,6 +49,6 @@ const compApi = (config: Config): Req<ApiFn> =>
     .reduce((acc: Object, key: RequestKey) => 
       Lens.fromNullableProp(key)
         .set(compRequest(config, request[key]))(acc),
-      {});
+    {});
 
 export default compApi;
