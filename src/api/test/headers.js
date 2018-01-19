@@ -1,5 +1,5 @@
 import test from 'ava';
-import headers from '../lib/headers';
+import headers from '../headers';
 
 const token = 'myToken';
 

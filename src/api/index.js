@@ -1,11 +1,11 @@
 // @flow
 
-import type {NormResponse} from '../request/lib/handle-response';
+import type {NormResponse} from '../request/handle-response';
 import type {Req, RequestKey, RequestFn} from '../request';
 
 import { fromNullable } from 'fp-ts/lib/Option';
 import { Lens } from 'monocle-ts';
-import headers from './lib/headers';
+import headers from './headers';
 import request from '../request';
 import {
   CONFIG_REJECT

@@ -4,12 +4,12 @@ import type { Option } from 'fp-ts/lib/Option.js.flow';
 
 import { fromNullable, some } from 'fp-ts/lib/Option';
 import { Lens } from 'monocle-ts';
-import merge from '../../merge';
+import merge from '../merge';
 import {
   HEADER_ID,
   HEADER_VERSION,
   DEFAULT_HEADERS
-} from '../constants';
+} from './constants';
 
 type Headers = {
   [key: string]: string

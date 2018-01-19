@@ -1,11 +1,11 @@
 // @flow
 
-import type { Method } from './lib/options';
-import type { NormResponse } from './lib/handle-response';
+import type { Method } from './options';
+import type { NormResponse } from './handle-response';
 
 import 'isomorphic-fetch';
-import options from './lib/options';
-import handleResponse from './lib/handle-response';
+import options from './options';
+import handleResponse from './handle-response';
 
 export type RequestKey = 'get' | 'post' | 'put' | 'delete';
 export type RequestFn = (a: string, b: ?RequestOptions) => Promise<NormResponse>;
