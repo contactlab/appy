@@ -5,7 +5,7 @@ import type { Option } from 'fp-ts/lib/Option.js.flow';
 
 import { fromNullable, some, getOrElseValue } from 'fp-ts/lib/Option';
 import { Lens } from 'monocle-ts'
-import merge from '../../request/lib/merge';
+import merge from '../../merge';
 import {
   HEADER_ID,
   HEADER_VERSION,
