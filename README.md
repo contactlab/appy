@@ -1,1 +1,1 @@
-# Appy
+# Appy [![Build Status](https://travis-ci.org/contactlab/appy.svg?branch=master)](https://travis-ci.org/contactlab/appy)
