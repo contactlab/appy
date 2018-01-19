@@ -5,6 +5,9 @@
   "main": "dist/index.js",
   "author": "Contactlab",
   "license": "Apache-2.0",
+  "homepage": "https://github.com/contactlab/appy#readme",
+  "bugs": "https://github.com/contactlab/appy/issues",
+  "repository": "contactlab/appy",
   "files": [
     "dist"
   ],
