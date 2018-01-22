@@ -4,7 +4,6 @@ import type { Option } from 'fp-ts/lib/Option.js.flow';
 
 import { fromNullable, some } from 'fp-ts/lib/Option';
 import { Lens } from 'monocle-ts';
-import merge from '../merge';
 import {
   HEADER_ID,
   HEADER_VERSION,
@@ -31,6 +30,8 @@ export type HeadersConfig = {
   version?: string,
   token: string
 };
+
+const merge = (o1: Object, o2: Object): Object => Object.assign({}, o1, o2);
 
 const addToken = (t: string) => (h: Headers): DefaultHeaders => 
   Lens.fromNullableProp('Authorization')

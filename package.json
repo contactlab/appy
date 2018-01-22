@@ -9,7 +9,7 @@
   "bugs": "https://github.com/contactlab/appy/issues",
   "repository": "contactlab/appy",
   "engines": {
-    "node" : ">= 8.0",
+    "node": ">= 8.0",
     "npm": ">= 5.2",
     "yarn": ">= 1.1"
   },
