@@ -16,7 +16,7 @@ test.afterEach('restore spy on "fetch"', t => {
   t.context.spy.restore();
 });
 
-test('function exists', t => {
+test('interface', t => {
   t.is(typeof myFetch, 'function', 'Should be a function');
 });
 
