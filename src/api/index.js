@@ -13,15 +13,14 @@ import {
 type Config = {|
   baseUri: string,
   id?: string,
-  version?: string,
-  token: string
+  version?: string
 |};
 
 type ConfigError = {|
   error: string
 |};
 
-type ApiFn = (m: Method, a: string, b: ?RequestOptions) => Promise<NormResponse | ConfigError>;
+type ApiFn = (t: string, m: Method, a: string, b: ?RequestOptions) => Promise<NormResponse | ConfigError>;
 
 const concatStrings = (xs: Array<mixed>): string =>
   xs
@@ -29,12 +28,12 @@ const concatStrings = (xs: Array<mixed>): string =>
     .map(String)
     .join('');
 
-const compRequest = ({baseUri, id, token, version}) =>
-  fromNullable(token)
-    .map(token => (method, uri, options) =>
+const compRequest = ({baseUri, id, version}) =>
+  fromNullable(baseUri)
+    .map((b: string) => (token, method, uri, options) =>
       request(
         method,
-        concatStrings([baseUri, uri]),
+        concatStrings([b, uri]),
         headers({ version, id, token }, options)
       )
     );

@@ -33,8 +33,8 @@ test('api - no config', t => {
   t.false(t.context.spy.called);
 });
 
-test('GET - no token', t => {
-  api({ baseUri })('GET')
+test('GET - no baseUri', t => {
+  api({ id: 'ciccio' })('GET')
     .catch(e => 
       t.is(e, 'Config error')
     );
@@ -43,7 +43,7 @@ test('GET - no token', t => {
 });
 
 test('GET', t => {
-  api({ baseUri, token })('GET', ENDPOINT)
+  api({ baseUri })(token, 'GET', ENDPOINT)
     .catch(handleError(t));
 
   t.true(t.context.spy.calledWith(URI, {
@@ -57,23 +57,8 @@ test('GET', t => {
   }));
 });
 
-test('GET - no `baseUri`', t => {
-  api({ token })('GET', ENDPOINT)
-    .catch(handleError(t));
-
-  t.true(t.context.spy.calledWith(ENDPOINT, {
-    method: 'GET',
-    mode: 'cors',
-    headers: {
-      'Accept': 'application/json',
-      'Content-type': 'application/json',
-      'Authorization': 'Bearer myToken'
-    }
-  }));
-});
-
 test('POST - with id & init headers', t => {
-  api({ baseUri, token, id: 'pippo' })('POST', ENDPOINT, {
+  api({ baseUri, id: 'pippo' })(token, 'POST', ENDPOINT, {
     headers: {
       'X-Custom': 'Header'
     }
@@ -94,7 +79,7 @@ test('POST - with id & init headers', t => {
 });
 
 test('DELETE - with id & version', t => {
-  api({ baseUri, token, id: 'pippo', version: '1.0.0' })('DELETE', ENDPOINT, {})
+  api({ baseUri, id: 'pippo', version: '1.0.0' })(token, 'DELETE', ENDPOINT, {})
     .catch(handleError(t));
 
   t.true(t.context.spy.calledWith(URI, {
@@ -111,7 +96,7 @@ test('DELETE - with id & version', t => {
 });
 
 test('PUT - with body', t => {
-  api({ baseUri, token })('PUT', ENDPOINT, {
+  api({ baseUri })(token, 'PUT', ENDPOINT, {
     body: { a: 1 }
   })
     .catch(handleError(t));
