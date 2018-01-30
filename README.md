@@ -50,7 +50,7 @@ Internally uses the `request()`.
 
   // api :: (Object) => (String, String, String, ?Object) => Promise<Object>
   const myFetch = api(config);
-  myFetch('myToken', 'GET', '/me', options)
+  myFetch('GET', '/me', 'myToken', options)
     .then(handleResponse)
     .catch(handleError)
 ```

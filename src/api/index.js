@@ -20,7 +20,7 @@ type ConfigError = {|
   error: string
 |};
 
-type ApiFn = (t: string, m: Method, a: string, b: ?RequestOptions) => Promise<NormResponse | ConfigError>;
+type ApiFn = (m: Method, a: string, t: string, b: ?RequestOptions) => Promise<NormResponse | ConfigError>;
 
 const concatStrings = (xs: Array<mixed>): string =>
   xs
@@ -30,7 +30,7 @@ const concatStrings = (xs: Array<mixed>): string =>
 
 const compRequest = ({baseUri, id, version}) =>
   fromNullable(baseUri)
-    .map((b: string) => (token, method, uri, options) =>
+    .map((b: string) => (method, uri, token, options) =>
       request(
         method,
         concatStrings([b, uri]),
