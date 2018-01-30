@@ -16,23 +16,20 @@ test.afterEach('restore spy on "fetch"', t => {
   t.context.spy.restore();
 });
 
-test('methods exist', t => {
-  t.is(typeof myFetch.get, 'function', 'Should have "get" method');
-  t.is(typeof myFetch.post, 'function', 'Should have "post" method');
-  t.is(typeof myFetch.put, 'function', 'Should have "put" method');
-  t.is(typeof myFetch.delete, 'function', 'Should have "delete" method');
+test('function exists', t => {
+  t.is(typeof myFetch, 'function', 'Should be a function');
 });
 
-test('.get()', t => {
-  myFetch.get(URI).catch(handleError(t));
+test('GET', t => {
+  myFetch('GET', URI).catch(handleError(t));
   t.true(t.context.spy.calledWith(URI, {
     method: 'GET',
     mode: 'cors'
   }));
 });
 
-test('.get() with some header', t => {
-  myFetch.get(URI, {
+test('GET with some header', t => {
+  myFetch('GET', URI, {
     headers: {
       'Custom-Header': 'custom-header'
     }
@@ -46,8 +43,8 @@ test('.get() with some header', t => {
   }));
 });
 
-test('.post() with token', t => {
-  myFetch.post(URI, {
+test('POST with token', t => {
+  myFetch('POST', URI, {
     headers: {
       'Authorization': 'Bearer myToken'
     }
@@ -61,8 +58,8 @@ test('.post() with token', t => {
   }));
 });
 
-test('.put() with body', t => {
-  myFetch.put(URI, {
+test('PUT with body', t => {
+  myFetch('PUT', URI, {
     headers: {
       'Authorization': 'Bearer myToken'
     },
@@ -80,8 +77,8 @@ test('.put() with body', t => {
   }));
 });
 
-test('.delete()', t => {
-  myFetch.delete(URI).catch(handleError(t));
+test('DELETE', t => {
+  myFetch('DELETE', URI).catch(handleError(t));
   t.true(t.context.spy.calledWith(URI, {
     method: 'DELETE',
     mode: 'cors'

@@ -7,7 +7,7 @@ import { Lens } from 'monocle-ts';
 
 export type RequestBody = string | URLSearchParams | FormData | Blob | ArrayBuffer | $ArrayBufferView;
 
-export type Method = 'GET' | 'POST' | 'PUT' | 'DELETE';
+export type Method = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
 
 const secureMethod = (method: ?string) => (o: RequestOptions): Option<RequestOptions> =>
   fromNullable(method)
