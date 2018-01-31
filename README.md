@@ -32,6 +32,16 @@ Request `options`:
   - The default `mode` is set to "cors".
   - The `body` content gets stringified, so objects are accepted
 
+`request` returns a Promise.
+For both Success and Reject cases the return type is:
+
+```js
+Promise<{
+  status: string,
+  payload: Object
+}>
+```
+
 ### Api
 
 Internally uses the `request()`.
@@ -61,19 +71,7 @@ Request `options` as above apart from the headers:
   - `"Contactlab-ClientId"` is set by the `id` key of the configuration.
   - `"Contactlab-ClientVersion"` is set by the `version` key of the configuration.
 
-## Normalized response
-
-`request` returns a Promise.
-For both Success and Reject cases the return type is:
-
-```js
-Promise<{
-  status: string,
-  payload: Object
-}>
-```
-
-`api` at the second call returns the same Promise type. 
+`api` at the second call returns the `request` Promise type. 
 
 Unless a configuration error occurs, in that case the return type will be:
 
@@ -83,20 +81,8 @@ Promise<{
 }>
 ```
 
-## Develop
-
-```sh
-  $ git clone git@github.com:contactlab/appy.git
-```
-
 ### Test
 
 ```sh
   $ yarn test
-```
-
-### Build
-
-```sh
-  $ yarn build
 ```
