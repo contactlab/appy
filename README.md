@@ -38,7 +38,7 @@ For both Success and Reject cases the return type is:
 ```js
 Promise<{
   status: string,
-  payload: Object
+  payload: Object | {message: string}
 }>
 ```
 
