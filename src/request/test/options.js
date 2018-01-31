@@ -1,5 +1,5 @@
 import test from 'ava';
-import options from '../lib/options';
+import options from '../options';
 
 test('default options', t => {
   t.deepEqual(options()(), {

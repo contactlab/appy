@@ -20,16 +20,12 @@ test.afterEach('provide spy on "fetch"', t => {
 });
 
 test('interface', t => {
-  const myFetch = api();
-  t.is(typeof myFetch.get, 'function', 'Should should have a "get" method');
-  t.is(typeof myFetch.post, 'function', 'Should should have a "post" method');
-  t.is(typeof myFetch.put, 'function', 'Should should have a "put" method');
-  t.is(typeof myFetch.delete, 'function', 'Should should have a "delete" method');
+  t.is(typeof api, 'function', 'Api config should be a function');
+  t.is(typeof api(), 'function', 'Api request should be a function');
 });
 
-test('api() without config', t => {
-  api()
-    .get(ENDPOINT)
+test('api - no config', t => {
+  api()('GET')
     .catch(e => 
       t.is(e, 'Config error')
     );
@@ -37,9 +33,8 @@ test('api() without config', t => {
   t.false(t.context.spy.called);
 });
 
-test('.get() without token', t => {
-  api({ baseUri })
-    .get(ENDPOINT)
+test('GET - no baseUri', t => {
+  api({ id: 'ciccio' })('GET')
     .catch(e => 
       t.is(e, 'Config error')
     );
@@ -47,9 +42,8 @@ test('.get() without token', t => {
   t.false(t.context.spy.called);
 });
 
-test('.get()', t => {
-  api({ baseUri, token })
-    .get(ENDPOINT)
+test('GET', t => {
+  api({ baseUri })('GET', ENDPOINT, token)
     .catch(handleError(t));
 
   t.true(t.context.spy.calledWith(URI, {
@@ -63,29 +57,12 @@ test('.get()', t => {
   }));
 });
 
-test('.get() - no `baseUri`', t => {
-  api({ token })
-    .get(ENDPOINT)
-    .catch(handleError(t));
-
-  t.true(t.context.spy.calledWith(ENDPOINT, {
-    method: 'GET',
-    mode: 'cors',
+test('POST - with id & init headers', t => {
+  api({ baseUri, id: 'pippo' })('POST', ENDPOINT, token, {
     headers: {
-      'Accept': 'application/json',
-      'Content-type': 'application/json',
-      'Authorization': 'Bearer myToken'
+      'X-Custom': 'Header'
     }
-  }));
-});
-
-test('.post() with id & init headers', t => {
-  api({ baseUri, token, id: 'pippo' })
-    .post(ENDPOINT, {
-      headers: {
-        'X-Custom': 'Header'
-      }
-    })
+  })
     .catch(handleError(t));
 
   t.true(t.context.spy.calledWith(URI, {
@@ -101,9 +78,8 @@ test('.post() with id & init headers', t => {
   }));
 });
 
-test('.delete() with id & version', t => {
-  api({ baseUri, token, id: 'pippo', version: '1.0.0' })
-    .delete(ENDPOINT, {})
+test('DELETE - with id & version', t => {
+  api({ baseUri, id: 'pippo', version: '1.0.0' })('DELETE', ENDPOINT, token, {})
     .catch(handleError(t));
 
   t.true(t.context.spy.calledWith(URI, {
@@ -119,11 +95,10 @@ test('.delete() with id & version', t => {
   }));
 });
 
-test('.put() with body', t => {
-  api({ baseUri, token })
-    .put(ENDPOINT, {
-      body: { a: 1 }
-    })
+test('PUT - with body', t => {
+  api({ baseUri })('PUT', ENDPOINT, token, {
+    body: { a: 1 }
+  })
     .catch(handleError(t));
 
   t.true(t.context.spy.calledWith(URI, {

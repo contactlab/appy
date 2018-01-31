@@ -1,5 +1,5 @@
 import test from 'ava';
-import handleResponse from '../lib/handle-response';
+import handleResponse from '../handle-response';
 import { response } from './_helpers';
 
 test('handleResponse() - 200', t => {

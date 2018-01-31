@@ -1,11 +1,10 @@
 // @flow
 
-import type {NormResponse} from '../request/lib/handle-response';
-import type {Req, RequestKey, RequestFn} from '../request';
+import type {NormResponse} from '../request/handle-response';
+import type {Method} from '../request/options';
 
 import { fromNullable } from 'fp-ts/lib/Option';
-import { Lens } from 'monocle-ts';
-import headers from './lib/headers';
+import headers from './headers';
 import request from '../request';
 import {
   CONFIG_REJECT
@@ -14,15 +13,14 @@ import {
 type Config = {|
   baseUri: string,
   id?: string,
-  version?: string,
-  token: string
+  version?: string
 |};
 
 type ConfigError = {|
   error: string
 |};
 
-type ApiFn = (a: string, b: ?RequestOptions) => Promise<NormResponse | ConfigError>;
+type ApiFn = (m: Method, a: string, t: string, b: ?RequestOptions) => Promise<NormResponse | ConfigError>;
 
 const concatStrings = (xs: Array<mixed>): string =>
   xs
@@ -30,25 +28,22 @@ const concatStrings = (xs: Array<mixed>): string =>
     .map(String)
     .join('');
 
-const compRequest = (config: Config, fn: RequestFn): ApiFn =>
+const compRequest = ({baseUri, id, version}) =>
+  fromNullable(baseUri)
+    .map((b: string) => (method, uri, token, options) =>
+      request(
+        method,
+        concatStrings([b, uri]),
+        headers({ version, id, token }, options)
+      )
+    );
+
+const api = (config: Config): ApiFn =>
   fromNullable(config)
-    .chain(({baseUri, id, token, version}) => 
-      fromNullable(token)
-        .map(token => (uri, options) => fn(
-          concatStrings([baseUri, uri]),
-          headers({ version, id, token }, options)
-        ))
-    )
+    .chain(compRequest)
     .fold(
       () => () => Promise.reject({error: CONFIG_REJECT}),
       s => s
     );
 
-const compApi = (config: Config): Req<ApiFn> =>
-  Object.keys(request)
-    .reduce((acc: Object, key: RequestKey) => 
-      Lens.fromNullableProp(key)
-        .set(compRequest(config, request[key]))(acc),
-    {});
-
-export default compApi;
+export default api;

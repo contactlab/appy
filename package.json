@@ -1,6 +1,6 @@
 {
   "name": "@contactlab/appy",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Fetch API the Contactlab way",
   "main": "dist/index.js",
   "author": "Contactlab",
@@ -9,7 +9,7 @@
   "bugs": "https://github.com/contactlab/appy/issues",
   "repository": "contactlab/appy",
   "engines": {
-    "node" : ">= 8.0",
+    "node": ">= 8.0",
     "npm": ">= 5.2",
     "yarn": ">= 1.1"
   },
