@@ -31,6 +31,7 @@
     "monocle-ts": "0.5.2"
   },
   "devDependencies": {
+    "@contactlab/babelrc": "1.0.0",
     "ava": "0.24.0",
     "babel-cli": "6.26.0",
     "babel-eslint": "8.2.1",
