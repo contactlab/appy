@@ -22,6 +22,8 @@ type ConfigError = {|
 
 type ApiFn = (m: Method, a: string, t: string, b: ?RequestOptions) => Promise<NormResponse | ConfigError>;
 
+export type WrapApiFn = (o: Config) => ApiFn;
+
 const concatStrings = (xs: Array<mixed>): string =>
   xs
     .filter(s => typeof s !== 'undefined' && s !== null)
@@ -38,7 +40,7 @@ const compRequest = ({baseUri, id, version}) =>
       )
     );
 
-const api = (config: Config): ApiFn =>
+const api: WrapApiFn = config =>
   fromNullable(config)
     .chain(compRequest)
     .fold(
