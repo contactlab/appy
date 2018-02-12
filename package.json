@@ -1,6 +1,6 @@
 {
   "name": "@contactlab/appy",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Fetch API the Contactlab way",
   "main": "dist/index.js",
   "author": "Contactlab",
