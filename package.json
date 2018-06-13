@@ -23,9 +23,9 @@
     "build": "tsc -p ."
   },
   "dependencies": {
-    "fp-ts": "0.6.8",
+    "fp-ts": "1.6.2",
     "isomorphic-fetch": "2.2.1",
-    "monocle-ts": "0.5.2"
+    "monocle-ts": "1.0.0"
   },
   "devDependencies": {
     "@contactlab/tslint-config": "1.0.0",
