@@ -1,4 +1,6 @@
 {
   "extends": ["@contactlab/tslint-config", "tslint-config-prettier"],
-  "rules": {}
+  "rules": {
+    "callable-types": false
+  }
 }
