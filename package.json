@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Fetch API the Contactlab way",
   "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
   "author": "Contactlab",
   "license": "Apache-2.0",
   "homepage": "https://github.com/contactlab/appy#readme",
@@ -18,9 +19,10 @@
   "scripts": {
     "precommit": "pretty-quick --staged",
     "lint": "tslint -p .",
+    "jest": "jest --ci --coverage",
     "pretest": "npm run lint",
-    "test": "echo \"TODO\"",
-    "build": "tsc -p ."
+    "test": "npm run jest",
+    "build": "tsc -p ./tsconfig-compile.json"
   },
   "dependencies": {
     "fp-ts": "1.6.2",
@@ -29,13 +31,46 @@
   },
   "devDependencies": {
     "@contactlab/tslint-config": "1.0.0",
+    "@types/jest": "23.1.0",
     "@types/node": "10.3.2",
     "husky": "0.14.3",
+    "jest": "23.1.0",
+    "jest-fetch-mock": "1.6.4",
     "prettier": "1.13.5",
     "pretty-quick": "1.6.0",
+    "ts-jest": "22.4.6",
     "ts-node": "6.1.1",
     "tslint": "5.10.0",
     "tslint-config-prettier": "1.13.0",
     "typescript": "2.9.1"
+  },
+  "jest": {
+    "automock": false,
+    "bail": true,
+    "coveragePathIgnorePatterns": [
+      "<rootDir>/test/_helpers/",
+      "<rootDir>/node_modules/"
+    ],
+    "coverageReporters": [
+      "text"
+    ],
+    "roots": [
+      "<rootDir>/test/"
+    ],
+    "transform": {
+      "^.+\\.ts$": "ts-jest"
+    },
+    "testRegex": "(\\.|/)spec\\.(js|ts)$",
+    "moduleFileExtensions": [
+      "ts",
+      "js",
+      "json",
+      "node"
+    ],
+    "globals": {
+      "ts-jest": {
+        "enableTsDiagnostics": true
+      }
+    }
   }
 }
