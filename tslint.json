@@ -1,7 +1,6 @@
 {
   "extends": ["@contactlab/tslint-config", "tslint-config-prettier"],
   "rules": {
-    "callable-types": false,
-    "object-literal-sort-keys": false
+    "callable-types": false
   }
 }

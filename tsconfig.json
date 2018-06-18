@@ -3,7 +3,6 @@
     "target": "es5",
     "module": "commonjs",
     "lib": ["es6", "dom"],
-    "sourceMap": true,
     "declaration": true,
     "outDir": "./lib",
     "alwaysStrict": true,
@@ -14,5 +13,5 @@
     "noFallthroughCasesInSwitch": true,
     "forceConsistentCasingInFileNames": true
   },
-  "include": ["./src/**/*", "./test/**/*"]
+  "include": ["./src/**/*"]
 }

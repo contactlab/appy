@@ -23,8 +23,7 @@
  * - https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
  * - https://developer.mozilla.org/en-US/docs/Web/API/USVString
  * - https://developer.mozilla.org/en-US/docs/Web/API/Request
- * - https://gcanti.github.io/fp-ts/Task.html
- * - https://gcanti.github.io/fp-ts/Either.html
+ * - https://gcanti.github.io/fp-ts/TaskEither.html
  *
  * @module request
  */
