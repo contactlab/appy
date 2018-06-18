@@ -22,7 +22,9 @@
     "jest": "jest --ci --coverage",
     "pretest": "npm run lint",
     "test": "npm run jest",
-    "build": "tsc -p ./tsconfig-compile.json"
+    "prebuild": "rimraf ./lib",
+    "build": "tsc -p ./tsconfig-compile.json",
+    "prepublish": "npm test && npm run build"
   },
   "dependencies": {
     "fp-ts": "1.6.2",
@@ -38,6 +40,7 @@
     "jest-fetch-mock": "1.6.4",
     "prettier": "1.13.5",
     "pretty-quick": "1.6.0",
+    "rimraf": "2.6.2",
     "ts-jest": "22.4.6",
     "ts-node": "6.1.1",
     "tslint": "5.10.0",
