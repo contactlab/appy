@@ -49,9 +49,9 @@ export class BadResponse {
   constructor(readonly response: Response) {}
 }
 
-export type RequestError = NetworkError | BadUrl | BadResponse;
+export type AppyError = NetworkError | BadUrl | BadResponse;
 
-export type AppyResponse = Task<Either<RequestError, Response>>;
+export type AppyResponse = Task<Either<AppyError, Response>>;
 
 export interface AppyRequest {
   (m: Method, u: USVString, o?: RequestInit): AppyResponse;
@@ -67,7 +67,7 @@ export const request: AppyRequest = (method, uri, options) =>
       .then(
         resp => {
           if (resp.ok) {
-            return right<RequestError, Response>(resp);
+            return right<AppyError, Response>(resp);
           }
 
           if (resp.status === 404) {
@@ -80,7 +80,7 @@ export const request: AppyRequest = (method, uri, options) =>
           throw new NetworkError(e.message, uri);
         }
       )
-      .catch((e: RequestError) => left<RequestError, Response>(e))
+      .catch((e: AppyError) => left<AppyError, Response>(e))
   );
 
 export const get: AppyRequesImplicitMethod = (uri, options) =>
