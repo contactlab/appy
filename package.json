@@ -24,7 +24,7 @@
     "test": "npm run jest",
     "prebuild": "rimraf ./lib",
     "build": "tsc -p ./tsconfig-compile.json",
-    "prepublish": "npm test && npm run build"
+    "prepublishOnly": "npm test && npm run build"
   },
   "dependencies": {
     "fp-ts": "1.6.2",
