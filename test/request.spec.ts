@@ -17,25 +17,58 @@ beforeEach(() => {
   global.fetch.resetMocks();
 });
 
-test('request() should return a Right<Response> when everything is ok', () => {
+test('request() should return a Right<AppyResponse> when everything is ok - with JSON', () => {
   global.fetch.mockResponseOnce(JSON.stringify({data: 'OK'}), {
     url: '/my/api',
-    status: 200
+    status: 200,
+    statusText: 'Ok'
   });
 
-  expect.assertions(4);
+  expect.assertions(2);
 
   return request('GET', '/my/api')
     .run()
     .then(r => {
       expect(r.isRight()).toBe(true);
 
-      const response = r.getOrElse(new Response());
+      r.fold(constNull, response => {
+        expect(response).toEqual({
+          headers: {},
+          status: 200,
+          statusText: 'Ok',
+          url: '/my/api',
+          body: {data: 'OK'}
+        });
+      });
+    });
+});
 
-      expect(response.status).toBe(200);
-      expect(response.url).toBe('/my/api');
+test('request() should return a Right<AppyResponse> when everything is ok - with string', () => {
+  global.fetch.mockResponseOnce('', {
+    url: '/my/api',
+    status: 200,
+    statusText: 'Ok',
+    headers: {'Custom-Header': 'Custom'}
+  });
 
-      return expect(response.json()).resolves.toEqual({data: 'OK'});
+  expect.assertions(2);
+
+  return request('GET', '/my/api')
+    .run()
+    .then(r => {
+      expect(r.isRight()).toBe(true);
+
+      r.fold(constNull, response => {
+        expect(response).toEqual({
+          // headers keys are lower-cased according to fetch specs
+          // @see https://github.com/whatwg/fetch/issues/304
+          headers: {'custom-header': 'Custom'},
+          status: 200,
+          statusText: 'Ok',
+          url: '/my/api',
+          body: ''
+        });
+      });
     });
 });
 
@@ -67,7 +100,7 @@ test('request() should return a Left<BadUrl> when Response has status 404', () =
     statusText: '404 - Not found'
   });
 
-  expect.assertions(5);
+  expect.assertions(4);
 
   return request('GET', '/my/api')
     .run()
@@ -80,14 +113,13 @@ test('request() should return a Left<BadUrl> when Response has status 404', () =
         const badUrl = e as BadUrl;
 
         expect(badUrl.url).toBe('/my/api');
-        expect(badUrl.response).toMatchObject({
-          ok: false,
+        expect(badUrl.response).toEqual({
+          headers: {},
           status: 404,
           statusText: '404 - Not found',
-          url: '/my/api'
+          url: '/my/api',
+          body: ''
         });
-
-        return expect(badUrl.response.text()).resolves.toBe('');
       }, constNull);
     });
 });
@@ -99,7 +131,7 @@ test('request() should return a Left<BadStatus> when Response is not ok and stat
     statusText: '500 - Internal Server Error'
   });
 
-  expect.assertions(4);
+  expect.assertions(3);
 
   return request('GET', '/my/api')
     .run()
@@ -111,15 +143,12 @@ test('request() should return a Left<BadStatus> when Response is not ok and stat
 
         const badResp = e as BadResponse;
 
-        expect(badResp.response).toMatchObject({
-          ok: false,
+        expect(badResp.response).toEqual({
+          headers: {},
           status: 500,
           statusText: '500 - Internal Server Error',
-          url: '/my/api'
-        });
-
-        return expect(badResp.response.json()).resolves.toEqual({
-          error: 'application error'
+          url: '/my/api',
+          body: {error: 'application error'}
         });
       }, constNull);
     });

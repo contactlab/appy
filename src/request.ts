@@ -13,7 +13,10 @@
  * The module tries to be as more compliant as possible with the `fetch()` interface but with subtle differences:
  * - request `method` is always explicit (no implicit 'GET');
  * - accepted methods are definened by the `Method` union type;
- * - `fetch`'s input is always a `USVString` (no `Request` objects allowed).
+ * - `fetch`'s input is always a `USVString` (no `Request` objects allowed);
+ * - `Response` is mapped into a specific `AppyResponse<mixed>` interface where `mixed` is taken from `io-ts` lib;
+ * - `AppyResponse` `headers` property is always a `HeadersMap` (alias for a map of string);
+ * - `AppyResponse` has a `body` property that is the result of parsing to JSON the string returned from `response.text()`; if it cannot be parsed as JSON, `body` value is just the string (both types of data are covered by the `mixed` type).
  *
  * `RequestInit` configuration object instead remains the same.
  *
@@ -25,14 +28,40 @@
  * - https://developer.mozilla.org/en-US/docs/Web/API/Request
  * - https://gcanti.github.io/fp-ts/Task.html
  * - https://gcanti.github.io/fp-ts/Either.html
+ * - https://gcanti.github.io/io-ts
  *
  * @module request
  */
 
 import {Either, left, right} from 'fp-ts/lib/Either';
 import {Task} from 'fp-ts/lib/Task';
+import {mixed} from 'io-ts';
 
 export type Method = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE' | 'OPTIONS';
+
+export interface HeadersMap {
+  [k: string]: string;
+}
+
+export interface AppyRequest {
+  (m: Method, u: USVString, o?: RequestInit): AppyTask;
+}
+
+export interface AppyRequestNoMethod {
+  (u: USVString, o?: RequestInit): AppyTask;
+}
+
+export type AppyTask = Task<Either<AppyError, AppyResponse<mixed>>>;
+
+export interface AppyResponse<A> {
+  headers: HeadersMap;
+  status: number;
+  statusText: string;
+  url: string;
+  body: A;
+}
+
+export type AppyError = NetworkError | BadUrl | BadResponse;
 
 export class NetworkError {
   public readonly type: 'NetworkError' = 'NetworkError';
@@ -41,59 +70,78 @@ export class NetworkError {
 
 export class BadUrl {
   public readonly type: 'BadUrl' = 'BadUrl';
-  constructor(readonly url: string, readonly response: Response) {}
+  constructor(readonly url: string, readonly response: AppyResponse<mixed>) {}
 }
 
 export class BadResponse {
   public readonly type: 'BadResponse' = 'BadResponse';
-  constructor(readonly response: Response) {}
+  constructor(readonly response: AppyResponse<mixed>) {}
 }
 
-export type AppyError = NetworkError | BadUrl | BadResponse;
+const toHeadersMap = (hs: Headers): HeadersMap => {
+  const result: HeadersMap = {};
 
-export type AppyResponse = Task<Either<AppyError, Response>>;
+  hs.forEach((v: string, k: string) => {
+    result[k] = v;
+  });
 
-export interface AppyRequest {
-  (m: Method, u: USVString, o?: RequestInit): AppyResponse;
-}
+  return result;
+};
 
-export interface AppyRequesImplicitMethod {
-  (u: USVString, o?: RequestInit): AppyResponse;
-}
+const parseBody = (a: string): mixed => {
+  try {
+    return JSON.parse(a);
+  } catch (e) {
+    return a;
+  }
+};
 
 export const request: AppyRequest = (method, uri, options) =>
   new Task(() =>
     fetch(uri, {...options, method})
       .then(
-        resp => {
-          if (resp.ok) {
-            return right<AppyError, Response>(resp);
-          }
-
-          if (resp.status === 404) {
-            throw new BadUrl(uri, resp);
-          } else {
-            throw new BadResponse(resp);
-          }
-        },
+        resp =>
+          resp
+            .text()
+            .then(parseBody)
+            .then(body => ({resp, body})),
         (e: Error) => {
           throw new NetworkError(e.message, uri);
         }
       )
-      .catch((e: AppyError) => left<AppyError, Response>(e))
+      .then(({resp, body}) => {
+        const aresp = {
+          headers: toHeadersMap(resp.headers),
+          status: resp.status,
+          statusText: resp.statusText,
+          url: resp.url,
+          body
+        };
+
+        if (resp.ok) {
+          return right<AppyError, AppyResponse<mixed>>(aresp);
+        }
+
+        if (resp.status === 404) {
+          throw new BadUrl(uri, aresp);
+        } else {
+          throw new BadResponse(aresp);
+        }
+      })
+      .catch((e: AppyError) => left<AppyError, AppyResponse<mixed>>(e))
   );
 
-export const get: AppyRequesImplicitMethod = (uri, options) =>
+export const get: AppyRequestNoMethod = (uri, options) =>
   request('GET', uri, options);
 
-export const post: AppyRequesImplicitMethod = (uri, options) =>
+export const post: AppyRequestNoMethod = (uri, options) =>
   request('POST', uri, options);
 
-export const put: AppyRequesImplicitMethod = (uri, options) =>
+export const put: AppyRequestNoMethod = (uri, options) =>
   request('PUT', uri, options);
 
-export const patch: AppyRequesImplicitMethod = (uri, options) =>
+export const patch: AppyRequestNoMethod = (uri, options) =>
   request('PATCH', uri, options);
 
-export const del: AppyRequesImplicitMethod = (uri, options) =>
+export const del: AppyRequestNoMethod = (uri, options) =>
   request('DELETE', uri, options);
