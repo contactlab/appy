@@ -16,7 +16,8 @@ import {fold as foldM} from 'fp-ts/lib/Monoid';
 import {fromNullable, getMonoid, some} from 'fp-ts/lib/Option';
 import {fold as foldS, getObjectSemigroup} from 'fp-ts/lib/Semigroup';
 
-import {ApiConfig, ApiOptionsNoContent, HeadersMap} from './api';
+import {ApiConfig, ApiOptions} from './api';
+import {HeadersMap} from './request';
 
 const DEFAULT_MODE: RequestMode = 'cors';
 const DEFAULT_HEADERS = {
@@ -29,10 +30,7 @@ const singleton = (k: string) => (v: string): HeadersMap => ({[k]: v});
 const foldOHM = foldM(getMonoid(getObjectSemigroup<HeadersMap>()));
 const foldRI = foldS(getObjectSemigroup<RequestInit>());
 
-const getHeaders = (
-  config: ApiConfig,
-  opts: ApiOptionsNoContent
-): HeadersMap => {
+const getHeaders = <A>(config: ApiConfig, opts: ApiOptions<A>): HeadersMap => {
   const optsHeaders = fromNullable(opts.headers);
   const auth = some(opts.token)
     .map(t => `Bearer ${t}`)
@@ -53,11 +51,24 @@ const getHeaders = (
   ]).getOrElse(DEFAULT_HEADERS);
 };
 
-const getMode = (opts: ApiOptionsNoContent): RequestMode =>
+const getMode = (opts: RequestInit): RequestMode =>
   fromNullable(opts.mode).getOrElse(DEFAULT_MODE);
 
-export const optsToRequestInit = (
+// TODO: find a more robust, "typescript-supported" solution...
+const toRequestInit = <A>(otps: ApiOptions<A>): RequestInit => {
+  const result = Object.assign({}, otps);
+
+  delete result.token;
+  delete result.decoder;
+
+  return result;
+};
+
+export const optsToRequestInit = <A>(
   config: ApiConfig,
-  opts: ApiOptionsNoContent
+  opts: ApiOptions<A>
 ): RequestInit =>
-  foldRI(opts)([{headers: getHeaders(config, opts)}, {mode: getMode(opts)}]);
+  foldRI(toRequestInit(opts))([
+    {headers: getHeaders(config, opts)},
+    {mode: getMode(opts)}
+  ]);
