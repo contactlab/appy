@@ -35,7 +35,14 @@
 
 import {Either, left, right} from 'fp-ts/lib/Either';
 import {Task} from 'fp-ts/lib/Task';
-import {mixed} from 'io-ts';
+
+export type Mixed =
+  | {[key: string]: any}
+  | object
+  | number
+  | string
+  | boolean
+  | null;
 
 export type Method = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE' | 'OPTIONS';
 
@@ -44,14 +51,14 @@ export interface HeadersMap {
 }
 
 export interface AppyRequest {
-  (m: Method, u: USVString, o?: RequestInit): AppyTask;
+  (m: Method, u: USVString, o?: RequestInit): AppyTask<AppyError, Mixed>;
 }
 
 export interface AppyRequestNoMethod {
-  (u: USVString, o?: RequestInit): AppyTask;
+  (u: USVString, o?: RequestInit): AppyTask<AppyError, Mixed>;
 }
 
-export type AppyTask = Task<Either<AppyError, AppyResponse<mixed>>>;
+export type AppyTask<E, A> = Task<Either<E, AppyResponse<A>>>;
 
 export interface AppyResponse<A> {
   headers: HeadersMap;
@@ -70,12 +77,12 @@ export class NetworkError {
 
 export class BadUrl {
   public readonly type: 'BadUrl' = 'BadUrl';
-  constructor(readonly url: string, readonly response: AppyResponse<mixed>) {}
+  constructor(readonly url: string, readonly response: AppyResponse<Mixed>) {}
 }
 
 export class BadResponse {
   public readonly type: 'BadResponse' = 'BadResponse';
-  constructor(readonly response: AppyResponse<mixed>) {}
+  constructor(readonly response: AppyResponse<Mixed>) {}
 }
 
 const toHeadersMap = (hs: Headers): HeadersMap => {
@@ -88,7 +95,7 @@ const toHeadersMap = (hs: Headers): HeadersMap => {
   return result;
 };
 
-const parseBody = (a: string): mixed => {
+const parseBody = (a: string): Mixed => {
   try {
     return JSON.parse(a);
   } catch (e) {
@@ -119,7 +126,7 @@ export const request: AppyRequest = (method, uri, options) =>
         };
 
         if (resp.ok) {
-          return right<AppyError, AppyResponse<mixed>>(aresp);
+          return right<AppyError, AppyResponse<Mixed>>(aresp);
         }
 
         if (resp.status === 404) {
@@ -128,7 +135,7 @@ export const request: AppyRequest = (method, uri, options) =>
           throw new BadResponse(aresp);
         }
       })
-      .catch((e: AppyError) => left<AppyError, AppyResponse<mixed>>(e))
+      .catch((e: AppyError) => left<AppyError, AppyResponse<Mixed>>(e))
   );
 
 export const get: AppyRequestNoMethod = (uri, options) =>
