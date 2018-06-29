@@ -20,13 +20,13 @@ Appy try to offer a better model for fething resources, using the standard globa
 
 The model is built around the concepts of:
 
-- an asynchronous operations (`Task`)
+- asynchronous operations (`Task`)
 - which can fail for some reason (`Either`)
 - or return data with a specific shape that should be decoded/validated (`Decoder`).
 
 In order to achieve this, Appy intensely uses:
 
-- [**Typescript**](https://www.typescriptlang.org) >= v2.9
+- [Typescript](https://www.typescriptlang.org) >= v2.9
 - [`fp-ts`](https://github.com/gcanti/io-ts)
 - [`io-ts`](https://github.com/gcanti/fp-ts/)
 
