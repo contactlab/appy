@@ -1,36 +1,16 @@
 /*tslint:disable:max-classes-per-file*/
 
 /**
- * This is a low level module:
- * it uses the standard Web API Fetch function (`fetch()`) in order to make a request to a resource
- * and wraps it in a `TaskEither` monad.
- *
- * So, you can:
- * - use the standard, clean and widely supported api to make XHR;
- * - "project" it into a declarative functional world where execution is lazy (`Task`);
- * - handle "by design" the possibility of a failure with an explicit channel for errors (`Either`).
- *
- * The module tries to be as more compliant as possible with the `fetch()` interface but with subtle differences:
- * - request `method` is always explicit (no implicit 'GET');
- * - accepted methods are definened by the `Method` union type;
- * - `fetch`'s input is always a `USVString` (no `Request` objects allowed);
- * - `Response` is mapped into a specific `AppyResponse<mixed>` interface where `mixed` is taken from `io-ts` lib;
- * - `AppyResponse` `headers` property is always a `HeadersMap` (alias for a map of string);
- * - `AppyResponse` has a `body` property that is the result of parsing to JSON the string returned from `response.text()`; if it cannot be parsed as JSON, `body` value is just the string (both types of data are covered by the `mixed` type).
- *
- * `RequestInit` configuration object instead remains the same.
- *
- * References:
- * - https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API
- * - https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/fetch
- * - https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
- * - https://developer.mozilla.org/en-US/docs/Web/API/USVString
- * - https://developer.mozilla.org/en-US/docs/Web/API/Request
- * - https://gcanti.github.io/fp-ts/Task.html
- * - https://gcanti.github.io/fp-ts/Either.html
- * - https://gcanti.github.io/io-ts
- *
  * @module request
+ * @since 1.0.0
+ * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API|Fetch Api}
+ * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/fetch|Global fetch}
+ * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch|Using fetch}
+ * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/USVString|USVString}
+ * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/Request|Request}
+ * @see {@link https://gcanti.github.io/fp-ts/Task.html|Task}
+ * @see {@link https://gcanti.github.io/fp-ts/Either.html|Either}
+ * @see {@link https://gcanti.github.io/fp-ts/TaskEither.html|TaskEither}
  */
 
 import {Either, left, right} from 'fp-ts/lib/Either';
