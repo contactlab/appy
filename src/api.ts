@@ -15,7 +15,7 @@
  *    * `options` has a required `token` (string) key which will be passed as request's `Authorization: Bearer ${token}` header;
  *    * `options` has a require `decoder` (`Decoder<I, A>`) key which will be used to decode the service's JSON payload;
  *    * decoder errors are expressed with a `DecoderError` class which extends the `AppyError` tagged union type into as `ApiError`;
- *    * thus, the returned type of `api` methods is `Task<Either<ApiError, A>>`
+ *    * thus, the returned type of `api` methods is `TaskEither<ApiError, A>`
  *    * `headers` in `options` object can only be a map of strings (`{[k: string]: string}`); if you need to work with a `Header` object you have to transform it;
  *    * `options` is merged with a predefined object in order to set some default values:
  *      - `mode: 'cors'`
@@ -28,6 +28,7 @@
  */
 
 import {Either} from 'fp-ts/lib/Either';
+import {fromEither} from 'fp-ts/lib/TaskEither';
 import {identity} from 'fp-ts/lib/function';
 import {Decoder, ValidationError} from 'io-ts';
 import {optsToRequestInit} from './opts-to-request-init';
@@ -95,11 +96,9 @@ const makeRequest = <A>(
   u: USVString,
   o: ApiOptions<A>
 ): ApiTask<A> =>
-  request(m, fullPath(c.baseUri, u), optsToRequestInit(c, o)).map(result =>
-    result
-      .mapLeft<ApiError>(identity) // type-level mapping... ;)
-      .chain(b => applyDecoder(b, o.decoder))
-  );
+  request(m, fullPath(c.baseUri, u), optsToRequestInit(c, o))
+    .mapLeft<ApiError>(identity) // type-level mapping... ;)
+    .chain(b => fromEither(applyDecoder(b, o.decoder)));
 
 export const api = (c: ApiConfig): ApiMethods => ({
   request: (method, uri, options) => makeRequest(c, method, uri, options),

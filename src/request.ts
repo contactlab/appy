@@ -3,7 +3,7 @@
 /**
  * This is a low level module:
  * it uses the standard Web API Fetch function (`fetch()`) in order to make a request to a resource
- * and wraps it in a `Task<Either>` monad.
+ * and wraps it in a `TaskEither` monad.
  *
  * So, you can:
  * - use the standard, clean and widely supported api to make XHR;
@@ -35,6 +35,7 @@
 
 import {Either, left, right} from 'fp-ts/lib/Either';
 import {Task} from 'fp-ts/lib/Task';
+import {TaskEither} from 'fp-ts/lib/TaskEither';
 
 export type Mixed =
   | {[key: string]: any}
@@ -58,7 +59,7 @@ export interface AppyRequestNoMethod {
   (u: USVString, o?: RequestInit): AppyTask<AppyError, Mixed>;
 }
 
-export type AppyTask<E, A> = Task<Either<E, AppyResponse<A>>>;
+export type AppyTask<E, A> = TaskEither<E, AppyResponse<A>>;
 
 export interface AppyResponse<A> {
   headers: HeadersMap;
@@ -103,9 +104,13 @@ const parseBody = (a: string): Mixed => {
   }
 };
 
-export const request: AppyRequest = (method, uri, options) =>
+const makeRequest = (
+  m: Method,
+  u: USVString,
+  o?: RequestInit
+): Task<Either<AppyError, AppyResponse<Mixed>>> =>
   new Task(() =>
-    fetch(uri, {...options, method})
+    fetch(u, {...o, method: m})
       .then(
         resp =>
           resp
@@ -113,7 +118,7 @@ export const request: AppyRequest = (method, uri, options) =>
             .then(parseBody)
             .then(body => ({resp, body})),
         (e: Error) => {
-          throw new NetworkError(e.message, uri);
+          throw new NetworkError(e.message, u);
         }
       )
       .then(({resp, body}) => {
@@ -130,13 +135,16 @@ export const request: AppyRequest = (method, uri, options) =>
         }
 
         if (resp.status === 404) {
-          throw new BadUrl(uri, aresp);
+          throw new BadUrl(u, aresp);
         } else {
           throw new BadResponse(aresp);
         }
       })
       .catch((e: AppyError) => left<AppyError, AppyResponse<Mixed>>(e))
   );
+
+export const request: AppyRequest = (method, uri, options) =>
+  new TaskEither(makeRequest(method, uri, options));
 
 export const get: AppyRequestNoMethod = (uri, options) =>
   request('GET', uri, options);
