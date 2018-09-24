@@ -1,5 +1,4 @@
 node_modules
-.vscode
-.nyc_output
 *.log*
-dist
+coverage
+lib
