@@ -273,3 +273,45 @@ test('api().del() should make a DELETE request', () => {
       );
     });
 });
+
+test('api().request() should call full url without token, decode response and return Right<AppyResponse<A>>', () => {
+  global.fetch.mockResponseOnce(JSON.stringify({data: 'OK'}), {
+    url: 'http://localhost/api/v1/my/api',
+    status: 200,
+    statusText: 'OK'
+  });
+
+  const myApi = api({baseUri: 'http://localhost/api/v1'});
+  const decoder = t.type({data: t.string});
+
+  expect.assertions(3);
+
+  return myApi
+    .request('GET', '/my/api', {decoder})
+    .run()
+    .then(r => {
+      expect(global.fetch).toHaveBeenCalledWith(
+        'http://localhost/api/v1/my/api',
+        {
+          method: 'GET',
+          headers: {
+            Accept: 'application/json',
+            'Content-type': 'application/json'
+          },
+          mode: 'cors'
+        }
+      );
+
+      expect(r.isRight()).toBe(true);
+
+      r.fold(constNull, result => {
+        expect(result).toEqual({
+          headers: {},
+          status: 200,
+          statusText: 'OK',
+          url: 'http://localhost/api/v1/my/api',
+          body: {data: 'OK'}
+        });
+      });
+    });
+});

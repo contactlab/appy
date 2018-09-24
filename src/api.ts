@@ -46,7 +46,7 @@ export interface ApiRequestNoMethod {
 
 export interface ApiOptions<A> extends RequestInit {
   headers?: HeadersMap;
-  token: string;
+  token?: string;
   decoder: Decoder<Mixed, A>;
 }
 

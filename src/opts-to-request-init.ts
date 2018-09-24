@@ -32,7 +32,7 @@ const foldRI = foldS(getObjectSemigroup<RequestInit>());
 
 const getHeaders = <A>(config: ApiConfig, opts: ApiOptions<A>): HeadersMap => {
   const optsHeaders = fromNullable(opts.headers);
-  const auth = some(opts.token)
+  const auth = fromNullable(opts.token)
     .map(t => `Bearer ${t}`)
     .map(singleton('Authorization'));
   const clientId = fromNullable(config.id).map(
