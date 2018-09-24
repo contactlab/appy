@@ -1,6 +1,6 @@
 # Appy
 
-[![Build Status](https://travis-ci.org/contactlab/appy.svg?branch=master)](https://travis-ci.org/contactlab/appy)
+[![Build Status](https://travis-ci.org/contactlab/appy.svg?branch=master)](https://travis-ci.org/contactlab/appy) [![Greenkeeper badge](https://badges.greenkeeper.io/contactlab/appy.svg)](https://greenkeeper.io/)
 
 Fetch API the Contactlab way
 
