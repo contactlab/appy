@@ -17,7 +17,6 @@
     "lib"
   ],
   "scripts": {
-    "precommit": "pretty-quick --staged",
     "lint": "tslint -p .",
     "jest": "jest --ci --coverage",
     "pretest": "npm run lint",
@@ -34,7 +33,7 @@
     "@contactlab/tslint-config": "1.2.0",
     "@types/jest": "23.3.2",
     "@types/node": "10.11.0",
-    "husky": "0.14.3",
+    "husky": "1.0.0",
     "jest": "23.6.0",
     "jest-fetch-mock": "1.6.6",
     "prettier": "1.14.3",
@@ -73,6 +72,11 @@
       "ts-jest": {
         "enableTsDiagnostics": true
       }
+    }
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "pretty-quick --staged"
     }
   }
 }
