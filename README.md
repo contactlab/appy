@@ -16,7 +16,7 @@ $ yarn add @contactlab/appy
 
 ## Motivation
 
-Appy try to offer a better model for fething resources, using the standard global `fetch()` function as a "backbone" and some principles from Functional Programming paradigm.
+Appy try to offer a better model for fetching resources, using the standard global `fetch()` function as a "backbone" and some principles from Functional Programming paradigm.
 
 The model is built around the concepts of:
 
