@@ -17,7 +17,6 @@
     "lib"
   ],
   "scripts": {
-    "precommit": "pretty-quick --staged",
     "lint": "tslint -p .",
     "jest": "jest --ci --coverage",
     "pretest": "npm run lint",
@@ -73,6 +72,11 @@
       "ts-jest": {
         "enableTsDiagnostics": true
       }
+    }
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "pretty-quick --staged"
     }
   }
 }
