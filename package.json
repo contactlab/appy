@@ -58,21 +58,20 @@
     "roots": [
       "<rootDir>/test/"
     ],
-    "transform": {
-      "^.+\\.ts$": "ts-jest"
-    },
     "testRegex": "(\\.|/)spec\\.(js|ts)$",
     "moduleFileExtensions": [
-      "ts",
       "js",
       "json",
-      "node"
+      "node",
+      "ts"
     ],
     "globals": {
       "ts-jest": {
-        "enableTsDiagnostics": true
+        "diagnostics": true
       }
-    }
+    },
+    "preset": "ts-jest",
+    "testMatch": null
   },
   "husky": {
     "hooks": {
