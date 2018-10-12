@@ -31,7 +31,7 @@
   },
   "devDependencies": {
     "@contactlab/tslint-config": "1.2.0",
-    "@types/jest": "23.3.3",
+    "@types/jest": "23.3.4",
     "@types/node": "10.11.4",
     "husky": "1.1.1",
     "jest": "23.6.0",
