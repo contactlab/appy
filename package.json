@@ -1,6 +1,6 @@
 {
   "name": "@contactlab/appy",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "description": "Fetch API the Contactlab way",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -9,6 +9,16 @@
   "homepage": "https://github.com/contactlab/appy#readme",
   "bugs": "https://github.com/contactlab/appy/issues",
   "repository": "contactlab/appy",
+  "keywords": [
+    "contactlab",
+    "clab",
+    "appy",
+    "fetch",
+    "fp",
+    "fp-ts",
+    "functional programming",
+    "task"
+  ],
   "engines": {
     "node": ">= 8.10",
     "npm": ">= 6.0"
@@ -23,27 +33,30 @@
     "test": "npm run jest",
     "prebuild": "rimraf ./lib",
     "build": "tsc -p ./tsconfig-compile.json",
-    "prepublishOnly": "npm test && npm run build"
+    "prepublishOnly": "npm test && npm run build",
+    "changelog": "standard-changelog -i CHANGELOG.md -r 0 && git add CHANGELOG.md",
+    "postversion": "npm run changelog"
   },
   "dependencies": {
     "fp-ts": "1.9.0",
-    "io-ts": "1.3.0"
+    "io-ts": "1.3.1"
   },
   "devDependencies": {
     "@contactlab/tslint-config": "1.2.0",
-    "@types/jest": "23.3.3",
-    "@types/node": "10.11.4",
-    "husky": "1.1.0",
+    "@types/jest": "23.3.5",
+    "@types/node": "10.11.7",
+    "husky": "1.1.2",
     "jest": "23.6.0",
     "jest-fetch-mock": "1.6.6",
     "prettier": "1.14.3",
-    "pretty-quick": "1.7.0",
+    "pretty-quick": "1.8.0",
     "rimraf": "2.6.2",
-    "ts-jest": "23.10.3",
+    "standard-changelog": "2.0.1",
+    "ts-jest": "23.10.4",
     "ts-node": "7.0.1",
     "tslint": "5.11.0",
     "tslint-config-prettier": "1.15.0",
-    "typescript": "3.0.3"
+    "typescript": "3.1.3"
   },
   "jest": {
     "automock": false,
@@ -58,21 +71,20 @@
     "roots": [
       "<rootDir>/test/"
     ],
-    "transform": {
-      "^.+\\.ts$": "ts-jest"
-    },
     "testRegex": "(\\.|/)spec\\.(js|ts)$",
     "moduleFileExtensions": [
-      "ts",
       "js",
       "json",
-      "node"
+      "node",
+      "ts"
     ],
     "globals": {
       "ts-jest": {
-        "enableTsDiagnostics": true
+        "diagnostics": true
       }
-    }
+    },
+    "preset": "ts-jest",
+    "testMatch": null
   },
   "husky": {
     "hooks": {
