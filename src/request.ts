@@ -6,7 +6,6 @@
  * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API|Fetch Api}
  * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/fetch|Global fetch}
  * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch|Using fetch}
- * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/USVString|USVString}
  * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/Request|Request}
  * @see {@link https://gcanti.github.io/fp-ts/Task.html|Task}
  * @see {@link https://gcanti.github.io/fp-ts/Either.html|Either}
@@ -32,11 +31,11 @@ export interface HeadersMap {
 }
 
 export interface AppyRequest {
-  (m: Method, u: USVString, o?: RequestInit): AppyTask<AppyError, Mixed>;
+  (m: Method, u: string, o?: RequestInit): AppyTask<AppyError, Mixed>;
 }
 
 export interface AppyRequestNoMethod {
-  (u: USVString, o?: RequestInit): AppyTask<AppyError, Mixed>;
+  (u: string, o?: RequestInit): AppyTask<AppyError, Mixed>;
 }
 
 export type AppyTask<E, A> = TaskEither<E, AppyResponse<A>>;
@@ -53,7 +52,7 @@ export type AppyError = NetworkError | BadUrl | BadResponse;
 
 export class NetworkError {
   public readonly type: 'NetworkError' = 'NetworkError';
-  constructor(readonly message: string, readonly uri: USVString) {}
+  constructor(readonly message: string, readonly uri: string) {}
 }
 
 export class BadUrl {
@@ -86,7 +85,7 @@ const parseBody = (a: string): Mixed => {
 
 const makeRequest = (
   m: Method,
-  u: USVString,
+  u: string,
   o?: RequestInit
 ): Task<Either<AppyError, AppyResponse<Mixed>>> =>
   new Task(() =>

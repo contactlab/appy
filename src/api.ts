@@ -37,11 +37,11 @@ export interface ApiMethods {
 }
 
 export interface ApiRequest {
-  <A>(m: Method, u: USVString, o: ApiOptions<A>): ApiTask<A>;
+  <A>(m: Method, u: string, o: ApiOptions<A>): ApiTask<A>;
 }
 
 export interface ApiRequestNoMethod {
-  <A>(u: USVString, o: ApiOptions<A>): ApiTask<A>;
+  <A>(u: string, o: ApiOptions<A>): ApiTask<A>;
 }
 
 export interface ApiOptions<A> extends RequestInit {
@@ -72,7 +72,7 @@ const applyDecoder = <A>(
 const makeRequest = <A>(
   c: ApiConfig,
   m: Method,
-  u: USVString,
+  u: string,
   o: ApiOptions<A>
 ): ApiTask<A> =>
   request(m, fullPath(c.baseUri, u), optsToRequestInit(c, o))
