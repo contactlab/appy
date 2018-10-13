@@ -9,6 +9,16 @@
   "homepage": "https://github.com/contactlab/appy#readme",
   "bugs": "https://github.com/contactlab/appy/issues",
   "repository": "contactlab/appy",
+  "keywords": [
+    "contactlab",
+    "clab",
+    "appy",
+    "fetch",
+    "fp",
+    "fp-ts",
+    "functional programming",
+    "task"
+  ],
   "engines": {
     "node": ">= 8.10",
     "npm": ">= 6.0"
