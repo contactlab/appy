@@ -156,7 +156,7 @@ So, it is a little more opinionated:
 - the main `api` method is `request()` which uses under the hood the `request` module with some subtle differences:
   - the `options` parameter is mandatory and it is an extension of the `RequestInit` interface;
   - `options` has a required `token` (string) key which will be passed as request's `Authorization: Bearer ${token}` header;
-  - `options` has a require `decoder` (`Decoder<Mixed, A>`) key which will be used to decode the service's JSON payload;
+  - `options` has a required `decoder` (`Decoder<Mixed, A>`) key which will be used to decode the service's JSON payload;
   - decoder errors are expressed with a `DecoderError` class which extends the `AppyError` tagged union type;
   - thus, the returned type of `api` methods is `TaskEither<ApiError, A>`
   - `headers` in `options` object can only be a map of strings (`{[k: string]: string}`); if you need to work with a `Header` object you have to transform it;
