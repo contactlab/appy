@@ -34,7 +34,7 @@
     "prebuild": "rimraf ./lib",
     "build": "tsc -p ./tsconfig-compile.json",
     "prepublishOnly": "npm test && npm run build",
-    "changelog": "standard-changelog -i CHANGELOG.md -r 0 && git add CHANGELOG.md",
+    "changelog": "standard-changelog -i CHANGELOG.md && git add CHANGELOG.md",
     "postversion": "npm run changelog"
   },
   "dependencies": {
