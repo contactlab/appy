@@ -1,3 +1,5 @@
+## [1.2.2](https://github.com/contactlab/appy/compare/1.2.1...1.2.2) (2018-11-02)
+
 <a name="1.2.1"></a>
 
 ## [1.2.1](https://github.com/contactlab/appy/compare/1.2.0...1.2.1) (2018-10-23)
