@@ -39,19 +39,19 @@
   },
   "dependencies": {
     "fp-ts": "1.10.0",
-    "io-ts": "1.3.1"
+    "io-ts": "1.4.0"
   },
   "devDependencies": {
     "@contactlab/tslint-config": "1.2.0",
-    "@types/jest": "23.3.7",
-    "@types/node": "10.12.0",
+    "@types/jest": "23.3.9",
+    "@types/node": "10.12.2",
     "husky": "1.1.3",
     "jest": "23.6.0",
     "jest-fetch-mock": "1.6.6",
     "prettier": "1.14.3",
     "pretty-quick": "1.8.0",
     "rimraf": "2.6.2",
-    "standard-changelog": "2.0.1",
+    "standard-changelog": "2.0.6",
     "ts-jest": "23.10.4",
     "ts-node": "7.0.1",
     "tslint": "5.11.0",
