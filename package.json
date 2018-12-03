@@ -38,7 +38,7 @@
     "postversion": "npm run changelog"
   },
   "dependencies": {
-    "fp-ts": "1.10.0",
+    "fp-ts": "1.12.0",
     "io-ts": "1.4.0"
   },
   "devDependencies": {
