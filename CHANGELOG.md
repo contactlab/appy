@@ -1,3 +1,9 @@
+## [1.2.3](https://github.com/contactlab/appy/compare/1.2.2...1.2.3) (2018-12-04)
+
+### Bug Fixes
+
+- **package:** update fp-ts to version 1.12.0 ([#76](https://github.com/contactlab/appy/issues/76)) ([c7d3ecd](https://github.com/contactlab/appy/commit/c7d3ecd)), closes [#67](https://github.com/contactlab/appy/issues/67)
+
 ## [1.2.2](https://github.com/contactlab/appy/compare/1.2.1...1.2.2) (2018-11-02)
 
 <a name="1.2.1"></a>
