@@ -1,3 +1,5 @@
+## [1.2.4](https://github.com/contactlab/appy/compare/1.2.3...1.2.4) (2018-12-28)
+
 ## [1.2.3](https://github.com/contactlab/appy/compare/1.2.2...1.2.3) (2018-12-04)
 
 ### Bug Fixes
