@@ -44,7 +44,7 @@
   "devDependencies": {
     "@contactlab/tslint-config": "1.2.0",
     "@types/jest": "23.3.10",
-    "@types/node": "10.12.15",
+    "@types/node": "10.12.18",
     "husky": "1.2.1",
     "jest": "23.6.0",
     "jest-fetch-mock": "2.0.1",
