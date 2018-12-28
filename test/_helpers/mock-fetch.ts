@@ -1,11 +1,5 @@
-import * as mockFetch from 'jest-fetch-mock';
+import {GlobalWithFetchMock} from 'jest-fetch-mock';
 
-declare global {
-  namespace NodeJS {
-    interface Global {
-      fetch: typeof mockFetch;
-    }
-  }
-}
-
-global.fetch = mockFetch;
+const customGlobal: GlobalWithFetchMock = global as GlobalWithFetchMock;
+customGlobal.fetch = require('jest-fetch-mock'); // tslint:disable-line
+customGlobal.fetchMock = customGlobal.fetch;
