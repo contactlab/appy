@@ -26,7 +26,7 @@ The model is built around the concepts of:
 
 In order to achieve this, Appy intensely uses:
 
-- [Typescript](https://www.typescriptlang.org) >= v2.9
+- [Typescript](https://www.typescriptlang.org) >= v3.2.2 (due to [`io-ts` v1.6+](https://github.com/gcanti/io-ts/blob/master/CHANGELOG.md#160))
 - [`fp-ts`](https://github.com/gcanti/fp-ts)
 - [`io-ts`](https://github.com/gcanti/io-ts)
 

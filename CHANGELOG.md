@@ -1,3 +1,9 @@
+## [1.2.7](https://github.com/contactlab/appy/compare/1.2.6...1.2.7) (2019-01-16)
+
+### Bug Fixes
+
+- **package:** update io-ts to version 1.6.2 ([#100](https://github.com/contactlab/appy/issues/100)) ([f61387f](https://github.com/contactlab/appy/commit/f61387f)), closes [#97](https://github.com/contactlab/appy/issues/97)
+
 ## [1.2.6](https://github.com/contactlab/appy/compare/1.2.5...1.2.6) (2019-01-10)
 
 ## [1.2.5](https://github.com/contactlab/appy/compare/1.2.4...1.2.5) (2019-01-07)
