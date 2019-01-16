@@ -39,7 +39,7 @@
   },
   "dependencies": {
     "fp-ts": "1.12.3",
-    "io-ts": "1.6.2"
+    "io-ts": "1.6.3"
   },
   "devDependencies": {
     "@contactlab/tslint-config": "1.2.0",
