@@ -27,9 +27,10 @@
     "lib"
   ],
   "scripts": {
+    "check": "tsc --noEmit",
     "lint": "tslint -p .",
     "jest": "jest --ci --coverage",
-    "pretest": "npm run lint",
+    "pretest": "npm run lint && npm run check",
     "test": "npm run jest",
     "prebuild": "rimraf ./lib",
     "build": "tsc -p ./tsconfig-compile.json",
