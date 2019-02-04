@@ -39,8 +39,8 @@
     "postversion": "npm run changelog"
   },
   "dependencies": {
-    "fp-ts": "1.12.3",
-    "io-ts": "1.6.4"
+    "fp-ts": "^1.13.0",
+    "io-ts": "^1.8.0"
   },
   "devDependencies": {
     "@contactlab/tslint-config": "1.2.0",
