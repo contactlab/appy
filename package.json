@@ -3,7 +3,9 @@
   "version": "1.2.7",
   "description": "Fetch API the Contactlab way",
   "main": "lib/index.js",
+  "module": "lib/es6/index.js",
   "typings": "lib/index.d.ts",
+  "sideEffects": false,
   "author": "Contactlab",
   "license": "Apache-2.0",
   "homepage": "https://github.com/contactlab/appy#readme",
@@ -33,7 +35,7 @@
     "pretest": "npm run lint && npm run check",
     "test": "npm run jest",
     "prebuild": "rimraf ./lib",
-    "build": "tsc -p ./tsconfig-compile.json",
+    "build": "tsc -p ./tsconfig-compile.json && tsc -p ./tsconfig-compile-es6.json",
     "prepublishOnly": "npm test && npm run build",
     "changelog": "standard-changelog -i CHANGELOG.md && git add CHANGELOG.md",
     "postversion": "npm run changelog"
