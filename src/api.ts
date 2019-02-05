@@ -1,5 +1,3 @@
-/*tslint:disable:max-classes-per-file*/
-
 /**
  * @module api
  * @since 1.0.0
@@ -12,12 +10,12 @@ import {identity} from 'fp-ts/lib/function';
 import {Decoder, ValidationError} from 'io-ts';
 import {optsToRequestInit} from './opts-to-request-init';
 import {
-  AppyError,
-  AppyResponse,
-  AppyTask,
+  Fetch,
   HeadersMap,
   Method,
   Mixed,
+  RequestError,
+  Response,
   request
 } from './request';
 
@@ -37,11 +35,11 @@ export interface ApiMethods {
 }
 
 export interface ApiRequest {
-  <A>(m: Method, u: string, o: ApiOptions<A>): ApiTask<A>;
+  <A>(m: Method, u: string, o: ApiOptions<A>): ApiFetch<A>;
 }
 
 export interface ApiRequestNoMethod {
-  <A>(u: string, o: ApiOptions<A>): ApiTask<A>;
+  <A>(u: string, o: ApiOptions<A>): ApiFetch<A>;
 }
 
 export interface ApiOptions<A> extends RequestInit {
@@ -50,32 +48,31 @@ export interface ApiOptions<A> extends RequestInit {
   decoder: Decoder<Mixed, A>;
 }
 
-export type ApiTask<A> = AppyTask<ApiError, A>;
+export type ApiFetch<A> = Fetch<ApiError, A>;
+/**
+ * @deprecated since version 1.3.0
+ */
+export type ApiTask<A> = ApiFetch<A>; // temporary type alias
 
-export type ApiError = AppyError | DecoderError;
+export type ApiError = RequestError | DecoderError;
 
-export class DecoderError {
-  public readonly type: 'DecoderError' = 'DecoderError';
-  constructor(readonly errors: ValidationError[]) {}
+export interface DecoderError {
+  readonly type: 'DecoderError';
+  readonly errors: ValidationError[];
 }
 
-const fullPath = (a: string, b: string) => `${a}${b}`;
-
-const applyDecoder = <A>(
-  aresponse: AppyResponse<Mixed>,
-  decoder: Decoder<Mixed, A>
-): Either<ApiError, AppyResponse<A>> =>
-  decoder
-    .decode(aresponse.body)
-    .bimap(err => new DecoderError(err), body => ({...aresponse, body}));
+const decoderError = (errors: ValidationError[]): DecoderError => ({
+  type: 'DecoderError',
+  errors
+});
 
 const makeRequest = <A>(
   c: ApiConfig,
   m: Method,
   u: string,
   o: ApiOptions<A>
-): ApiTask<A> =>
-  request(m, fullPath(c.baseUri, u), optsToRequestInit(c, o))
+): ApiFetch<A> =>
+  request(m, `${c.baseUri}${u}`, optsToRequestInit(c, o))
     .mapLeft<ApiError>(identity) // type-level mapping... ;)
     .chain(b => fromEither(applyDecoder(b, o.decoder)));
 
@@ -87,3 +84,17 @@ export const api = (c: ApiConfig): ApiMethods => ({
   patch: (uri, options) => makeRequest(c, 'PATCH', uri, options),
   del: (uri, options) => makeRequest(c, 'DELETE', uri, options)
 });
+
+// --- Helpers
+function applyDecoder<A>(
+  aresponse: Response<Mixed>,
+  decoder: Decoder<Mixed, A>
+): Either<ApiError, Response<A>> {
+  return decoder
+    .decode(aresponse.body)
+    .bimap(decoderError, withBody(aresponse));
+}
+
+function withBody<A>(response: Response<Mixed>): (a: A) => Response<A> {
+  return (body: A) => ({...response, body});
+}

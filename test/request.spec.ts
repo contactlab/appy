@@ -17,7 +17,7 @@ beforeEach(() => {
   global.fetch.resetMocks();
 });
 
-test('request() should return a Right<AppyResponse> when everything is ok - with JSON', () => {
+test('request() should return a Right<Response> when everything is ok - with JSON', () => {
   global.fetch.mockResponseOnce(JSON.stringify({data: 'OK'}), {
     url: '/my/api',
     status: 200,
@@ -43,7 +43,7 @@ test('request() should return a Right<AppyResponse> when everything is ok - with
     });
 });
 
-test('request() should return a Right<AppyResponse> when everything is ok - with string', () => {
+test('request() should return a Right<Response> when everything is ok - with string', () => {
   global.fetch.mockResponseOnce('', {
     url: '/my/api',
     status: 200,
