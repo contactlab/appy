@@ -10,12 +10,12 @@ import {identity} from 'fp-ts/lib/function';
 import {Decoder, ValidationError} from 'io-ts';
 import {optsToRequestInit} from './opts-to-request-init';
 import {
-  AppyError,
-  AppyResponse,
-  AppyTask,
+  Fetch,
   HeadersMap,
   Method,
   Mixed,
+  RequestError,
+  Response,
   request
 } from './request';
 
@@ -35,11 +35,11 @@ export interface ApiMethods {
 }
 
 export interface ApiRequest {
-  <A>(m: Method, u: string, o: ApiOptions<A>): ApiTask<A>;
+  <A>(m: Method, u: string, o: ApiOptions<A>): ApiFetch<A>;
 }
 
 export interface ApiRequestNoMethod {
-  <A>(u: string, o: ApiOptions<A>): ApiTask<A>;
+  <A>(u: string, o: ApiOptions<A>): ApiFetch<A>;
 }
 
 export interface ApiOptions<A> extends RequestInit {
@@ -48,9 +48,13 @@ export interface ApiOptions<A> extends RequestInit {
   decoder: Decoder<Mixed, A>;
 }
 
-export type ApiTask<A> = AppyTask<ApiError, A>;
+export type ApiFetch<A> = Fetch<ApiError, A>;
+/**
+ * @deprecated since version 1.3.0
+ */
+export type ApiTask<A> = ApiFetch<A>; // temporary type alias
 
-export type ApiError = AppyError | DecoderError;
+export type ApiError = RequestError | DecoderError;
 
 export interface DecoderError {
   readonly type: 'DecoderError';
@@ -67,7 +71,7 @@ const makeRequest = <A>(
   m: Method,
   u: string,
   o: ApiOptions<A>
-): ApiTask<A> =>
+): ApiFetch<A> =>
   request(m, `${c.baseUri}${u}`, optsToRequestInit(c, o))
     .mapLeft<ApiError>(identity) // type-level mapping... ;)
     .chain(b => fromEither(applyDecoder(b, o.decoder)));
@@ -83,14 +87,14 @@ export const api = (c: ApiConfig): ApiMethods => ({
 
 // --- Helpers
 function applyDecoder<A>(
-  aresponse: AppyResponse<Mixed>,
+  aresponse: Response<Mixed>,
   decoder: Decoder<Mixed, A>
-): Either<ApiError, AppyResponse<A>> {
+): Either<ApiError, Response<A>> {
   return decoder
     .decode(aresponse.body)
     .bimap(decoderError, withBody(aresponse));
 }
 
-function withBody<A>(response: AppyResponse<Mixed>): (a: A) => AppyResponse<A> {
+function withBody<A>(response: Response<Mixed>): (a: A) => Response<A> {
   return (body: A) => ({...response, body});
 }

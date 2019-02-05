@@ -11,7 +11,7 @@ import {taskEither} from 'fp-ts/lib/TaskEither';
 import * as t from 'io-ts';
 import {failure} from 'io-ts/lib/PathReporter';
 import 'isomorphic-fetch';
-import {ApiError, ApiTask, AppyResponse, api} from '../src/index';
+import {ApiError, ApiFetch, Response, api} from '../src/index';
 
 const Post = t.type({
   userId: t.number,
@@ -68,25 +68,25 @@ const createPost = (
   userId: number,
   title: string,
   body: string
-): ApiTask<Post> =>
+): ApiFetch<Post> =>
   myApi.post('/posts', {
     token,
     decoder: Post,
     body: JSON.stringify({userId, title, body})
   });
 
-const getUser = (id: number): ApiTask<User> =>
+const getUser = (id: number): ApiFetch<User> =>
   myApi.get(`/users/${id}`, {token, decoder: User});
 
 const concatPosts = liftA2(taskEither)(
-  (a: AppyResponse<Post>) => (b: AppyResponse<Post>) => [a, b]
+  (a: Response<Post>) => (b: Response<Post>) => [a, b]
 );
 
 const main = (
   userId: number,
   post1: PostPayload,
   post2: PostPayload
-): ApiTask<User> =>
+): ApiFetch<User> =>
   concatPosts(createPost(userId, post1.title, post1.body))(
     createPost(userId, post2.title, post2.body)
   )

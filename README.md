@@ -63,9 +63,9 @@ The module tries to be as more compliant as possible with the `fetch()` interfac
 - request `method` is always explicit (no implicit "GET");
 - accepted methods are definened by the `Method` union type;
 - `fetch`'s input is always a `string` (no `Request` objects allowed);
-- `Response` is mapped into a specific `AppyResponse<Mixed>` interface;
-- `AppyResponse` `headers` property is always a `HeadersMap` (alias for a map of string);
-- `AppyResponse` has a `body` property that is the result of parsing to JSON the string returned from `response.text()`; if it cannot be parsed as JSON, `body` value is just the string (both types of data are covered by the `Mixed` type).
+- standard `Response` is mapped into a specific Appy's `Response<Mixed>` interface;
+- Appy's `Response` `headers` property is always a `HeadersMap` (alias for a `Record<string, string>`);
+- Appy's `Response` has a `body` property that is the result of parsing to JSON the string returned from `response.text()`; if it cannot be parsed as JSON, `body` value is just the string (both types of data are covered by the `Mixed` type).
 
 `RequestInit` configuration object instead remains the same.
 
@@ -78,42 +78,42 @@ declare function request(
   m: Method,
   u: string,
   o?: RequestInit
-): TaskEither<AppyError, AppyResponse<Mixed>>;
+): TaskEither<RequestError, Response<Mixed>>;
 ```
 
 ```typescript
 declare function get(
   u: string,
   o?: RequestInit
-): TaskEither<AppyError, AppyResponse<Mixed>>;
+): TaskEither<RequestError, Response<Mixed>>;
 ```
 
 ```typescript
 declare function post(
   u: string,
   o?: RequestInit
-): TaskEither<AppyError, AppyResponse<Mixed>>;
+): TaskEither<RequestError, Response<Mixed>>;
 ```
 
 ```typescript
 declare function put(
   u: string,
   o?: RequestInit
-): TaskEither<AppyError, AppyResponse<Mixed>>;
+): TaskEither<RequestError, Response<Mixed>>;
 ```
 
 ```typescript
 declare function patch(
   u: string,
   o?: RequestInit
-): TaskEither<AppyError, AppyResponse<Mixed>>;
+): TaskEither<RequestError, Response<Mixed>>;
 ```
 
 ```typescript
 declare function del(
   u: string,
   o?: RequestInit
-): TaskEither<AppyError, AppyResponse<Mixed>>;
+): TaskEither<RequestError, Response<Mixed>>;
 ```
 
 ### api
@@ -157,9 +157,9 @@ So, it is a little more opinionated:
   - the `options` parameter is mandatory and it is an extension of the `RequestInit` interface;
   - `options` has a required `token` (string) key which will be passed as request's `Authorization: Bearer ${token}` header;
   - `options` has a required `decoder` (`Decoder<Mixed, A>`) key which will be used to decode the service's JSON payload;
-  - decoder errors are expressed with a `DecoderError` class which extends the `AppyError` tagged union type;
+  - decoder errors are expressed with a `DecoderError` interface which extends the `RequestError` tagged union type;
   - thus, the returned type of `api` methods is `TaskEither<ApiError, A>`
-  - `headers` in `options` object can only be a map of strings (`{[k: string]: string}`); if you need to work with a `Header` object you have to transform it;
+  - `headers` in `options` object can only be a map of strings (`Record<string, string>`); if you need to work with a `Header` object you have to transform it;
   - `options` is merged with a predefined object in order to set some default values:
     - `mode: 'cors'`
     - `headers: {'Accept': 'application/json', 'Content-type': 'application/json'}`
@@ -170,17 +170,17 @@ See [here](src/api.ts) for the complete list of types.
 
 ```typescript
 interface ApiMethods {
-  request: <A>(m: Method, u: string, o: ApiOptions<A>): TaskEither<ApiError, AppyResponse<A>>;
+  request: <A>(m: Method, u: string, o: ApiOptions<A>): TaskEither<ApiError, Response<A>>;
 
-  get: <A>(u: string, o: ApiOptions<A>): TaskEither<ApiError, AppyResponse<A>>;
+  get: <A>(u: string, o: ApiOptions<A>): TaskEither<ApiError, Response<A>>;
 
-  post: <A>(u: string, o: ApiOptions<A>): TaskEither<ApiError, AppyResponse<A>>;
+  post: <A>(u: string, o: ApiOptions<A>): TaskEither<ApiError, Response<A>>;
 
-  put: <A>(u: string, o: ApiOptions<A>): TaskEither<ApiError, AppyResponse<A>>;
+  put: <A>(u: string, o: ApiOptions<A>): TaskEither<ApiError, Response<A>>;
 
-  patch: <A>(u: string, o: ApiOptions<A>): TaskEither<ApiError, AppyResponse<A>>;
+  patch: <A>(u: string, o: ApiOptions<A>): TaskEither<ApiError, Response<A>>;
 
-  del: <A>(u: string, o: ApiOptions<A>): TaskEither<ApiError, AppyResponse<A>>;
+  del: <A>(u: string, o: ApiOptions<A>): TaskEither<ApiError, Response<A>>;
 }
 
 declare function api(c: ApiConfig): ApiMethods

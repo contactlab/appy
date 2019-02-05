@@ -9,7 +9,7 @@ beforeEach(() => {
   global.fetch.resetMocks();
 });
 
-test('api().request() should call full url, decode response and return Right<AppyResponse<A>>', () => {
+test('api().request() should call full url, decode response and return Right<Response<A>>', () => {
   global.fetch.mockResponseOnce(JSON.stringify({data: 'OK'}), {
     url: 'http://localhost/api/v1/my/api',
     status: 200,

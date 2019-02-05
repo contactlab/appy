@@ -26,25 +26,45 @@ export type Method = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE' | 'OPTIONS';
 
 export type HeadersMap = Record<string, string>;
 
-export interface AppyRequest {
-  (m: Method, u: string, o?: RequestInit): AppyTask<AppyError, Mixed>;
+export interface Request {
+  (m: Method, u: string, o?: RequestInit): Fetch<RequestError, Mixed>;
 }
+/**
+ * @deprecated since version 1.3.0
+ */
+export type AppyRequest = Request; // Temporary type alias
 
-export interface AppyRequestNoMethod {
-  (u: string, o?: RequestInit): AppyTask<AppyError, Mixed>;
+export interface RequestNoMethod {
+  (u: string, o?: RequestInit): Fetch<RequestError, Mixed>;
 }
+/**
+ * @deprecated since version 1.3.0
+ */
+export type AppyRequestNoMethod = RequestNoMethod; // Temporary type alias
 
-export type AppyTask<E, A> = TaskEither<E, AppyResponse<A>>;
+export type Fetch<E, A> = TaskEither<E, Response<A>>;
+/**
+ * @deprecated since version 1.3.0
+ */
+export type AppyTask<E, A> = Fetch<E, A>; // Temporary type alias
 
-export interface AppyResponse<A> {
+export interface Response<A> {
   headers: HeadersMap;
   status: number;
   statusText: string;
   url: string;
   body: A;
 }
+/**
+ * @deprecated since version 1.3.0
+ */
+export type AppyResponse<A> = Response<A>; // Temporary type alias
 
-export type AppyError = NetworkError | BadUrl | BadResponse;
+export type RequestError = NetworkError | BadUrl | BadResponse;
+/**
+ * @deprecated since version 1.3.0
+ */
+export type AppyError = RequestError; // Temporary type alias
 
 export interface NetworkError {
   readonly type: 'NetworkError';
@@ -61,10 +81,10 @@ const networkError = (message: string, uri: string): NetworkError => ({
 export interface BadUrl {
   readonly type: 'BadUrl';
   readonly url: string;
-  readonly response: AppyResponse<Mixed>;
+  readonly response: Response<Mixed>;
 }
 
-const badUrl = (url: string, response: AppyResponse<Mixed>): BadUrl => ({
+const badUrl = (url: string, response: Response<Mixed>): BadUrl => ({
   type: 'BadUrl',
   url,
   response
@@ -72,10 +92,10 @@ const badUrl = (url: string, response: AppyResponse<Mixed>): BadUrl => ({
 
 export interface BadResponse {
   readonly type: 'BadResponse';
-  readonly response: AppyResponse<Mixed>;
+  readonly response: Response<Mixed>;
 }
 
-const badResponse = (response: AppyResponse<Mixed>): BadResponse => ({
+const badResponse = (response: Response<Mixed>): BadResponse => ({
   type: 'BadResponse',
   response
 });
@@ -84,7 +104,7 @@ const makeRequest = (
   m: Method,
   u: string,
   o?: RequestInit
-): Task<Either<AppyError, AppyResponse<Mixed>>> =>
+): Task<Either<RequestError, Response<Mixed>>> =>
   new Task(() =>
     fetch(u, {...o, method: m})
       .then(
@@ -107,7 +127,7 @@ const makeRequest = (
         };
 
         if (resp.ok) {
-          return right<AppyError, AppyResponse<Mixed>>(aresp);
+          return right<RequestError, Response<Mixed>>(aresp);
         }
 
         if (resp.status === 404) {
@@ -116,25 +136,25 @@ const makeRequest = (
           throw badResponse(aresp);
         }
       })
-      .catch((e: AppyError) => left<AppyError, AppyResponse<Mixed>>(e))
+      .catch((e: RequestError) => left<RequestError, Response<Mixed>>(e))
   );
 
-export const request: AppyRequest = (method, uri, options) =>
+export const request: Request = (method, uri, options) =>
   new TaskEither(makeRequest(method, uri, options));
 
-export const get: AppyRequestNoMethod = (uri, options) =>
+export const get: RequestNoMethod = (uri, options) =>
   request('GET', uri, options);
 
-export const post: AppyRequestNoMethod = (uri, options) =>
+export const post: RequestNoMethod = (uri, options) =>
   request('POST', uri, options);
 
-export const put: AppyRequestNoMethod = (uri, options) =>
+export const put: RequestNoMethod = (uri, options) =>
   request('PUT', uri, options);
 
-export const patch: AppyRequestNoMethod = (uri, options) =>
+export const patch: RequestNoMethod = (uri, options) =>
   request('PATCH', uri, options);
 
-export const del: AppyRequestNoMethod = (uri, options) =>
+export const del: RequestNoMethod = (uri, options) =>
   request('DELETE', uri, options);
 
 // --- Helpers
