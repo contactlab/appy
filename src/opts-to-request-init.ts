@@ -10,12 +10,12 @@
  * - `Contactlab-ClientVersion` header uses the value of `config.version` if present;
  *
  * @module opts-to-request-init
+ * @since 1.0.0
  */
 
 import {fold as foldM} from 'fp-ts/lib/Monoid';
 import {fromNullable, getMonoid, some} from 'fp-ts/lib/Option';
 import {fold as foldS, getObjectSemigroup} from 'fp-ts/lib/Semigroup';
-
 import {ApiConfig, ApiOptions} from './api';
 import {HeadersMap} from './request';
 

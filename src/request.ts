@@ -1,5 +1,3 @@
-/*tslint:disable:max-classes-per-file*/
-
 /**
  * @module request
  * @since 1.0.0
@@ -50,38 +48,39 @@ export interface AppyResponse<A> {
 
 export type AppyError = NetworkError | BadUrl | BadResponse;
 
-export class NetworkError {
-  public readonly type: 'NetworkError' = 'NetworkError';
-  constructor(readonly message: string, readonly uri: string) {}
+export interface NetworkError {
+  readonly type: 'NetworkError';
+  readonly message: string;
+  readonly uri: string;
 }
 
-export class BadUrl {
-  public readonly type: 'BadUrl' = 'BadUrl';
-  constructor(readonly url: string, readonly response: AppyResponse<Mixed>) {}
+const networkError = (message: string, uri: string): NetworkError => ({
+  type: 'NetworkError',
+  message,
+  uri
+});
+
+export interface BadUrl {
+  readonly type: 'BadUrl';
+  readonly url: string;
+  readonly response: AppyResponse<Mixed>;
 }
 
-export class BadResponse {
-  public readonly type: 'BadResponse' = 'BadResponse';
-  constructor(readonly response: AppyResponse<Mixed>) {}
+const badUrl = (url: string, response: AppyResponse<Mixed>): BadUrl => ({
+  type: 'BadUrl',
+  url,
+  response
+});
+
+export interface BadResponse {
+  readonly type: 'BadResponse';
+  readonly response: AppyResponse<Mixed>;
 }
 
-const toHeadersMap = (hs: Headers): HeadersMap => {
-  const result: HeadersMap = {};
-
-  hs.forEach((v: string, k: string) => {
-    result[k] = v;
-  });
-
-  return result;
-};
-
-const parseBody = (a: string): Mixed => {
-  try {
-    return JSON.parse(a);
-  } catch (e) {
-    return a;
-  }
-};
+const badResponse = (response: AppyResponse<Mixed>): BadResponse => ({
+  type: 'BadResponse',
+  response
+});
 
 const makeRequest = (
   m: Method,
@@ -97,7 +96,7 @@ const makeRequest = (
             .then(parseBody)
             .then(body => ({resp, body})),
         (e: Error) => {
-          throw new NetworkError(e.message, u);
+          throw networkError(e.message, u);
         }
       )
       .then(({resp, body}) => {
@@ -114,9 +113,9 @@ const makeRequest = (
         }
 
         if (resp.status === 404) {
-          throw new BadUrl(u, aresp);
+          throw badUrl(u, aresp);
         } else {
-          throw new BadResponse(aresp);
+          throw badResponse(aresp);
         }
       })
       .catch((e: AppyError) => left<AppyError, AppyResponse<Mixed>>(e))
@@ -139,3 +138,22 @@ export const patch: AppyRequestNoMethod = (uri, options) =>
 
 export const del: AppyRequestNoMethod = (uri, options) =>
   request('DELETE', uri, options);
+
+// --- Helpers
+function toHeadersMap(hs: Headers): HeadersMap {
+  const result: HeadersMap = {};
+
+  hs.forEach((v: string, k: string) => {
+    result[k] = v;
+  });
+
+  return result;
+}
+
+function parseBody(a: string): Mixed {
+  try {
+    return JSON.parse(a);
+  } catch (e) {
+    return a;
+  }
+}

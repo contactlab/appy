@@ -1,5 +1,3 @@
-/*tslint:disable:max-classes-per-file*/
-
 /**
  * @module api
  * @since 1.0.0
@@ -54,20 +52,15 @@ export type ApiTask<A> = AppyTask<ApiError, A>;
 
 export type ApiError = AppyError | DecoderError;
 
-export class DecoderError {
-  public readonly type: 'DecoderError' = 'DecoderError';
-  constructor(readonly errors: ValidationError[]) {}
+export interface DecoderError {
+  readonly type: 'DecoderError';
+  readonly errors: ValidationError[];
 }
 
-const fullPath = (a: string, b: string) => `${a}${b}`;
-
-const applyDecoder = <A>(
-  aresponse: AppyResponse<Mixed>,
-  decoder: Decoder<Mixed, A>
-): Either<ApiError, AppyResponse<A>> =>
-  decoder
-    .decode(aresponse.body)
-    .bimap(err => new DecoderError(err), body => ({...aresponse, body}));
+const decoderError = (errors: ValidationError[]): DecoderError => ({
+  type: 'DecoderError',
+  errors
+});
 
 const makeRequest = <A>(
   c: ApiConfig,
@@ -75,7 +68,7 @@ const makeRequest = <A>(
   u: string,
   o: ApiOptions<A>
 ): ApiTask<A> =>
-  request(m, fullPath(c.baseUri, u), optsToRequestInit(c, o))
+  request(m, `${c.baseUri}${u}`, optsToRequestInit(c, o))
     .mapLeft<ApiError>(identity) // type-level mapping... ;)
     .chain(b => fromEither(applyDecoder(b, o.decoder)));
 
@@ -87,3 +80,17 @@ export const api = (c: ApiConfig): ApiMethods => ({
   patch: (uri, options) => makeRequest(c, 'PATCH', uri, options),
   del: (uri, options) => makeRequest(c, 'DELETE', uri, options)
 });
+
+// --- Helpers
+function applyDecoder<A>(
+  aresponse: AppyResponse<Mixed>,
+  decoder: Decoder<Mixed, A>
+): Either<ApiError, AppyResponse<A>> {
+  return decoder
+    .decode(aresponse.body)
+    .bimap(decoderError, withBody(aresponse));
+}
+
+function withBody<A>(response: AppyResponse<Mixed>): (a: A) => AppyResponse<A> {
+  return (body: A) => ({...response, body});
+}
