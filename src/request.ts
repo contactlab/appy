@@ -24,9 +24,7 @@ export type Mixed =
 
 export type Method = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE' | 'OPTIONS';
 
-export interface HeadersMap {
-  [k: string]: string;
-}
+export type HeadersMap = Record<string, string>;
 
 export interface AppyRequest {
   (m: Method, u: string, o?: RequestInit): AppyTask<AppyError, Mixed>;
