@@ -13,53 +13,69 @@ import {failure} from 'io-ts/lib/PathReporter';
 import 'isomorphic-fetch';
 import {ApiError, ApiFetch, Response, api} from '../src/index';
 
-const Post = t.type({
-  userId: t.number,
-  id: t.number,
-  title: t.string,
-  body: t.string
-});
-
-type Post = t.TypeOf<typeof Post>;
+interface Post extends t.TypeOf<typeof Post> {}
 type PostPayload = Pick<Post, Exclude<keyof Post, 'id' | 'userId'>>;
+const Post = t.type(
+  {
+    userId: t.number,
+    id: t.number,
+    title: t.string,
+    body: t.string
+  },
+  'Post'
+);
 
-const Geo = t.type({
-  lat: t.string,
-  lng: t.string
-});
+const Geo = t.type(
+  {
+    lat: t.string,
+    lng: t.string
+  },
+  'Geo'
+);
 
-const Address = t.type({
-  street: t.string,
-  suite: t.string,
-  city: t.string,
-  zipcode: t.string,
-  geo: Geo
-});
+const Address = t.type(
+  {
+    street: t.string,
+    suite: t.string,
+    city: t.string,
+    zipcode: t.string,
+    geo: Geo
+  },
+  'Address'
+);
 
-const Company = t.type({
-  name: t.string,
-  catchPhrase: t.string,
-  bs: t.string
-});
+const Company = t.type(
+  {
+    name: t.string,
+    catchPhrase: t.string,
+    bs: t.string
+  },
+  'Company'
+);
 
-const BaseUser = t.type({
-  id: t.number,
-  firstname: t.string,
-  username: t.string,
-  email: t.string,
-  address: Address,
-  phone: t.string,
-  website: t.string,
-  company: Company
-});
+const BaseUser = t.type(
+  {
+    id: t.number,
+    name: t.string,
+    username: t.string,
+    email: t.string,
+    address: Address,
+    phone: t.string,
+    website: t.string,
+    company: Company
+  },
+  'Base user'
+);
 
-const WithPosts = t.partial({
-  posts: t.array(Post)
-});
+const WithPosts = t.partial(
+  {
+    posts: t.array(Post)
+  },
+  'With posts'
+);
 
+interface User extends t.TypeOf<typeof User> {}
 const User = t.intersection([BaseUser, WithPosts]);
-
-type User = t.TypeOf<typeof User>;
 
 const myApi = api({baseUri: 'http://jsonplaceholder.typicode.com'});
 const token = 'secret';
