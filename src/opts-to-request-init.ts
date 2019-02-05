@@ -19,50 +19,17 @@ import {fold as foldS, getObjectSemigroup} from 'fp-ts/lib/Semigroup';
 import {ApiConfig, ApiOptions} from './api';
 import {HeadersMap} from './request';
 
+const CLIENT_ID = 'Contactlab-ClientId';
+const CLIENT_VERSION = 'Contactlab-ClientVersion';
 const DEFAULT_MODE: RequestMode = 'cors';
-const DEFAULT_HEADERS = {
+const DEFAULT_HEADERS: HeadersMap = {
   Accept: 'application/json',
   'Content-type': 'application/json'
 };
 
-const singleton = (k: string) => (v: string): HeadersMap => ({[k]: v});
-
 const foldOHM = foldM(getMonoid(getObjectSemigroup<HeadersMap>()));
 const foldRI = foldS(getObjectSemigroup<RequestInit>());
-
-const getHeaders = <A>(config: ApiConfig, opts: ApiOptions<A>): HeadersMap => {
-  const optsHeaders = fromNullable(opts.headers);
-  const auth = some(opts.token)
-    .map(t => `Bearer ${t}`)
-    .map(singleton('Authorization'));
-  const clientId = fromNullable(config.id).map(
-    singleton('Contactlab-ClientId')
-  );
-  const clientVersion = fromNullable(config.version).map(
-    singleton('Contactlab-ClientVersion')
-  );
-
-  return foldOHM([
-    some(DEFAULT_HEADERS),
-    optsHeaders,
-    auth,
-    clientId,
-    clientVersion
-  ]).getOrElse(DEFAULT_HEADERS);
-};
-
-const getMode = (opts: RequestInit): RequestMode =>
-  fromNullable(opts.mode).getOrElse(DEFAULT_MODE);
-
-// TODO: find a more robust, "typescript-supported" solution...
-const toRequestInit = <A>(otps: ApiOptions<A>): RequestInit => {
-  const result = Object.assign({}, otps);
-
-  delete result.token;
-  delete result.decoder;
-
-  return result;
-};
+const singleton = (k: string) => (v: string): HeadersMap => ({[k]: v});
 
 export const optsToRequestInit = <A>(
   config: ApiConfig,
@@ -72,3 +39,37 @@ export const optsToRequestInit = <A>(
     {headers: getHeaders(config, opts)},
     {mode: getMode(opts)}
   ]);
+
+// --- Helpers
+function getHeaders<A>(
+  {id, version}: ApiConfig,
+  opts: ApiOptions<A>
+): HeadersMap {
+  const headers = fromNullable(opts.headers);
+  const auth = some(opts.token)
+    .map(t => `Bearer ${t}`)
+    .map(singleton('Authorization'));
+  const clientId = fromNullable(id).map(singleton(CLIENT_ID));
+  const clientVersion = fromNullable(version).map(singleton(CLIENT_VERSION));
+
+  return foldOHM([
+    some(DEFAULT_HEADERS),
+    headers,
+    auth,
+    clientId,
+    clientVersion
+  ]).getOrElse(DEFAULT_HEADERS);
+}
+
+function getMode(opts: RequestInit): RequestMode {
+  return typeof opts.mode !== 'undefined' ? opts.mode : DEFAULT_MODE;
+}
+
+function toRequestInit<A>(opts: ApiOptions<A>): RequestInit {
+  const result = {...opts};
+
+  delete result.token;
+  delete result.decoder;
+
+  return result;
+}
