@@ -1,96 +1,127 @@
-## [1.2.7](https://github.com/contactlab/appy/compare/1.2.6...1.2.7) (2019-01-16)
+# Changelog
 
-### Bug Fixes
+> **Tags:**
+>
+> - [New Feature]
+> - [Bug Fix]
+> - [Breaking Change]
+> - [Documentation]
+> - [Internal]
+> - [Polish]
+> - [Deprecation]
 
-- **package:** update io-ts to version 1.6.2 ([#100](https://github.com/contactlab/appy/issues/100)) ([f61387f](https://github.com/contactlab/appy/commit/f61387f)), closes [#97](https://github.com/contactlab/appy/issues/97)
+**Note**: Gaps between patch versions are faulty/broken releases.
 
-## [1.2.6](https://github.com/contactlab/appy/compare/1.2.5...1.2.6) (2019-01-10)
+## [1.3.0](https://github.com/contactlab/appy/releases/tag/1.3.0)
 
-## [1.2.5](https://github.com/contactlab/appy/compare/1.2.4...1.2.5) (2019-01-07)
+[REF: [Milestone 1.3.0](https://github.com/contactlab/appy/milestone/3)]
 
-## [1.2.4](https://github.com/contactlab/appy/compare/1.2.3...1.2.4) (2018-12-28)
+- **Internal:**
+  - "\*-ts" dependencies with caret range ([#106](https://github.com/contactlab/appy/issues/106))
+  - Compile also as ES6 modules for better tree-shaking ([#107](https://github.com/contactlab/appy/issues/107))
+  - Update `io-ts` to version 1.8.1 ([#116](https://github.com/contactlab/appy/pull/116))
+- **Polish:**
+  - Remove classes in favour of interfaces + creator functions ([#108](https://github.com/contactlab/appy/issues/108))
+- **Deprecation:**
+  - Deprecate types with "Appy" prefix ([c03514e](https://github.com/contactlab/appy/commit/c03514e))
+- **Documentation:**
+  - Drop automatic generation of `CHANGELOG` ([#109](https://github.com/contactlab/appy/issues/109))
 
-## [1.2.3](https://github.com/contactlab/appy/compare/1.2.2...1.2.3) (2018-12-04)
+## [1.2.7](https://github.com/contactlab/appy/releases/tag/1.2.7)
 
-### Bug Fixes
+- **Internal:**
+  - Update `Typescript` to version 3.2.2 ([#99](https://github.com/contactlab/appy/pull/99))
+  - Update `io-ts` to version 1.6.2 ([#97](https://github.com/contactlab/appy/issues/97))
+- **Documentation:**
+  - Update min `Typescript`'s version to 3.2.2 in `README` ([#101](https://github.com/contactlab/appy/pull/101))
 
-- **package:** update fp-ts to version 1.12.0 ([#76](https://github.com/contactlab/appy/issues/76)) ([c7d3ecd](https://github.com/contactlab/appy/commit/c7d3ecd)), closes [#67](https://github.com/contactlab/appy/issues/67)
+## [1.2.6](https://github.com/contactlab/appy/releases/tag/1.2.6)
 
-## [1.2.2](https://github.com/contactlab/appy/compare/1.2.1...1.2.2) (2018-11-02)
+- **Internal:**
+  - Update `fp-ts` to version 1.12.3 ([#94](https://github.com/contactlab/appy/pull/94))
+  - Update `io-ts` to version 1.5.2 ([#95](https://github.com/contactlab/appy/pull/95))
 
-<a name="1.2.1"></a>
+## [1.2.5](https://github.com/contactlab/appy/releases/tag/1.2.5)
 
-## [1.2.1](https://github.com/contactlab/appy/compare/1.2.0...1.2.1) (2018-10-23)
+- **Internal:**
+  - Update `fp-ts` to version 1.12.2 ([#91](https://github.com/contactlab/appy/pull/91))
 
-### Bug Fixes
+## [1.2.4](https://github.com/contactlab/appy/releases/tag/1.2.4)
 
-- **package:** update fp-ts to version 1.10.0 ([fa89697](https://github.com/contactlab/appy/commit/fa89697))
+- **Internal:**
+  - Update `fp-ts` to version 1.12.1 ([#82](https://github.com/contactlab/appy/pull/82))
+  - Update `io-ts` to version 1.5.1 ([#86](https://github.com/contactlab/appy/pull/86))
 
-<a name="1.2.0"></a>
+## [1.2.3](https://github.com/contactlab/appy/releases/tag/1.2.3)
 
-# [1.2.0](https://github.com/contactlab/appy/compare/1.1.1...1.2.0) (2018-10-13)
+- **Internal:**
+  - Update `fp-ts` to version 1.12.0 ([#67](https://github.com/contactlab/appy/issues/67))
+  - Update `io-ts` to version 1.4.2 ([#63](https://github.com/contactlab/appy/pull/63))
 
-### Bug Fixes
+## [1.2.2](https://github.com/contactlab/appy/releases/tag/1.2.2)
 
-- **package:** update io-ts to version 1.3.1 ([a7fcf98](https://github.com/contactlab/appy/commit/a7fcf98))
-- **typescript:** change USVString type alias to string type ([1da62d3](https://github.com/contactlab/appy/commit/1da62d3)), closes [#38](https://github.com/contactlab/appy/issues/38)
+- **Internal:**
+  - Update `Typescript` to version 3.1.6 ([#58](https://github.com/contactlab/appy/pull/58))
+  - Update `io-ts` to version 1.4.0 ([#54](https://github.com/contactlab/appy/pull/54))
 
-### Features
+## [1.2.1](https://github.com/contactlab/appy/releases/tag/1.2.1)
 
-- add changelog automatically generated ([be2daac](https://github.com/contactlab/appy/commit/be2daac)), closes [#25](https://github.com/contactlab/appy/issues/25)
+- **Internal:**
+  - Update `fp-ts` to version 1.10.0 ([#44](https://github.com/contactlab/appy/pull/44))
 
-<a name="1.1.1"></a>
+## [1.2.0](https://github.com/contactlab/appy/releases/tag/1.2.0)
 
-## [1.1.1](https://github.com/contactlab/appy/compare/1.1.0...1.1.1) (2018-09-26)
+[REF: [Milestone 1.2.0](https://github.com/contactlab/appy/milestone/2)]
 
-### Bug Fixes
+- **Bug Fix:**
+  - Change `USVString` type alias to string type ([#38](https://github.com/contactlab/appy/issues/38))
+- **Internal:**
+  - Update `Typescript` to version 3.1.3 ([#39](https://github.com/contactlab/appy/issues/38))
+  - Update `io-ts` to version 1.3.1 ([#37](https://github.com/contactlab/appy/pull/37))
+  - Add changelog automatically generated ([#25](https://github.com/contactlab/appy/issues/25))
+  - Add keywords to package.json ([#23](https://github.com/contactlab/appy/issues/23))
 
-- fix a couple of typos in README ([4225fee](https://github.com/contactlab/appy/commit/ab499bf))
+## [1.1.1](https://github.com/contactlab/appy/releases/tag/1.1.1)
 
-<a name="1.1.0"></a>
+- **Internal:**
+  - Fix a couple of typos in README
 
-# [1.1.0](https://github.com/contactlab/appy/compare/1.0.0...1.1.0) (2018-09-25)
+## [1.1.0](https://github.com/contactlab/appy/releases/tag/1.1.0)
 
-### Bug Fixes
+- **Internal:**
+  - Update `fp-ts` to version 1.9.0 ([ab499bf](https://github.com/contactlab/appy/commit/ab499bf))
 
-- **package:** update fp-ts to version 1.9.0 ([ab499bf](https://github.com/contactlab/appy/commit/ab499bf))
+## [1.0.0](https://github.com/contactlab/appy/releases/tag/1.0.0)
 
-<a name="1.0.0"></a>
+[REF: [Milestone 1.0.0](https://github.com/contactlab/appy/milestone/1)]
 
-# [1.0.0](https://github.com/contactlab/appy/compare/0.3.0...1.0.0) (2018-09-24)
+This version introduces a huge and breaking change which affect the below main topics.
 
-### Features
+Technical explanation could be found in the related issues.
 
-This version introduces a huge and breaking change which affect two main topics:
+Full documentation could be found in the `README` file.
 
-- moving from Flow type checker to Typescript [#11](https://github.com/contactlab/appy/issues/11);
-- implementation of a more functional API [#12](https://github.com/contactlab/appy/issues/12);
+- **Breaking Change:**
+  - Moving from Flow type checker to `Typescript` ([#11](https://github.com/contactlab/appy/issues/11))
+  - Implementation of a more functional API ([#12](https://github.com/contactlab/appy/issues/12))
+- **New Feature:**
+  - Handle `fetch()` network errors (a.k.a. `TypeError`) ([#10](https://github.com/contactlab/appy/issues/10))
 
-Technical explanation could be found in the two related issues.
+## [0.3.0](https://github.com/contactlab/appy/releases/tag/0.3.0)
 
-Full documentation could be found in the README file.
+- **Bug Fix:**
+  - Types declared in the main export ([#5](https://github.com/contactlab/appy/issues/5))
+- **Polish:**:
+  - Published content is transpiled ([#6](https://github.com/contactlab/appy/issues/6))
 
-<a name="0.3.0"></a>
+## [0.2.0](https://github.com/contactlab/appy/releases/tag/0.2.0)
 
-## [0.3.0](https://github.com/contactlab/appy/compare/0.2.0...0.3.0) (2018-02-12)
+- **New Feature:**
+  - Add PATCH method to request lib ([#1](https://github.com/contactlab/appy/issues/1))
+  - Token should not be passed in api configuration ([#2](https://github.com/contactlab/appy/issues/2))
+- **Documentation:**
+  - `README` file ([#3](https://github.com/contactlab/appy/issues/3))
 
-### Features
-
-- Types declared in the main export ([cd1e32d](https://github.com/contactlab/appy/commit/cd1e32d)), closes [#5](https://github.com/contactlab/appy/issues/5)
-- Published content is transpiled ([33d5462](https://github.com/contactlab/appy/commit/33d5462)), closes [#6](https://github.com/contactlab/appy/issues/6)
-
-<a name="0.2.0"></a>
-
-## [0.2.0](https://github.com/contactlab/appy/compare/0.1.0...0.2.0) (2018-02-12)
-
-### Features
-
-- Add PATCH method to request lib ([a7c3f37](https://github.com/contactlab/appy/commit/a7c3f37)), closes [#1](https://github.com/contactlab/appy/issues/1)
-- token should not be passed in api configuration ([38148ce](https://github.com/contactlab/appy/commit/38148ce)), closes [#2](https://github.com/contactlab/appy/issues/2)
-- README ([4a68305](https://github.com/contactlab/appy/commit/4a68305)), closes [#3](https://github.com/contactlab/appy/issues/3)
-
-<a name="0.1.0"></a>
-
-## [0.1.0](https://github.com/contactlab/appy/releases/tag/0.1.0) (2018-01-19)
+## [0.1.0](https://github.com/contactlab/appy/releases/tag/0.1.0)
 
 First alpha version
