@@ -36,9 +36,7 @@
     "test": "npm run jest",
     "prebuild": "rimraf ./lib",
     "build": "tsc -p ./tsconfig-compile.json && tsc -p ./tsconfig-compile-es6.json",
-    "prepublishOnly": "npm test && npm run build",
-    "changelog": "standard-changelog -i CHANGELOG.md && git add CHANGELOG.md",
-    "postversion": "npm run changelog"
+    "prepublishOnly": "npm test && npm run build"
   },
   "dependencies": {
     "fp-ts": "^1.13.0",
@@ -54,7 +52,6 @@
     "prettier": "1.16.4",
     "pretty-quick": "1.10.0",
     "rimraf": "2.6.3",
-    "standard-changelog": "2.0.6",
     "ts-jest": "23.10.5",
     "ts-node": "8.0.2",
     "tslint": "5.12.1",
