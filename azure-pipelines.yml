@@ -1,0 +1,28 @@
+# --- Run pipeline only in pull requests
+trigger: none
+pr:
+- master
+
+# --- Ubuntu agent
+pool:
+  vmImage: 'ubuntu-latest'
+
+# --- Execute the job with 2 different versions of Node
+strategy:
+  matrix:
+    Node_8:
+      node_version: 8.x
+    Node_10:
+      node_version: 10.x
+
+# --- Job tasks
+steps:
+- task: NodeTool@0
+  inputs:
+    versionSpec: $(node_version)
+  displayName: 'Install Node.js'
+
+- script: |
+    npm ci
+    npm test
+  displayName: 'Run tests'
