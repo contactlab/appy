@@ -1,5 +1,6 @@
-# --- Run pipeline only in pull requests
-trigger: none
+# --- Run pipeline only for "master" changes
+trigger:
+- master
 pr:
 - master
 
