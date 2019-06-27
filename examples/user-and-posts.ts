@@ -6,12 +6,12 @@
  * and print the data combined
  */
 
-import {liftA2} from 'fp-ts/lib/Apply';
+import {sequenceT} from 'fp-ts/lib/Apply';
 import {taskEither} from 'fp-ts/lib/TaskEither';
 import * as t from 'io-ts';
 import {failure} from 'io-ts/lib/PathReporter';
 import 'isomorphic-fetch';
-import {ApiError, ApiFetch, Response, api} from '../src/index';
+import {ApiError, ApiFetch, api} from '../src/index';
 
 interface Post extends t.TypeOf<typeof Post> {}
 type PostPayload = Pick<Post, Exclude<keyof Post, 'id' | 'userId'>>;
@@ -94,16 +94,15 @@ const createPost = (
 const getUser = (id: number): ApiFetch<User> =>
   myApi.get(`/users/${id}`, {token, decoder: User});
 
-const concatPosts = liftA2(taskEither)(
-  (a: Response<Post>) => (b: Response<Post>) => [a, b]
-);
+const concatPosts = sequenceT(taskEither);
 
 const main = (
   userId: number,
   post1: PostPayload,
   post2: PostPayload
 ): ApiFetch<User> =>
-  concatPosts(createPost(userId, post1.title, post1.body))(
+  concatPosts(
+    createPost(userId, post1.title, post1.body),
     createPost(userId, post2.title, post2.body)
   )
     .map(posts => posts.map(x => x.body))
