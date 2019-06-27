@@ -12,6 +12,11 @@
 
 **Note**: Gaps between patch versions are faulty/broken releases.
 
+## [1.4.0](https://github.com/contactlab/appy/releases/tag/1.4.0)
+
+- **Internal:**
+  - set `fp-ts` version to be at least [1.9.0](https://github.com/gcanti/fp-ts/releases/tag/1.19.0) - this can lead to some deprecation warnings ([#183](https://github.com/contactlab/appy/pull/183))
+
 ## [1.3.0](https://github.com/contactlab/appy/releases/tag/1.3.0)
 
 [REF: [Milestone 1.3.0](https://github.com/contactlab/appy/milestone/3)]
