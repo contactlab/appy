@@ -39,7 +39,7 @@
     "prepublishOnly": "npm test && npm run build"
   },
   "dependencies": {
-    "fp-ts": "^1.19.0",
+    "fp-ts": "^2.0.5",
     "io-ts": "^1.8.0"
   },
   "devDependencies": {
