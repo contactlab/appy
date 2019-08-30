@@ -14,8 +14,16 @@
  */
 
 import {fold as foldM} from 'fp-ts/lib/Monoid';
-import {fromNullable, getMonoid, some} from 'fp-ts/lib/Option';
+import {
+  fromNullable,
+  getMonoid,
+  getOrElse,
+  map,
+  option,
+  some
+} from 'fp-ts/lib/Option';
 import {fold as foldS, getObjectSemigroup} from 'fp-ts/lib/Semigroup';
+import {pipe} from 'fp-ts/lib/pipeable';
 import {ApiConfig, ApiOptions} from './api';
 import {HeadersMap} from './request';
 
@@ -35,7 +43,7 @@ export const optsToRequestInit = <A>(
   config: ApiConfig,
   opts: ApiOptions<A>
 ): RequestInit =>
-  foldRI(toRequestInit(opts))([
+  foldRI(toRequestInit(opts), [
     {headers: getHeaders(config, opts)},
     {mode: getMode(opts)}
   ]);
@@ -46,19 +54,24 @@ function getHeaders<A>(
   opts: ApiOptions<A>
 ): HeadersMap {
   const headers = fromNullable(opts.headers);
-  const auth = some(opts.token)
-    .map(t => `Bearer ${t}`)
-    .map(singleton('Authorization'));
-  const clientId = fromNullable(id).map(singleton(CLIENT_ID));
-  const clientVersion = fromNullable(version).map(singleton(CLIENT_VERSION));
+  const auth = pipe(
+    some(opts.token),
+    map(t => `Bearer ${t}`),
+    map(singleton('Authorization'))
+  );
+  const clientId = option.map(fromNullable(id), singleton(CLIENT_ID));
+  const clientVersion = option.map(
+    fromNullable(version),
+    singleton(CLIENT_VERSION)
+  );
 
-  return foldOHM([
-    some(DEFAULT_HEADERS),
-    headers,
-    auth,
-    clientId,
-    clientVersion
-  ]).getOrElse(DEFAULT_HEADERS);
+  return pipe(
+    foldOHM([some(DEFAULT_HEADERS), headers, auth, clientId, clientVersion]),
+    getOrElse(
+      /* istanbul ignore next */
+      () => DEFAULT_HEADERS
+    )
+  );
 }
 
 function getMode(opts: RequestInit): RequestMode {

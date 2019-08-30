@@ -43,9 +43,11 @@
     "io-ts": "^2.0.1"
   },
   "devDependencies": {
+    "@babel/register": "^7.5.5",
     "@contactlab/tslint-config": "1.3.0",
     "@types/jest": "24.0.18",
     "@types/node": "^12.7.3",
+    "babel-plugin-istanbul": "^5.2.0",
     "husky": "3.0.4",
     "jest": "24.9.0",
     "jest-fetch-mock": "2.1.2",
@@ -57,6 +59,15 @@
     "tslint": "5.19.0",
     "tslint-config-prettier": "1.18.0",
     "typescript": "3.6.2"
+  },
+  "babel": {
+    "env": {
+      "test": {
+        "plugins": [
+          "istanbul"
+        ]
+      }
+    }
   },
   "jest": {
     "automock": false,
@@ -85,6 +96,13 @@
     },
     "preset": "ts-jest",
     "testMatch": null
+  },
+  "nyc": {
+    "require": [
+      "@babel/register"
+    ],
+    "sourceMap": false,
+    "instrument": false
   },
   "husky": {
     "hooks": {
