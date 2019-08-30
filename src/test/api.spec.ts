@@ -2,7 +2,7 @@ import {constNull} from 'fp-ts/lib/function';
 import * as t from 'io-ts';
 import {failure} from 'io-ts/lib/PathReporter';
 
-import {DecoderError, api} from '../src/api';
+import {DecoderError, api} from '../api';
 import './_helpers/mock-fetch';
 
 beforeEach(() => {

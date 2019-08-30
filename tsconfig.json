@@ -15,5 +15,5 @@
     "noFallthroughCasesInSwitch": true,
     "forceConsistentCasingInFileNames": true
   },
-  "include": ["./src/**/*", "./test/**/*", "./examples/**/*"]
+  "include": ["./src", "./examples"]
 }
