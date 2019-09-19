@@ -1,18 +1,24 @@
 /*tslint:disable:no-console*/
 
 /**
- * Create 2 new posts for the user with id 1,
- * get the data of the user with id 1
- * and print the data combined
+ * 1. Create 2 new posts for the user with id 1,
+ * 2. get the data of the user with id 1
+ * 3. and print the data combined
  */
 
 import {sequenceT} from 'fp-ts/lib/Apply';
-import {taskEither} from 'fp-ts/lib/TaskEither';
+import * as E from 'fp-ts/lib/Either';
+import * as TE from 'fp-ts/lib/TaskEither';
+import {pipe} from 'fp-ts/lib/pipeable';
 import * as t from 'io-ts';
 import {failure} from 'io-ts/lib/PathReporter';
 import 'isomorphic-fetch';
 import {ApiError, ApiFetch, api} from '../src/index';
 
+// --- Aliases
+const teMap = TE.taskEither.map;
+
+// --- Decoders
 interface Post extends t.TypeOf<typeof Post> {}
 type PostPayload = Pick<Post, Exclude<keyof Post, 'id' | 'userId'>>;
 const Post = t.type(
@@ -77,6 +83,7 @@ const WithPosts = t.partial(
 interface User extends t.TypeOf<typeof User> {}
 const User = t.intersection([BaseUser, WithPosts]);
 
+// --- Api
 const myApi = api({baseUri: 'http://jsonplaceholder.typicode.com'});
 const token = 'secret';
 
@@ -94,29 +101,32 @@ const createPost = (
 const getUser = (id: number): ApiFetch<User> =>
   myApi.get(`/users/${id}`, {token, decoder: User});
 
-const concatPosts = sequenceT(taskEither);
+const concatPosts = sequenceT(TE.taskEither);
 
 const main = (
   userId: number,
   post1: PostPayload,
   post2: PostPayload
 ): ApiFetch<User> =>
-  concatPosts(
-    createPost(userId, post1.title, post1.body),
-    createPost(userId, post2.title, post2.body)
-  )
-    .map(posts => posts.map(x => x.body))
-    .chain(posts =>
-      getUser(userId).map(userResp => ({
+  pipe(
+    concatPosts(
+      createPost(userId, post1.title, post1.body),
+      createPost(userId, post2.title, post2.body)
+    ),
+    TE.map(posts => posts.map(x => x.body)),
+    TE.chain(posts =>
+      teMap(getUser(userId), userResp => ({
         ...userResp,
         body: {...userResp.body, posts}
       }))
-    );
+    )
+  );
 
 const printErr = (err: ApiError): void => {
   switch (err.type) {
     case 'DecoderError':
       return console.error(failure(err.errors));
+
     case 'NetworkError':
     case 'BadUrl':
     case 'BadResponse':
@@ -124,6 +134,7 @@ const printErr = (err: ApiError): void => {
   }
 };
 
+// --- Execution
 const POST1 = {
   body: 'My first post body',
   title: 'First post'
@@ -134,6 +145,4 @@ const POST2 = {
   title: 'Second post'
 };
 
-main(1, POST1, POST2)
-  .run()
-  .then(resp => resp.fold(printErr, data => console.log(data.body)));
+main(1, POST1, POST2)().then(E.fold(printErr, data => console.log(data.body)));
