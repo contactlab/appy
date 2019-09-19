@@ -37,15 +37,14 @@ In order to achieve this, Appy intensely uses:
 ### request
 
 ```typescript
+import {fold} from 'fp-ts/lib/Either';
 import {get} from '@contactlab/appy';
 // same as:
 // import {get} from '@contactlab/appy/lib/request';
 
-get('http://jsonplaceholder.typicode.com/posts')
-  .run()
-  .then(result =>
-    result.fold(err => console.error(err), data => console.log(data))
-  );
+const request = get('http://jsonplaceholder.typicode.com/posts');
+
+request().then(fold(err => console.error(err), data => console.log(data)));
 ```
 
 This is a low level module:
@@ -61,7 +60,7 @@ So, you can:
 The module tries to be as more compliant as possible with the `fetch()` interface but with subtle differences:
 
 - request `method` is always explicit (no implicit "GET");
-- accepted methods are definened by the `Method` union type;
+- accepted methods are definened by the [`Method`](src/request.ts) union type;
 - `fetch`'s input is always a `string` (no `Request` objects allowed);
 - standard `Response` is mapped into a specific Appy's `Response<Mixed>` interface;
 - Appy's `Response` `headers` property is always a `HeadersMap` (alias for a `Record<string, string>`);
@@ -119,6 +118,7 @@ declare function del(
 ### api
 
 ```typescript
+import {fold} from 'fp-ts/lib/Either';
 import * as t from 'io-ts';
 import {api} from '@contactlab/appy';
 // same as:
@@ -135,12 +135,9 @@ const Posts = t.array(
   })
 );
 
-myApi
-  .get('/posts', {token, decoder: Posts})
-  .run()
-  .then(result =>
-    result.fold(err => console.error(err), data => console.log(data))
-  );
+const request = myApi.get('/posts', {token, decoder: Posts});
+
+request().then(fold(err => console.error(err), data => console.log(data)));
 ```
 
 This module is tailored on the needs of the Contactlab Frontend Team.
