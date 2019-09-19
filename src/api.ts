@@ -4,9 +4,10 @@
  * @see {@link https://github.com/gcanti/io-ts|io-ts}
  */
 
-import {Either} from 'fp-ts/lib/Either';
-import {fromEither} from 'fp-ts/lib/TaskEither';
+import * as E from 'fp-ts/lib/Either';
+import * as TE from 'fp-ts/lib/TaskEither';
 import {identity} from 'fp-ts/lib/function';
+import {pipe} from 'fp-ts/lib/pipeable';
 import {Decoder, ValidationError} from 'io-ts';
 import {optsToRequestInit} from './opts-to-request-init';
 import {
@@ -72,9 +73,11 @@ const makeRequest = <A>(
   u: string,
   o: ApiOptions<A>
 ): ApiFetch<A> =>
-  request(m, `${c.baseUri}${u}`, optsToRequestInit(c, o))
-    .mapLeft<ApiError>(identity) // type-level mapping... ;)
-    .chain(b => fromEither(applyDecoder(b, o.decoder)));
+  pipe(
+    request(m, `${c.baseUri}${u}`, optsToRequestInit(c, o)),
+    TE.mapLeft<RequestError, ApiError>(identity), // type-level mapping... ;)
+    TE.chain(b => TE.fromEither(applyDecoder(b, o.decoder)))
+  );
 
 export const api = (c: ApiConfig): ApiMethods => ({
   request: (method, uri, options) => makeRequest(c, method, uri, options),
@@ -89,10 +92,11 @@ export const api = (c: ApiConfig): ApiMethods => ({
 function applyDecoder<A>(
   aresponse: Response<Mixed>,
   decoder: Decoder<Mixed, A>
-): Either<ApiError, Response<A>> {
-  return decoder
-    .decode(aresponse.body)
-    .bimap(decoderError, withBody(aresponse));
+): E.Either<ApiError, Response<A>> {
+  return pipe(
+    decoder.decode(aresponse.body),
+    E.bimap(decoderError, withBody(aresponse))
+  );
 }
 
 function withBody<A>(response: Response<Mixed>): (a: A) => Response<A> {
