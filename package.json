@@ -1,6 +1,6 @@
 {
   "name": "@contactlab/appy",
-  "version": "1.4.0",
+  "version": "2.0.0",
   "description": "Fetch API the Contactlab way",
   "main": "lib/index.js",
   "module": "lib/es6/index.js",
