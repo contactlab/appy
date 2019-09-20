@@ -1,6 +1,6 @@
 {
   "name": "@contactlab/appy",
-  "version": "2.0.0-0",
+  "version": "2.0.0-1",
   "description": "Fetch API the Contactlab way",
   "main": "lib/index.js",
   "module": "lib/es6/index.js",
@@ -35,7 +35,7 @@
     "pretest": "npm run lint && npm run check",
     "test": "npm run jest",
     "prebuild": "rimraf ./lib",
-    "build": "tsc -p ./tsconfig-compile.json && tsc -p ./tsconfig-compile-es6.json",
+    "build": "tsc -p ./tsconfig.build.json && tsc -p ./tsconfig.build-es6.json",
     "prepublishOnly": "npm test && npm run build"
   },
   "dependencies": {

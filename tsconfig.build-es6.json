@@ -1,5 +1,5 @@
 {
-  "extends": "./tsconfig-compile.json",
+  "extends": "./tsconfig.build.json",
   "compilerOptions": {
     "target": "es6",
     "module": "es6",
