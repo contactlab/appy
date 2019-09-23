@@ -1,5 +1,9 @@
 # Changelog
 
+## [2.0.1](https://github.com/contactlab/appy/releases/tag/2.0.1)
+
+This release only fixes a NPM versioning issue
+
 ## [2.0.0](https://github.com/contactlab/appy/releases/tag/2.0.0)
 
 [REF: [Milestone 2.0.0](https://github.com/contactlab/appy/milestone/4)]
