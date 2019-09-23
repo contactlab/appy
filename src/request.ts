@@ -104,43 +104,41 @@ const makeRequest = (
   m: Method,
   u: string,
   o?: RequestInit
-): Task<Either<RequestError, Response<Mixed>>> =>
-  new Task(() =>
-    fetch(u, {...o, method: m})
-      .then(
-        resp =>
-          resp
-            .text()
-            .then(parseBody)
-            .then(body => ({resp, body})),
-        (e: Error) => {
-          throw networkError(e.message, u);
-        }
-      )
-      .then(({resp, body}) => {
-        const aresp = {
-          headers: toHeadersMap(resp.headers),
-          status: resp.status,
-          statusText: resp.statusText,
-          url: resp.url,
-          body
-        };
+): Task<Either<RequestError, Response<Mixed>>> => () =>
+  fetch(u, {...o, method: m})
+    .then(
+      resp =>
+        resp
+          .text()
+          .then(parseBody)
+          .then(body => ({resp, body})),
+      (e: Error) => {
+        throw networkError(e.message, u);
+      }
+    )
+    .then(({resp, body}) => {
+      const aresp = {
+        headers: toHeadersMap(resp.headers),
+        status: resp.status,
+        statusText: resp.statusText,
+        url: resp.url,
+        body
+      };
 
-        if (resp.ok) {
-          return right<RequestError, Response<Mixed>>(aresp);
-        }
+      if (resp.ok) {
+        return right<RequestError, Response<Mixed>>(aresp);
+      }
 
-        if (resp.status === 404) {
-          throw badUrl(u, aresp);
-        } else {
-          throw badResponse(aresp);
-        }
-      })
-      .catch((e: RequestError) => left<RequestError, Response<Mixed>>(e))
-  );
+      if (resp.status === 404) {
+        throw badUrl(u, aresp);
+      } else {
+        throw badResponse(aresp);
+      }
+    })
+    .catch((e: RequestError) => left<RequestError, Response<Mixed>>(e));
 
 export const request: Request = (method, uri, options) =>
-  new TaskEither(makeRequest(method, uri, options));
+  makeRequest(method, uri, options);
 
 export const get: RequestNoMethod = (uri, options) =>
   request('GET', uri, options);

@@ -1,11 +1,10 @@
 {
-  "extends": "./tsconfig",
+  "extends": "./tsconfig.build.json",
   "compilerOptions": {
     "target": "es6",
     "module": "es6",
     "moduleResolution": "node",
     "outDir": "./lib/es6",
     "declaration": false
-  },
-  "include": ["./src/**/*"]
+  }
 }

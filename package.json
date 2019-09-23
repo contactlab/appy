@@ -1,6 +1,6 @@
 {
   "name": "@contactlab/appy",
-  "version": "1.4.0",
+  "version": "2.0.0",
   "description": "Fetch API the Contactlab way",
   "main": "lib/index.js",
   "module": "lib/es6/index.js",
@@ -35,43 +35,56 @@
     "pretest": "npm run lint && npm run check",
     "test": "npm run jest",
     "prebuild": "rimraf ./lib",
-    "build": "tsc -p ./tsconfig-compile.json && tsc -p ./tsconfig-compile-es6.json",
+    "build": "tsc -p ./tsconfig.build.json && tsc -p ./tsconfig.build-es6.json",
     "prepublishOnly": "npm test && npm run build"
   },
   "dependencies": {
-    "fp-ts": "^1.19.0",
-    "io-ts": "^1.8.0"
+    "fp-ts": "^2.0.5",
+    "io-ts": "^2.0.1"
   },
   "devDependencies": {
+    "@babel/register": "7.6.0",
     "@contactlab/tslint-config": "1.3.0",
+    "@types/isomorphic-fetch": "0.0.35",
     "@types/jest": "24.0.18",
-    "@types/node": "^12.0.0",
-    "husky": "3.0.4",
+    "@types/node": "12.7.5",
+    "babel-plugin-istanbul": "5.2.0",
+    "husky": "3.0.5",
+    "isomorphic-fetch": "2.2.1",
     "jest": "24.9.0",
     "jest-fetch-mock": "2.1.2",
     "prettier": "1.18.2",
     "pretty-quick": "1.11.1",
     "rimraf": "3.0.0",
-    "ts-jest": "24.0.2",
+    "ts-jest": "24.1.0",
     "ts-node": "8.4.1",
-    "tslint": "5.19.0",
+    "tslint": "5.20.0",
     "tslint-config-prettier": "1.18.0",
-    "typescript": "3.5.3"
+    "typescript": "3.6.3"
+  },
+  "babel": {
+    "env": {
+      "test": {
+        "plugins": [
+          "istanbul"
+        ]
+      }
+    }
   },
   "jest": {
     "automock": false,
     "bail": true,
     "coveragePathIgnorePatterns": [
-      "<rootDir>/test/_helpers/",
+      "<rootDir>/src/test/_helpers/",
       "<rootDir>/node_modules/"
     ],
     "coverageReporters": [
       "text"
     ],
     "roots": [
-      "<rootDir>/test/"
+      "<rootDir>/src/test/"
     ],
-    "testRegex": "(\\.|/)spec\\.(js|ts)$",
+    "testRegex": "(\\.|/)spec\\.ts$",
     "moduleFileExtensions": [
       "js",
       "json",
@@ -85,6 +98,13 @@
     },
     "preset": "ts-jest",
     "testMatch": null
+  },
+  "nyc": {
+    "require": [
+      "@babel/register"
+    ],
+    "sourceMap": false,
+    "instrument": false
   },
   "husky": {
     "hooks": {
