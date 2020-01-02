@@ -1,159 +1,183 @@
-// --- Mocks
-import './_helpers/mock-fetch';
-// ---
-
+import {left, right} from 'fp-ts/lib/Either';
 import {del, get, patch, post, put, request} from '../request';
-import {result} from './_helpers/result';
+
+const fetch = global.fetch;
 
 beforeEach(() => {
-  global.fetch.resetMocks();
+  fetch.resetMocks();
 });
 
-test('request() should return a Right<Response> when everything is ok - with JSON', () => {
-  global.fetch.mockResponseOnce(JSON.stringify({data: 'OK'}), {
+test('request() should return a Right<Response> when everything is ok - with JSON', async () => {
+  fetch.mockResponseOnce(JSON.stringify({data: 'OK'}), {
+    headers: {'Content-type': 'application/json'},
     url: '/my/api',
     status: 200,
     statusText: 'Ok'
   });
 
-  return expect(result(request('GET', '/my/api'))).resolves.toEqual({
-    headers: {},
-    status: 200,
-    statusText: 'Ok',
-    url: '/my/api',
-    body: {data: 'OK'}
-  });
+  const result = await request('GET', '/my/api')();
+
+  expect(result).toEqual(
+    right({
+      headers: {'content-type': 'application/json'},
+      status: 200,
+      statusText: 'Ok',
+      url: '/my/api',
+      body: {data: 'OK'}
+    })
+  );
 });
 
-test('request() should return a Right<Response> when everything is ok - with string', () => {
-  global.fetch.mockResponseOnce('', {
+test('request() should return a Right<Response> when everything is ok - with string', async () => {
+  fetch.mockResponseOnce('', {
     url: '/my/api',
     status: 200,
     statusText: 'Ok',
-    headers: {'Custom-Header': 'Custom'}
+    headers: {'Content-type': 'application/json', 'Custom-Header': 'Custom'}
   });
 
-  return expect(result(request('GET', '/my/api'))).resolves.toEqual({
-    // headers keys are lower-cased according to fetch specs
-    // @see https://github.com/whatwg/fetch/issues/304
-    headers: {'custom-header': 'Custom'},
-    status: 200,
-    statusText: 'Ok',
-    url: '/my/api',
-    body: ''
-  });
+  const result = await request('GET', '/my/api')();
+
+  expect(result).toEqual(
+    right({
+      // headers keys are lower-cased according to fetch specs
+      // @see https://github.com/whatwg/fetch/issues/304
+      headers: {
+        'content-type': 'application/json',
+        'custom-header': 'Custom'
+      },
+      status: 200,
+      statusText: 'Ok',
+      url: '/my/api',
+      body: ''
+    })
+  );
 });
 
-test('request() should return a Left<NetworkError> when there is any network error', () => {
-  global.fetch.mockRejectOnce(new TypeError('Connection error'));
+test('request() should return a Left<NetworkError> when there is any network error', async () => {
+  fetch.mockRejectOnce(new TypeError('Connection error'));
 
-  return expect(result(request('GET', '/my/api'))).rejects.toEqual({
-    type: 'NetworkError',
-    message: 'Connection error',
-    uri: '/my/api'
-  });
+  const result = await request('GET', '/my/api')();
+
+  expect(result).toEqual(
+    left({
+      type: 'NetworkError',
+      message: 'Connection error',
+      uri: '/my/api'
+    })
+  );
 });
 
-test('request() should return a Left<BadUrl> when Response has status 404', () => {
-  global.fetch.mockResponseOnce('', {
+test('request() should return a Left<BadUrl> when Response has status 404', async () => {
+  fetch.mockResponseOnce('', {
+    headers: {'Content-type': 'application/json'},
     url: '/my/api',
     status: 404,
     statusText: '404 - Not found'
   });
 
-  return expect(result(request('GET', '/my/api'))).rejects.toEqual({
-    type: 'BadUrl',
-    url: '/my/api',
-    response: {
-      headers: {},
-      status: 404,
-      statusText: '404 - Not found',
+  const result = await request('GET', '/my/api')();
+
+  expect(result).toEqual(
+    left({
+      type: 'BadUrl',
       url: '/my/api',
-      body: ''
-    }
-  });
+      response: {
+        headers: {'content-type': 'application/json'},
+        status: 404,
+        statusText: '404 - Not found',
+        url: '/my/api',
+        body: ''
+      }
+    })
+  );
 });
 
-test('request() should return a Left<BadStatus> when Response is not ok and status is not 404', () => {
-  global.fetch.mockResponseOnce(JSON.stringify({error: 'application error'}), {
+test('request() should return a Left<BadStatus> when Response is not ok and status is not 404', async () => {
+  fetch.mockResponseOnce(JSON.stringify({error: 'application error'}), {
+    headers: {'Content-type': 'application/json'},
     url: '/my/api',
     status: 500,
     statusText: '500 - Internal Server Error'
   });
 
-  return expect(result(request('GET', '/my/api'))).rejects.toEqual({
-    type: 'BadResponse',
-    response: {
-      headers: {},
-      status: 500,
-      statusText: '500 - Internal Server Error',
-      url: '/my/api',
-      body: {error: 'application error'}
-    }
-  });
+  const result = await request('GET', '/my/api')();
+
+  expect(result).toEqual(
+    left({
+      type: 'BadResponse',
+      response: {
+        headers: {'content-type': 'application/json'},
+        status: 500,
+        statusText: '500 - Internal Server Error',
+        url: '/my/api',
+        body: {error: 'application error'}
+      }
+    })
+  );
 });
 
-test('get() should make a request with a `GET` method', () => {
-  global.fetch.mockResponseOnce('', {url: '/my/api'});
+test('get() should make a request with a `GET` method', async () => {
+  fetch.mockResponseOnce('', {url: '/my/api'});
 
   const req = get('/my/api', {headers: {Authorization: 'Berear TOKEN'}});
 
-  return req().then(() => {
-    expect(global.fetch).toHaveBeenCalledWith('/my/api', {
-      method: 'GET',
-      headers: {Authorization: 'Berear TOKEN'}
-    });
+  await req();
+
+  expect(fetch).toHaveBeenCalledWith('/my/api', {
+    method: 'GET',
+    headers: {Authorization: 'Berear TOKEN'}
   });
 });
 
-test('post() should make a request with a `POST` method', () => {
-  global.fetch.mockResponseOnce('', {url: '/my/api'});
+test('post() should make a request with a `POST` method', async () => {
+  fetch.mockResponseOnce('', {url: '/my/api'});
 
   const req = post('/my/api', {body: JSON.stringify({data: 123})});
 
-  return req().then(() => {
-    expect(global.fetch).toHaveBeenCalledWith('/my/api', {
-      method: 'POST',
-      body: JSON.stringify({data: 123})
-    });
+  await req();
+
+  expect(fetch).toHaveBeenCalledWith('/my/api', {
+    method: 'POST',
+    body: JSON.stringify({data: 123})
   });
 });
 
-test('put() should make a request with a `PUT` method', () => {
-  global.fetch.mockResponseOnce('', {url: '/my/api'});
+test('put() should make a request with a `PUT` method', async () => {
+  fetch.mockResponseOnce('', {url: '/my/api'});
 
   const req = put('/my/api', {body: JSON.stringify({data: 123})});
 
-  return req().then(() => {
-    expect(global.fetch).toHaveBeenCalledWith('/my/api', {
-      method: 'PUT',
-      body: JSON.stringify({data: 123})
-    });
+  await req();
+
+  expect(fetch).toHaveBeenCalledWith('/my/api', {
+    method: 'PUT',
+    body: JSON.stringify({data: 123})
   });
 });
 
-test('patch() should make a request with a `PATCH` method', () => {
-  global.fetch.mockResponseOnce('', {url: '/my/api'});
+test('patch() should make a request with a `PATCH` method', async () => {
+  fetch.mockResponseOnce('', {url: '/my/api'});
 
   const req = patch('/my/api', {body: JSON.stringify({data: 123})});
 
-  return req().then(() => {
-    expect(global.fetch).toHaveBeenCalledWith('/my/api', {
-      method: 'PATCH',
-      body: JSON.stringify({data: 123})
-    });
+  await req();
+
+  expect(fetch).toHaveBeenCalledWith('/my/api', {
+    method: 'PATCH',
+    body: JSON.stringify({data: 123})
   });
 });
 
-test('del() should make a request with a `DELETE` method', () => {
-  global.fetch.mockResponseOnce('', {url: '/my/api'});
+test('del() should make a request with a `DELETE` method', async () => {
+  fetch.mockResponseOnce('', {url: '/my/api'});
 
   const req = del('/my/api', {mode: 'cors'});
 
-  return req().then(() => {
-    expect(global.fetch).toHaveBeenCalledWith('/my/api', {
-      method: 'DELETE',
-      mode: 'cors'
-    });
+  await req();
+
+  expect(fetch).toHaveBeenCalledWith('/my/api', {
+    method: 'DELETE',
+    mode: 'cors'
   });
 });

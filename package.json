@@ -75,7 +75,7 @@
     "automock": false,
     "bail": true,
     "coveragePathIgnorePatterns": [
-      "<rootDir>/src/test/_helpers/",
+      "<rootDir>/src/test/_setup.ts",
       "<rootDir>/node_modules/"
     ],
     "coverageReporters": [
@@ -97,7 +97,10 @@
       }
     },
     "preset": "ts-jest",
-    "testMatch": null
+    "testMatch": null,
+    "setupFiles": [
+      "<rootDir>/src/test/_setup.ts"
+    ]
   },
   "nyc": {
     "require": [
