@@ -1,6 +1,9 @@
 # --- Run pipeline only for "master" changes
 trigger:
-- master
+  batch: true
+  branches:
+    include:
+      - master
 pr:
 - master
 
