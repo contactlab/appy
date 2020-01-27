@@ -49,7 +49,7 @@
     "@types/jest": "24.9.0",
     "@types/node": "12.12.25",
     "babel-plugin-istanbul": "6.0.0",
-    "husky": "4.0.10",
+    "husky": "4.2.1",
     "isomorphic-fetch": "2.2.1",
     "jest": "24.9.0",
     "jest-fetch-mock": "3.0.1",
