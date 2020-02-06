@@ -20,7 +20,7 @@
     "typescript"
   ],
   "engines": {
-    "node": ">= 8.10 <11.0",
+    "node": ">= 8.10 <13.0",
     "npm": ">= 6.0"
   },
   "files": [
