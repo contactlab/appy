@@ -27,7 +27,7 @@
     "lib"
   ],
   "scripts": {
-    "check": "tsc --noEmit",
+    "check": "tsc",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "jest": "jest --ci --coverage",
     "pretest": "npm run lint && npm run check",
