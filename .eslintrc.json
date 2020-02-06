@@ -1,0 +1,20 @@
+{
+  "root": true,
+
+  "extends": ["contactlab/typescript", "prettier/@typescript-eslint"],
+
+  "env": {
+    "jest": true
+  },
+
+  "overrides": [
+    // --- Disable typescript rules for tests files
+    {
+      "files": ["*.spec.ts*", "test/_setup.ts"],
+      "rules": {
+        "@typescript-eslint/explicit-function-return-type": "off",
+        "@typescript-eslint/no-explicit-any": "off"
+      }
+    }
+  ]
+}

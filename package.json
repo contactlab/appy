@@ -28,36 +28,35 @@
   ],
   "scripts": {
     "check": "tsc --noEmit",
-    "lint": "tslint -p .",
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "jest": "jest --ci --coverage",
     "pretest": "npm run lint && npm run check",
     "test": "npm run jest",
-    "prebuild": "rimraf ./lib",
+    "prebuild": "rm -rf ./lib",
     "build": "tsc -p ./tsconfig.build.json && tsc -p ./tsconfig.build-es6.json",
     "prepublishOnly": "npm test && npm run build"
   },
   "peerDependencies": {
-    "fp-ts": "^2.0.0"
+    "fp-ts": "^2.0.5"
   },
   "devDependencies": {
     "@babel/register": "^7.8.3",
-    "@contactlab/tslint-config": "^1.3.0",
     "@types/isomorphic-fetch": "^0.0.35",
     "@types/jest": "^25.1.1",
     "@types/node": "^12.12.25",
     "babel-plugin-istanbul": "^6.0.0",
-    "fp-ts": "^2.0.0",
+    "eslint": "^6.8.0",
+    "eslint-config-contactlab": "^4.2.2",
+    "eslint-config-prettier": "^6.10.0",
+    "fp-ts": "^2.0.5",
     "husky": "^4.2.1",
     "isomorphic-fetch": "^2.2.1",
     "jest": "^25.1.0",
     "jest-fetch-mock": "^3.0.1",
     "prettier": "^1.19.1",
     "pretty-quick": "^2.0.1",
-    "rimraf": "^3.0.1",
     "ts-jest": "^25.2.0",
     "ts-node": "^8.6.2",
-    "tslint": "^5.20.1",
-    "tslint-config-prettier": "^1.18.0",
     "typescript": "^3.3.0"
   },
   "babel": {

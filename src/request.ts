@@ -15,7 +15,7 @@ import {Task} from 'fp-ts/lib/Task';
 import {TaskEither} from 'fp-ts/lib/TaskEither';
 
 export type Mixed =
-  | {[key: string]: any}
+  | {[key: string]: any} // eslint-disable-line @typescript-eslint/no-explicit-any
   | object
   | number
   | string
