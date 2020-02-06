@@ -24,7 +24,8 @@
     "npm": ">= 6.0"
   },
   "files": [
-    "lib"
+    "lib",
+    "es6"
   ],
   "scripts": {
     "check": "tsc",

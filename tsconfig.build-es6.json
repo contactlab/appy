@@ -4,7 +4,7 @@
     "target": "es6",
     "module": "es6",
     "moduleResolution": "node",
-    "outDir": "./lib/es6",
+    "outDir": "./es6",
     "declaration": false
   }
 }
