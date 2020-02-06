@@ -1,7 +1,7 @@
 {
   "name": "@contactlab/appy",
   "version": "2.0.1",
-  "description": "Fetch API the Contactlab way",
+  "description": "A functional wrapper of Fetch API",
   "main": "lib/index.js",
   "module": "lib/es6/index.js",
   "typings": "lib/index.d.ts",
@@ -13,13 +13,11 @@
   "repository": "contactlab/appy",
   "keywords": [
     "contactlab",
-    "clab",
     "appy",
     "fetch",
     "fp",
     "fp-ts",
-    "functional programming",
-    "task"
+    "typescript"
   ],
   "engines": {
     "node": ">= 8.10 <11.0",
