@@ -1,5 +1,5 @@
 import {left, right} from 'fp-ts/lib/Either';
-import {del, get, patch, post, put, request} from '../request';
+import {del, get, patch, post, put, request} from '../src/request';
 
 const fetch = global.fetch;
 

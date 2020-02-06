@@ -1,7 +1,7 @@
 import {either, left, right} from 'fp-ts/lib/Either';
 import * as t from 'io-ts';
 import {failure} from 'io-ts/lib/PathReporter';
-import {api} from '../api';
+import {api} from '../src/api';
 
 const fetch = global.fetch;
 

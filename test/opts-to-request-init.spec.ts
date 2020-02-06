@@ -1,5 +1,5 @@
 import * as t from 'io-ts';
-import {optsToRequestInit} from '../opts-to-request-init';
+import {optsToRequestInit} from '../src/opts-to-request-init';
 
 const CONFIG1 = {baseUri: 'https://...'};
 const CONFIG2 = {...CONFIG1, id: 'App'};

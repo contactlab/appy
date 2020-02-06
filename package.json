@@ -73,14 +73,14 @@
     "automock": false,
     "bail": true,
     "coveragePathIgnorePatterns": [
-      "<rootDir>/src/test/_setup.ts",
+      "<rootDir>/test/_setup.ts",
       "<rootDir>/node_modules/"
     ],
     "coverageReporters": [
       "text"
     ],
     "roots": [
-      "<rootDir>/src/test/"
+      "<rootDir>/test/"
     ],
     "testRegex": "(\\.|/)spec\\.ts$",
     "moduleFileExtensions": [
@@ -97,7 +97,7 @@
     "preset": "ts-jest",
     "testMatch": null,
     "setupFiles": [
-      "<rootDir>/src/test/_setup.ts"
+      "<rootDir>/test/_setup.ts"
     ]
   },
   "nyc": {
