@@ -1,5 +1,5 @@
 /**
- * Appy - A functional wrapper of Fetch API.
+ * appy - A functional wrapper around Fetch API.
  *
  * @since 3.0.0
  * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API|Fetch Api}
@@ -38,7 +38,7 @@ export type ReqInput = RequestInfo | RequestInfoInit;
 export type RequestInfoInit = [RequestInfo, RequestInit];
 
 /**
- * `Resp<A>` is an object that carries the original `Response` from a `fetch()` call with the actual retrieved `data` (of type `A`).
+ * `Resp<A>` is an object that carries the original `Response` from a `fetch()` call and the actual retrieved `data` (of type `A`).
  *
  * @since 3.0.0
  */
@@ -79,7 +79,23 @@ export interface ResponseError {
 /**
  * Makes a request using `fetch()` under the hood.
  *
- * The `data` in the retured `Resp` object is a `string` because the response's body can **always** be converted to text without errors (via [`text()`](https://developer.mozilla.org/en-US/docs/Web/API/Body/text) method).
+ * The `data` in the returned `Resp` object is a `string` because the response's body can **always** be converted to text without errors (via [`text()`](https://developer.mozilla.org/en-US/docs/Web/API/Body/text) method).
+ *
+ * Example:
+ * ```ts
+ * import {request} from '@contactlab/appy';
+ * import {fold} from 'fp-ts/lib/Either';
+ *
+ * // GET method as default like original fetch()
+ * const posts = request('http://jsonplaceholder.typicode.com/posts');
+ *
+ * posts().then(
+ *   fold(
+ *     err => console.error(err),
+ *     data => console.log(data)
+ *   )
+ * );
+ * ```
  *
  * @since 3.0.0
  */

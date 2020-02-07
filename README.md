@@ -1,8 +1,8 @@
-# Appy
+# appy
 
 [![Build Status](https://clab-dev.visualstudio.com/OSS/_apis/build/status/contactlab.appy?branchName=master)](https://clab-dev.visualstudio.com/OSS/_build/latest?definitionId=32&branchName=master)
 
-Fetch API the Contactlab way
+A functional wrapper around Fetch API
 
 ## Install
 
@@ -16,176 +16,88 @@ $ yarn add @contactlab/appy
 
 ## Motivation
 
-Appy try to offer a better model for fetching resources, using the standard global `fetch()` function as a "backbone" and some principles from Functional Programming paradigm.
+`appy` tries to offer a better model for fetching resources, using the standard global `fetch()` function as a "backbone" and some principles from Functional Programming paradigm.
 
 The model is built around the concepts of:
 
-- asynchronous operations (`Task`)
+- a function with some configurable options (`Reader`)
+- that runs asynchronous operations (`Task`)
 - which can fail for some reason (`Either`)
-- or return data with a specific shape that should be decoded/validated (`Decoder`).
 
-In order to achieve this, Appy intensely uses:
+In order to achieve this, `appy` intensely uses:
 
-- [Typescript](https://www.typescriptlang.org) >= v3.2.2 (due to [`io-ts` v1.6+](https://github.com/gcanti/io-ts/blob/master/CHANGELOG.md#160))
+- [Typescript](https://www.typescriptlang.org) >= v3.2.2
 - [`fp-ts`](https://github.com/gcanti/fp-ts)
-- [`io-ts`](https://github.com/gcanti/io-ts)
 
 ## API
 
-**Note:** every sub module/lib is exported into the main `index.ts` file for a comfortable use.
+`appy` exposes a simple core API that can be extended with ["combinators"](#combinators).
 
-### request
+It encodes through the `Req<A>` type a resource's request, or rather, an async operation that can fail or return a `Resp<A>`.
 
-```typescript
-import {fold} from 'fp-ts/lib/Either';
-import {get} from '@contactlab/appy';
-// same as:
-// import {get} from '@contactlab/appy/lib/request';
+The request is expressed in terms of `ReaderTaskEither` - a function that takes a `ReqInput` as parameter and returns a `TaskEither` - for better composability: we can act on both side of operation (input and output) with the tools provided by `fp-ts`.
 
-const request = get('http://jsonplaceholder.typicode.com/posts');
-
-request().then(fold(err => console.error(err), data => console.log(data)));
+```ts
+interface Req<A> extends RTE.ReaderTaskEither<ReqInput, Err, Resp<A>> {}
 ```
 
-This is a low level module:
-it uses the standard Web API Fetch function (`fetch`) in order to make a request to a resource
-and wraps it in a `TaskEither` monad.
+`ReqInput` encodes the `fetch()` parameters: a single [`RequestInfo`](https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/fetch#Parameters) (simple string or [`Request`](https://developer.mozilla.org/en-US/docs/Web/API/Request) object) or a tuple of `RequestInfo` and [`RequestInit`](https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/fetch#Parameters) (the object containing request's options, that it's optional in the original `fetch()` API).
 
-So, you can:
+```ts
+type ReqInput = RequestInfo | RequestInfoInit;
 
-- use the standard, clean and widely supported api to make XHR;
-- "project" it into a declarative functional world where execution is lazy (`Task`);
-- handle "by design" the possibility of a failure with an explicit channel for errors (`Either`).
-
-The module tries to be as more compliant as possible with the `fetch()` interface but with subtle differences:
-
-- request `method` is always explicit (no implicit "GET");
-- accepted methods are definened by the [`Method`](src/request.ts) union type;
-- `fetch`'s input is always a `string` (no `Request` objects allowed);
-- standard `Response` is mapped into a specific Appy's `Response<Mixed>` interface;
-- Appy's `Response` `headers` property is always a `HeadersMap` (alias for a `Record<string, string>`);
-- Appy's `Response` has a `body` property that is the result of parsing to JSON the string returned from `response.text()`; if it cannot be parsed as JSON, `body` value is just the string (both types of data are covered by the `Mixed` type).
-
-`RequestInit` configuration object instead remains the same.
-
-#### Exports
-
-See [here](src/request.ts) for the complete list of types.
-
-```typescript
-declare function request(
-  m: Method,
-  u: string,
-  o?: RequestInit
-): TaskEither<RequestError, Response<Mixed>>;
+// Just an alias for a tuple of `RequesInfo` and `RequestInit` (a.k.a. the `fetch()` parameters)
+type RequestInfoInit = [RequestInfo, RequestInit];
 ```
 
-```typescript
-declare function get(
-  u: string,
-  o?: RequestInit
-): TaskEither<RequestError, Response<Mixed>>;
+`Resp<A>` is an object that carries the original `Response` from a `fetch()` call and the actual retrieved `data` (of type `A`).
+
+```ts
+interface Resp<A> {
+  response: Response;
+  data: A;
+}
 ```
 
-```typescript
-declare function post(
-  u: string,
-  o?: RequestInit
-): TaskEither<RequestError, Response<Mixed>>;
-```
+`Err` encodes (as tagged union) the two kind of error that can be generated by `Req`: a `RequestError` or a `ResponseError`.
 
-```typescript
-declare function put(
-  u: string,
-  o?: RequestInit
-): TaskEither<RequestError, Response<Mixed>>;
-```
+`RequestError` represents a request error. It carries the generated `Error` and the input of the request (`RequestInfoInit` tuple).
 
-```typescript
-declare function patch(
-  u: string,
-  o?: RequestInit
-): TaskEither<RequestError, Response<Mixed>>;
-```
+`ResponseError` represents a response error. It carriess the generated `Error` and the original `Response` object.
 
-```typescript
-declare function del(
-  u: string,
-  o?: RequestInit
-): TaskEither<RequestError, Response<Mixed>>;
-```
+```ts
+type Err = RequestError | ResponseError;
 
-### api
-
-```typescript
-import {fold} from 'fp-ts/lib/Either';
-import * as t from 'io-ts';
-import {api} from '@contactlab/appy';
-// same as:
-// import {api} from '@contactlab/appy/lib/api';
-
-const myApi = api({baseUri: 'http://jsonplaceholder.typicode.com'});
-const token = 'secret';
-const Posts = t.array(
-  t.type({
-    userId: t.number,
-    id: t.number,
-    title: t.string,
-    body: t.string
-  })
-);
-
-const request = myApi.get('/posts', {token, decoder: Posts});
-
-request().then(fold(err => console.error(err), data => console.log(data)));
-```
-
-This module is tailored on the needs of the Contactlab Frontend Team.
-It uses the "low-level" `request` module in order to interact with Contactlab's services (REST API).
-
-So, it is a little more opinionated:
-
-- the exposed function (`api`) is used to "load" some configuration and returns an object with methods;
-- the configuration has a required `baseUri` (string) key which will be prepended to every `uri`;
-- there are also 2 optional keys `id` (string) and `version` (string) which will be passed as request's `headers`:
-  - `'Contactlab-ClientId': ${id}`,
-  - `'Contactlab-ClientVersion': ${version}`;
-- the main `api` method is `request()` which uses under the hood the `request` module with some subtle differences:
-  - the `options` parameter is mandatory and it is an extension of the `RequestInit` interface;
-  - `options` has a required `token` (string) key which will be passed as request's `Authorization: Bearer ${token}` header;
-  - `options` has a required `decoder` (`Decoder<Mixed, A>`) key which will be used to decode the service's JSON payload;
-  - decoder errors are expressed with a `DecoderError` interface which extends the `RequestError` tagged union type;
-  - thus, the returned type of `api` methods is `TaskEither<ApiError, A>`
-  - `headers` in `options` object can only be a map of strings (`Record<string, string>`); if you need to work with a `Header` object you have to transform it;
-  - `options` is merged with a predefined object in order to set some default values:
-    - `mode: 'cors'`
-    - `headers: {'Accept': 'application/json', 'Content-type': 'application/json'}`
-
-#### Exports
-
-See [here](src/api.ts) for the complete list of types.
-
-```typescript
-interface ApiMethods {
-  request: <A>(m: Method, u: string, o: ApiOptions<A>): TaskEither<ApiError, Response<A>>;
-
-  get: <A>(u: string, o: ApiOptions<A>): TaskEither<ApiError, Response<A>>;
-
-  post: <A>(u: string, o: ApiOptions<A>): TaskEither<ApiError, Response<A>>;
-
-  put: <A>(u: string, o: ApiOptions<A>): TaskEither<ApiError, Response<A>>;
-
-  patch: <A>(u: string, o: ApiOptions<A>): TaskEither<ApiError, Response<A>>;
-
-  del: <A>(u: string, o: ApiOptions<A>): TaskEither<ApiError, Response<A>>;
+interface RequestError {
+  type: 'RequestError';
+  error: Error;
+  input: RequestInfoInit;
 }
 
-declare function api(c: ApiConfig): ApiMethods
+interface ResponseError {
+  type: 'ResponseError';
+  error: Error;
+  response: Response;
+}
 ```
 
 ## Examples
 
-You can find a couple of examples [here](examples).
+```ts
+import {get} from '@contactlab/appy';
+import {fold} from 'fp-ts/lib/Either';
+
+const posts = get('http://jsonplaceholder.typicode.com/posts');
+
+posts().then(
+  fold(
+    err => console.error(err),
+    data => console.log(data)
+  )
+);
+```
+
+You can find other examples [here](examples).
 
 ## About `fetch()` compatibility
 
@@ -197,13 +109,7 @@ Opening issues is always welcome.
 
 Then, fork the repository or create a new branch, write your code and send a pull request.
 
-This project uses [Prettier](https://prettier.io/) (automatically applied as pre-commit hook), [TSLint](https://palantir.github.io/tslint/) and [Jest](https://facebook.github.io/jest/en/).
-
-Tests are run with:
-
-```sh
-$ npm test
-```
+This project uses [Prettier](https://prettier.io/) (automatically applied as pre-commit hook), [ESLint](https://eslint.org/) (with [TypeScript integration](https://github.com/typescript-eslint/typescript-eslint)) and [Jest](https://facebook.github.io/jest/en/).
 
 ## License
 
