@@ -35,7 +35,9 @@
     "test": "npm run jest",
     "prebuild": "rm -rf ./lib",
     "build": "tsc -p ./tsconfig.build.json && tsc -p ./tsconfig.build-es6.json",
-    "prepublishOnly": "npm test && npm run build"
+    "prepublishOnly": "npm test && npm run build",
+    "docs": "docs-ts",
+    "postdocs": "ts-node scripts/docs-index"
   },
   "peerDependencies": {
     "fp-ts": "^2.0.5"
@@ -47,6 +49,7 @@
     "@types/jest": "^25.1.1",
     "@types/node": "^12.12.25",
     "babel-plugin-istanbul": "^6.0.0",
+    "docs-ts": "^0.3.4",
     "eslint": "^6.8.0",
     "eslint-config-contactlab": "^4.2.2",
     "eslint-config-prettier": "^6.10.0",
