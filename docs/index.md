@@ -106,7 +106,7 @@ You can find other examples [here](examples).
 
 ## About `fetch()` compatibility
 
-The Fetch API is available only on "modern" browsers: if you need to support legacy browsers (e.g. **Internet Explorer 11** or older) or you want to use it in a Nodejs script we recommend you the excellent [`isomorphic-fetch`](https://www.npmjs.com/package/isomorphic-fetch) package.
+The Fetch API is available only on "modern" browsers: if you need to support legacy browsers (e.g. **Internet Explorer 11** or older) or you want to use it in a Nodejs script we recommend you the excellent [`cross-fetch`](https://www.npmjs.com/package/cross-fetch) package.
 
 ## Contributing
 
