@@ -1,5 +1,4 @@
 node_modules
 *.log*
 coverage
-lib
-es6
+dist

@@ -1,7 +1,6 @@
 node_modules
 coverage
-lib
-es6
+dist
 
 # --- TMP
 examples

@@ -2,9 +2,9 @@
   "name": "@contactlab/appy",
   "version": "3.0.0-0",
   "description": "A functional wrapper around Fetch API",
-  "main": "lib/index.js",
-  "module": "lib/es6/index.js",
-  "typings": "lib/index.d.ts",
+  "main": "index.js",
+  "module": "./es6/index.js",
+  "typings": "index.d.ts",
   "sideEffects": false,
   "author": "Contactlab",
   "license": "Apache-2.0",
@@ -23,19 +23,18 @@
     "node": ">= 8.10 <13.0",
     "npm": ">= 6.0"
   },
-  "files": [
-    "lib",
-    "es6"
-  ],
   "scripts": {
     "check": "tsc",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "jest": "jest --ci --coverage",
     "pretest": "npm run lint && npm run check",
     "test": "npm run jest",
-    "prebuild": "rm -rf ./lib",
+    "prebuild": "rm -rf ./dist",
     "build": "tsc -p ./tsconfig.build.json && tsc -p ./tsconfig.build-es6.json",
-    "prepublishOnly": "npm test && npm run build",
+    "postbuild": "ts-node scripts/prepare-dist",
+    "prepublishOnly": "ts-node scripts/pre-publish",
+    "prerelease": "npm test && npm run build",
+    "release": "ts-node scripts/release --tag version3",
     "docs": "docs-ts",
     "docs:update": "npm run docs && git add docs",
     "postdocs": "ts-node scripts/docs-index"
