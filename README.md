@@ -7,11 +7,11 @@ A functional wrapper around Fetch API
 ## Install
 
 ```sh
-$ npm install @contactlab/appy
+$ npm install @contactlab/appy fp-ts
 
 # --- or ---
 
-$ yarn add @contactlab/appy
+$ yarn add @contactlab/appy fp-ts
 ```
 
 ## Motivation
