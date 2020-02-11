@@ -99,6 +99,57 @@ posts().then(
 
 You can find other examples [here](examples).
 
+## Combinators
+
+In order to make extending the library functionalities easier, any other feature should then be expressed as simple combinator `Req<A> => Req<A>`.
+
+So, for example, decoding the response body as JSON:
+
+```ts
+import {get} from '@contactlab/appy';
+import {withDecoder, Decoder} from '@contactlab/appy/combinators/decoder';
+import {pipe} from 'fp-ts/lib/pipeable';
+
+interface Post {
+  id: number;
+  userId: number;
+  title: string;
+  body: string;
+}
+
+declare const decoder: Decoder<Post>;
+
+const getPost = pipe(withDecoder(decoder), get);
+
+const singlePost = getPost('http://jsonplaceholder.typicode.com/posts/1');
+```
+
+or adding headers to the request:
+
+```ts
+import {get} from '@contactlab/appy';
+import {withHeaders} from '@contactlab/appy/combinators/headers';
+
+const asJson = withHeaders({'Content-Type': 'application/json'})(get);
+
+const posts = asJson('http://jsonplaceholder.typicode.com/posts');
+```
+
+or setting request's body (for `POST`s or `PUT`s):
+
+```ts
+import {post} from '@contactlab/appy';
+import {withBody} from '@contactlab/appy/combinators/body';
+import {pipe} from 'fp-ts/lib/pipeable';
+
+const send = pipe(
+  withBody({userId: 1234, title: 'My post title', body: 'My post body'}),
+  post
+);
+
+const addPost = send('http://jsonplaceholder.typicode.com/posts');
+```
+
 ## About `fetch()` compatibility
 
 The Fetch API is available only on "modern" browsers: if you need to support legacy browsers (e.g. **Internet Explorer 11** or older) or you want to use it in a Nodejs script we recommend you the excellent [`cross-fetch`](https://www.npmjs.com/package/cross-fetch) package.
