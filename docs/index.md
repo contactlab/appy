@@ -92,9 +92,9 @@ interface ResponseError {
 import {get} from '@contactlab/appy';
 import {fold} from 'fp-ts/lib/Either';
 
-const posts = get('http://jsonplaceholder.typicode.com/posts');
+const users = get('https://reqres.in/api/users');
 
-posts().then(
+users().then(
   fold(
     err => console.error(err),
     data => console.log(data)
@@ -115,18 +115,19 @@ import {get} from '@contactlab/appy';
 import {withDecoder, Decoder} from '@contactlab/appy/combinators/decoder';
 import {pipe} from 'fp-ts/lib/pipeable';
 
-interface Post {
+interface User {
   id: number;
-  userId: number;
-  title: string;
-  body: string;
+  email: string;
+  first_name: string;
+  last_name: string;
+  avatar: string;
 }
 
-declare const decoder: Decoder<Post>;
+declare const decoder: Decoder<User>;
 
-const getPost = pipe(withDecoder(decoder), get);
+const getUser = pipe(withDecoder(decoder), get);
 
-const singlePost = getPost('http://jsonplaceholder.typicode.com/posts/1');
+const singleUser = getPost('https://reqres.in/api/users/1');
 ```
 
 or adding headers to the request:
@@ -137,7 +138,7 @@ import {withHeaders} from '@contactlab/appy/combinators/headers';
 
 const asJson = withHeaders({'Content-Type': 'application/json'})(get);
 
-const posts = asJson('http://jsonplaceholder.typicode.com/posts');
+const users = asJson('https://reqres.in/api/users');
 ```
 
 or setting request's body (for `POST`s or `PUT`s):
@@ -148,11 +149,11 @@ import {withBody} from '@contactlab/appy/combinators/body';
 import {pipe} from 'fp-ts/lib/pipeable';
 
 const send = pipe(
-  withBody({userId: 1234, title: 'My post title', body: 'My post body'}),
+  withBody({email: 'foo.bar@mail.com', first_name: 'Foo', last_name: 'Bar'}),
   post
 );
 
-const addPost = send('http://jsonplaceholder.typicode.com/posts');
+const addUser = send('https://reqres.in/api/users');
 ```
 
 ## About `fetch()` compatibility
