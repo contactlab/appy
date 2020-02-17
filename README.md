@@ -46,7 +46,7 @@ interface Req<A> extends RTE.ReaderTaskEither<ReqInput, Err, Resp<A>> {}
 ```ts
 type ReqInput = RequestInfo | RequestInfoInit;
 
-// Just an alias for a tuple of `RequesInfo` and `RequestInit` (a.k.a. the `fetch()` parameters)
+// Just an alias for a tuple of `RequesInfo` and `RequestInit` (namely the `fetch()` parameters)
 type RequestInfoInit = [RequestInfo, RequestInit];
 ```
 
@@ -87,12 +87,12 @@ interface ResponseError {
 import {get} from '@contactlab/appy';
 import {fold} from 'fp-ts/lib/Either';
 
-const posts = get('http://jsonplaceholder.typicode.com/posts');
+const users = get('https://reqres.in/api/users');
 
-posts().then(
+users().then(
   fold(
     err => console.error(err),
-    data => console.log(data)
+    resp => console.log(resp.data)
   )
 );
 ```
@@ -110,18 +110,19 @@ import {get} from '@contactlab/appy';
 import {withDecoder, Decoder} from '@contactlab/appy/combinators/decoder';
 import {pipe} from 'fp-ts/lib/pipeable';
 
-interface Post {
+interface User {
   id: number;
-  userId: number;
-  title: string;
-  body: string;
+  email: string;
+  first_name: string;
+  last_name: string;
+  avatar: string;
 }
 
-declare const decoder: Decoder<Post>;
+declare const userDec: Decoder<User>;
 
-const getPost = pipe(withDecoder(decoder), get);
+const getUser = pipe(get, withDecoder(userDec));
 
-const singlePost = getPost('http://jsonplaceholder.typicode.com/posts/1');
+const singleUser = getUser('https://reqres.in/api/users/1');
 ```
 
 or adding headers to the request:
@@ -130,9 +131,9 @@ or adding headers to the request:
 import {get} from '@contactlab/appy';
 import {withHeaders} from '@contactlab/appy/combinators/headers';
 
-const asJson = withHeaders({'Content-Type': 'application/json'})(get);
+const asJson = pipe(get, withHeaders({'Content-Type': 'application/json'}));
 
-const posts = asJson('http://jsonplaceholder.typicode.com/posts');
+const users = asJson('https://reqres.in/api/users');
 ```
 
 or setting request's body (for `POST`s or `PUT`s):
@@ -143,11 +144,26 @@ import {withBody} from '@contactlab/appy/combinators/body';
 import {pipe} from 'fp-ts/lib/pipeable';
 
 const send = pipe(
-  withBody({userId: 1234, title: 'My post title', body: 'My post body'}),
-  post
+  post,
+  withBody({email: 'foo.bar@mail.com', first_name: 'Foo', last_name: 'Bar'})
 );
 
-const addPost = send('http://jsonplaceholder.typicode.com/posts');
+const addUser = send('https://reqres.in/api/users');
+```
+
+### `io-ts` integration
+
+[`io-ts`](https://github.com/gcanti/io-ts) is recommended but is not automatically installed as dependency.
+
+In order to use it with the `Decoder` combinator you can write a simple helper like:
+
+```ts
+import * as t from 'io-ts';
+import {failure} from 'io-ts/lib/PathReporter';
+import {Decoder, toDecoder} from '@contactlab/appy/combinators/decoder';
+
+export const fromIots = <A>(d: t.Decoder<unknown, A>): Decoder<A> =>
+  toDecoder(d.decode, e => new Error(failure(e).join('\n')));
 ```
 
 ## About `fetch()` compatibility

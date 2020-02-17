@@ -51,7 +51,7 @@ interface Req<A> extends RTE.ReaderTaskEither<ReqInput, Err, Resp<A>> {}
 ```ts
 type ReqInput = RequestInfo | RequestInfoInit;
 
-// Just an alias for a tuple of `RequesInfo` and `RequestInit` (a.k.a. the `fetch()` parameters)
+// Just an alias for a tuple of `RequesInfo` and `RequestInit` (namely the `fetch()` parameters)
 type RequestInfoInit = [RequestInfo, RequestInit];
 ```
 
@@ -97,7 +97,7 @@ const users = get('https://reqres.in/api/users');
 users().then(
   fold(
     err => console.error(err),
-    data => console.log(data)
+    resp => console.log(resp.data)
   )
 );
 ```
@@ -123,11 +123,11 @@ interface User {
   avatar: string;
 }
 
-declare const decoder: Decoder<User>;
+declare const userDec: Decoder<User>;
 
-const getUser = pipe(withDecoder(decoder), get);
+const getUser = pipe(get, withDecoder(userDec));
 
-const singleUser = getPost('https://reqres.in/api/users/1');
+const singleUser = getUser('https://reqres.in/api/users/1');
 ```
 
 or adding headers to the request:
@@ -136,7 +136,7 @@ or adding headers to the request:
 import {get} from '@contactlab/appy';
 import {withHeaders} from '@contactlab/appy/combinators/headers';
 
-const asJson = withHeaders({'Content-Type': 'application/json'})(get);
+const asJson = pipe(get, withHeaders({'Content-Type': 'application/json'}));
 
 const users = asJson('https://reqres.in/api/users');
 ```
@@ -149,11 +149,26 @@ import {withBody} from '@contactlab/appy/combinators/body';
 import {pipe} from 'fp-ts/lib/pipeable';
 
 const send = pipe(
-  withBody({email: 'foo.bar@mail.com', first_name: 'Foo', last_name: 'Bar'}),
-  post
+  post,
+  withBody({email: 'foo.bar@mail.com', first_name: 'Foo', last_name: 'Bar'})
 );
 
 const addUser = send('https://reqres.in/api/users');
+```
+
+### `io-ts` integration
+
+[`io-ts`](https://github.com/gcanti/io-ts) is recommended but is not automatically installed as dependency.
+
+In order to use it with the `Decoder` combinator you can write a simple helper like:
+
+```ts
+import * as t from 'io-ts';
+import {failure} from 'io-ts/lib/PathReporter';
+import {Decoder, toDecoder} from '@contactlab/appy/combinators/decoder';
+
+export const fromIots = <A>(d: t.Decoder<unknown, A>): Decoder<A> =>
+  toDecoder(d.decode, e => new Error(failure(e).join('\n')));
 ```
 
 ## About `fetch()` compatibility
