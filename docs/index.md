@@ -183,6 +183,16 @@ Then, fork the repository or create a new branch, write your code and send a pul
 
 This project uses [Prettier](https://prettier.io/) (automatically applied as pre-commit hook), [ESLint](https://eslint.org/) (with [TypeScript integration](https://github.com/typescript-eslint/typescript-eslint)) and [Jest](https://facebook.github.io/jest/en/).
 
+### Publish a new version
+
+In order to keep the package's file structure as flat as possible, the "usual" npm `publish` command was disabled (via a `prepublishOnly` script) in favour of a `release` script:
+
+```sh
+$ npm run release
+```
+
+This command will execute `npm publish` directly in the `/dist` folder, where the `postbuild` script previously copied the `package.json` and other usefull files (`LICENSE`, `CHANGELOG.md`, etc...).
+
 ## License
 
 Released under the [Apache 2.0](LICENSE) license.
