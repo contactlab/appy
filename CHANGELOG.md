@@ -1,5 +1,17 @@
 # Changelog
 
+## [3.0.0](https://github.com/contactlab/appy/releases/tag/3.0.0)
+
+[REF: [Milestone 3.0.0](https://github.com/contactlab/appy/milestone/5)]
+
+This version introduces another **big** breaking change with previous API.
+
+Motivations and guide-lines can be found in the related [issue](https://github.com/contactlab/appy/issues/298) and in the [new documentation site](https://contactlab.github.io/appy).
+
+**Breaking:**
+
+- More agnostic API ([#298](https://github.com/contactlab/appy/issues/298))
+
 ## [2.0.1](https://github.com/contactlab/appy/releases/tag/2.0.1)
 
 This release only fixes a NPM versioning issue
@@ -128,7 +140,7 @@ Technical explanation could be found in the related issues.
 
 Full documentation could be found in the `README` file.
 
-**Breaking Change:**
+**Breaking:**
 
 - Moving from Flow type checker to `Typescript` ([#11](https://github.com/contactlab/appy/issues/11))
 - Implementation of a more functional API ([#12](https://github.com/contactlab/appy/issues/12))
