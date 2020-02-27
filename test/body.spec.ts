@@ -1,5 +1,6 @@
 import fetchMock from 'fetch-mock';
-import {left} from 'fp-ts/lib/Either';
+import {left, mapLeft} from 'fp-ts/lib/Either';
+import {pipe} from 'fp-ts/lib/pipeable';
 import {withBody} from '../src/combinators/body';
 import * as appy from '../src/index';
 
@@ -30,10 +31,21 @@ test('withBody() should fail if provided JSON body throws error when stringified
 
   const result = await request('http://localhost/api/resources')();
 
-  expect(result).toEqual(
+  // --- Use this trick because Nodejs error messages are different in v10 and v12
+  const check = pipe(
+    result,
+    mapLeft(e => ({
+      ...e,
+      error:
+        e.error instanceof TypeError &&
+        e.error.message.includes('Converting circular structure to JSON')
+    }))
+  );
+
+  expect(check).toEqual(
     left({
       type: 'RequestError',
-      error: new TypeError('Converting circular structure to JSON'),
+      error: true,
       input: ['http://localhost/api/resources', {}]
     })
   );
