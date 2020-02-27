@@ -34,7 +34,7 @@
     "postbuild": "ts-node scripts/prepare-dist",
     "prepublishOnly": "ts-node scripts/pre-publish",
     "prerelease": "npm test && npm run build",
-    "release": "ts-node scripts/release --tag version3",
+    "release": "ts-node scripts/release",
     "docs": "docs-ts",
     "docs:update": "npm run docs && git add docs",
     "postdocs": "ts-node scripts/docs-index"
