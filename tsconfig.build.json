@@ -1,5 +1,7 @@
 {
   "extends": "./tsconfig",
-  "include": ["./src"],
-  "exclude": ["./src/test"]
+  "compilerOptions": {
+    "noEmit": false
+  },
+  "include": ["./src"]
 }

@@ -1,3 +1,8 @@
+---
+title: Home
+nav_order: 1
+---
+
 # @contactlab/appy
 
 [![Build Status](https://clab-dev.visualstudio.com/OSS/_apis/build/status/contactlab.appy?branchName=master)](https://clab-dev.visualstudio.com/OSS/_build/latest?definitionId=32&branchName=master)
