@@ -43,7 +43,7 @@ It encodes through the `Req<A>` type a resource's request, or rather, an async o
 The request is expressed in terms of `ReaderTaskEither` - a function that takes a `ReqInput` as parameter and returns a `TaskEither` - for better composability: we can act on both side of operation (input and output) with the tools provided by `fp-ts`.
 
 ```ts
-interface Req<A> extends RTE.ReaderTaskEither<ReqInput, Err, Resp<A>> {}
+interface Req<A> extends ReaderTaskEither<ReqInput, Err, Resp<A>> {}
 ```
 
 `ReqInput` encodes the `fetch()` parameters: a single [`RequestInfo`](https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/fetch#Parameters) (simple string or [`Request`](https://developer.mozilla.org/en-US/docs/Web/API/Request) object) or a tuple of `RequestInfo` and [`RequestInit`](https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/fetch#Parameters) (the object containing request's options, that it's optional in the original `fetch()` API).
