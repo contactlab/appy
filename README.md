@@ -164,6 +164,16 @@ import {Decoder, toDecoder} from '@contactlab/appy/combinators/decoder';
 
 export const fromIots = <A>(d: t.Decoder<unknown, A>): Decoder<A> =>
   toDecoder(d.decode, e => new Error(failure(e).join('\n')));
+
+```
+
+Or, with the [Decoder](https://github.com/gcanti/io-ts/lib/) module:
+
+```ts
+import * as D from 'io-ts/lib/Decoder';
+
+export const fromIots = <A>(d: D.Decoder<A>): Decoder<A> =>
+  toDecoder(d.decode, (e) => new Error(JSON.stringify(e)))
 ```
 
 ## About `fetch()` compatibility
