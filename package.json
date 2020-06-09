@@ -20,7 +20,7 @@
     "typescript"
   ],
   "engines": {
-    "node": ">= 8.10 <13.0",
+    "node": ">= 10.0",
     "npm": ">= 6.0"
   },
   "scripts": {
@@ -44,22 +44,22 @@
   },
   "devDependencies": {
     "@types/fetch-mock": "^7.3.2",
-    "@types/jest": "^25.1.1",
+    "@types/jest": "^25.2.3",
     "@types/node": "^12.12.25",
     "cross-fetch": "^3.0.4",
     "docs-ts": "^0.3.4",
-    "eslint": "^6.8.0",
-    "eslint-config-contactlab": "^4.2.2",
-    "eslint-config-prettier": "^6.10.0",
-    "fetch-mock": "^8.3.2",
+    "eslint": "^7.0.0",
+    "eslint-config-contactlab": "^5.0.0",
+    "eslint-config-prettier": "^6.11.0",
+    "fetch-mock": "^9.10.1",
     "fp-ts": "^2.0.5",
-    "husky": "^4.2.1",
+    "husky": "^4.2.5",
     "io-ts": "^2.0.1",
-    "jest": "^25.1.0",
-    "prettier": "^1.19.1",
+    "jest": "^26.0.1",
+    "prettier": "^2.0.5",
     "pretty-quick": "^2.0.1",
-    "ts-jest": "^25.2.0",
-    "ts-node": "^8.6.2",
+    "ts-jest": "^26.1.0",
+    "ts-node": "^8.10.2",
     "typescript": "^3.2.2"
   },
   "jest": {

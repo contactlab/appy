@@ -17,16 +17,16 @@ import {get, put} from '../src/index';
 interface User {
   id: number;
   email: string;
-  first_name: string;
-  last_name: string;
+  first_name: string; // eslint-disable-line camelcase
+  last_name: string; // eslint-disable-line camelcase
   avatar: string;
 }
 
 interface Payload {
   page: number;
-  per_page: number;
+  per_page: number; // eslint-disable-line camelcase
   total: number;
-  total_pages: number;
+  total_pages: number; // eslint-disable-line camelcase
   data: User[];
 }
 

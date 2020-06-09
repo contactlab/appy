@@ -16,8 +16,10 @@
   "[typescriptreact]": {
     "editor.formatOnSave": true
   },
+  "prettier.arrowParens": "avoid",
   "prettier.bracketSpacing": false,
   "prettier.singleQuote": true,
+  "prettier.trailingComma": "none",
   "typescript.validate.enable": true,
   "typescript.reportStyleChecksAsWarnings": false,
   "typescript.tsdk": "node_modules/typescript/lib"

@@ -14,8 +14,6 @@ pool:
 # --- Execute the job with 3 different versions of Node
 strategy:
   matrix:
-    Node_8:
-      node_version: 8.x
     Node_10:
       node_version: 10.x
     Node_12:
