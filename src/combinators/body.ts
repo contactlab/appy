@@ -13,6 +13,7 @@ import {Req, ReqInput, normalizeReqInput, toRequestError, Err} from '../index';
 /**
  * Sets the provided `body` (automatically converted to string when JSON) on `Req` init object and returns the updated `Req`.
  *
+ * @category combinators
  * @since 3.0.0
  */
 export function withBody<A>(body: unknown): (req: Req<A>) => Req<A> {

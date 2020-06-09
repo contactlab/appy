@@ -14,27 +14,30 @@ Added in v3.0.0
 
 <h2 class="text-delta">Table of contents</h2>
 
-- [utils](#utils)
+- [Error](#error)
   - [Err (type alias)](#err-type-alias)
+  - [RequestError (interface)](#requesterror-interface)
+  - [ResponseError (interface)](#responseerror-interface)
+  - [toRequestError](#torequesterror)
+  - [toResponseError](#toresponseerror)
+- [Request](#request)
   - [Req (interface)](#req-interface)
   - [ReqInput (type alias)](#reqinput-type-alias)
-  - [RequestError (interface)](#requesterror-interface)
   - [RequestInfoInit (type alias)](#requestinfoinit-type-alias)
+  - [normalizeReqInput](#normalizereqinput)
+- [Response](#response)
   - [Resp (interface)](#resp-interface)
-  - [ResponseError (interface)](#responseerror-interface)
+- [creators](#creators)
   - [del](#del)
   - [get](#get)
-  - [normalizeReqInput](#normalizereqinput)
   - [patch](#patch)
   - [post](#post)
   - [put](#put)
   - [request](#request)
-  - [toRequestError](#torequesterror)
-  - [toResponseError](#toresponseerror)
 
 ---
 
-# utils
+# Error
 
 ## Err (type alias)
 
@@ -44,32 +47,6 @@ Added in v3.0.0
 
 ```ts
 export type Err = RequestError | ResponseError;
-```
-
-Added in v3.0.0
-
-## Req (interface)
-
-`Req<A>` encodes a resource's request, or rather, an async operation that can fail or return a `Resp<A>`.
-
-The request is expressed in terms of `ReaderTaskEither` - a function that takes a `ReqInput` as parameter and returns a `TaskEither` - for better composability: we can act on both side of operation (input and output) with the tools provided by `fp-ts`.
-
-**Signature**
-
-```ts
-export interface Req<A> extends RTE.ReaderTaskEither<ReqInput, Err, Resp<A>> {}
-```
-
-Added in v3.0.0
-
-## ReqInput (type alias)
-
-`ReqInput` encodes the `fetch()` parameters: a single [`RequestInfo`](https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/fetch#Parameters) (simple string or [`Request`](https://developer.mozilla.org/en-US/docs/Web/API/Request) object) or a tuple of `RequestInfo` and [`RequestInit`](https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/fetch#Parameters) (the object containing request's options, that it's optional in the original `fetch()` API).
-
-**Signature**
-
-```ts
-export type ReqInput = RequestInfo | RequestInfoInit;
 ```
 
 Added in v3.0.0
@@ -85,33 +62,6 @@ export interface RequestError {
   type: 'RequestError';
   error: Error;
   input: RequestInfoInit;
-}
-```
-
-Added in v3.0.0
-
-## RequestInfoInit (type alias)
-
-An alias for a tuple of `RequesInfo` and `RequestInit` (a.k.a. the `fetch()` parameters).
-
-**Signature**
-
-```ts
-export type RequestInfoInit = [RequestInfo, RequestInit];
-```
-
-Added in v3.0.0
-
-## Resp (interface)
-
-`Resp<A>` is an object that carries the original `Response` from a `fetch()` call and the actual retrieved `data` (of type `A`).
-
-**Signature**
-
-```ts
-export interface Resp<A> {
-  response: Response;
-  data: A;
 }
 ```
 
@@ -133,6 +83,107 @@ export interface ResponseError {
 
 Added in v3.0.0
 
+## toRequestError
+
+Creates a `RequestError` object.
+
+**Signature**
+
+```ts
+export declare function toRequestError(
+  error: Error,
+  input: RequestInfoInit
+): RequestError;
+```
+
+Added in v3.0.0
+
+## toResponseError
+
+Creates a `ResponseError` object.
+
+**Signature**
+
+```ts
+export declare function toResponseError(
+  error: Error,
+  response: Response
+): ResponseError;
+```
+
+Added in v3.0.0
+
+# Request
+
+## Req (interface)
+
+`Req<A>` encodes a resource's request, or rather, an async operation that can fail or return a `Resp<A>`.
+
+The request is expressed in terms of `ReaderTaskEither` - a function that takes a `ReqInput` as parameter and returns a `TaskEither` - for better composability: we can act on both side of operation (input and output) with the tools provided by `fp-ts`.
+
+**Signature**
+
+```ts
+export interface Req<A> extends ReaderTaskEither<ReqInput, Err, Resp<A>> {}
+```
+
+Added in v3.0.0
+
+## ReqInput (type alias)
+
+`ReqInput` encodes the `fetch()` parameters: a single [`RequestInfo`](https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/fetch#Parameters) (simple string or [`Request`](https://developer.mozilla.org/en-US/docs/Web/API/Request) object) or a tuple of `RequestInfo` and [`RequestInit`](https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/fetch#Parameters) (the object containing request's options, that it's optional in the original `fetch()` API).
+
+**Signature**
+
+```ts
+export type ReqInput = RequestInfo | RequestInfoInit;
+```
+
+Added in v3.0.0
+
+## RequestInfoInit (type alias)
+
+An alias for a tuple of `RequesInfo` and `RequestInit` (a.k.a. the `fetch()` parameters).
+
+**Signature**
+
+```ts
+export type RequestInfoInit = [RequestInfo, RequestInit];
+```
+
+Added in v3.0.0
+
+## normalizeReqInput
+
+Normalizes the input of a `Req` to a `RequestInfoInit` tuple even when only a single `RequestInfo` is provided.
+
+**Signature**
+
+```ts
+export declare function normalizeReqInput(input: ReqInput): RequestInfoInit;
+```
+
+Added in v3.0.0
+
+# Response
+
+## Resp (interface)
+
+`Resp<A>` is an object that carries the original `Response` from a `fetch()` call and the actual retrieved `data` (of type `A`).
+
+**Signature**
+
+```ts
+export interface Resp<A> {
+  response: Response;
+  data: A;
+}
+```
+
+Added in v3.0.0
+
+# creators
+
 ## del
 
 Makes a request with the `method` set to `DELETE`.
@@ -153,18 +204,6 @@ Makes a request with the `method` set to `GET`.
 
 ```ts
 export declare const get: Req<string>;
-```
-
-Added in v3.0.0
-
-## normalizeReqInput
-
-Normalizes the input of a `Req` to a `RequestInfoInit` tuple even when only a single `RequestInfo` is provided.
-
-**Signature**
-
-```ts
-export declare function normalizeReqInput(input: ReqInput): RequestInfoInit;
 ```
 
 Added in v3.0.0
@@ -209,7 +248,7 @@ Added in v3.0.0
 
 Makes a request using `fetch()` under the hood.
 
-The `data` in the returned `Resp` object is a `string` because the response's body can **always** be converted to text without errors (via [`text()`](https://developer.mozilla.org/en-US/docs/Web/API/Body/text) method).
+The `data` in the returned `Resp` object is a `string` because the response's body can **always** be converted to text without error (via [`text()`](https://developer.mozilla.org/en-US/docs/Web/API/Body/text) method).
 
 Example:
 
@@ -217,10 +256,10 @@ Example:
 import {request} from '@contactlab/appy';
 import {fold} from 'fp-ts/lib/Either';
 
-// GET method as default like original fetch()
-const posts = request('http://jsonplaceholder.typicode.com/posts');
+// Default method is GET like original `fetch()`
+const users = request('https://reqres.in/api/users');
 
-posts().then(
+users().then(
   fold(
     err => console.error(err),
     data => console.log(data)
@@ -232,36 +271,6 @@ posts().then(
 
 ```ts
 export declare const request: Req<string>;
-```
-
-Added in v3.0.0
-
-## toRequestError
-
-Creates a `RequestError` object.
-
-**Signature**
-
-```ts
-export declare function toRequestError(
-  error: Error,
-  input: RequestInfoInit
-): RequestError;
-```
-
-Added in v3.0.0
-
-## toResponseError
-
-Creates a `ResponseError` object.
-
-**Signature**
-
-```ts
-export declare function toResponseError(
-  error: Error,
-  response: Response
-): ResponseError;
 ```
 
 Added in v3.0.0

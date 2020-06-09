@@ -12,6 +12,7 @@ import {Req, ReqInput, RequestInfoInit, normalizeReqInput} from '../index';
 /**
  * Adds provided url search parameters (as `Record<string, string>`) to `Req`'s input url and returns the updated `Req`.
  *
+ * @category combinators
  * @since 3.0.0
  */
 export function withUrlParams<A>(

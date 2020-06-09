@@ -18,6 +18,7 @@ const sequenceTEither = sequenceT(E.either);
 /**
  * Merges provided `Headers` with `Req` ones and returns the updated `Req`.
  *
+ * @category combinators
  * @since 3.0.0
  */
 export function withHeaders<A>(headers: HeadersInit): (req: Req<A>) => Req<A> {

@@ -26,9 +26,8 @@
   "scripts": {
     "check": "tsc",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
-    "jest": "jest --ci --coverage",
     "pretest": "npm run lint && npm run check",
-    "test": "npm run jest",
+    "test": "jest",
     "prebuild": "rm -rf ./dist",
     "build": "tsc -p ./tsconfig.build.json && tsc -p ./tsconfig.build-es6.json",
     "postbuild": "ts-node scripts/prepare-dist",
@@ -48,7 +47,7 @@
     "@types/node": "^12.12.25",
     "cross-fetch": "^3.0.4",
     "docs-ts": "^0.5.1",
-    "eslint": "^7.0.0",
+    "eslint": "^7.2.0",
     "eslint-config-contactlab": "^5.0.0",
     "eslint-config-prettier": "^6.11.0",
     "fetch-mock": "^9.10.1",
@@ -60,11 +59,12 @@
     "pretty-quick": "^2.0.1",
     "ts-jest": "^26.1.0",
     "ts-node": "^8.10.2",
-    "typescript": "^3.2.2"
+    "typescript": "^3.8.3"
   },
   "jest": {
     "automock": false,
     "bail": true,
+    "collectCoverage": true,
     "coveragePathIgnorePatterns": [
       "<rootDir>/test/_setup.ts",
       "<rootDir>/node_modules/"

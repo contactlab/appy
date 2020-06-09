@@ -14,15 +14,17 @@ Added in v3.0.0
 
 <h2 class="text-delta">Table of contents</h2>
 
-- [utils](#utils)
+- [Decoder](#decoder)
   - [Decoder (interface)](#decoder-interface)
   - [GenericDecoder (interface)](#genericdecoder-interface)
-  - [toDecoder](#todecoder)
+- [combinators](#combinators)
   - [withDecoder](#withdecoder)
+- [helpers](#helpers)
+  - [toDecoder](#todecoder)
 
 ---
 
-# utils
+# Decoder
 
 ## Decoder (interface)
 
@@ -38,30 +40,17 @@ Added in v3.0.0
 
 ## GenericDecoder (interface)
 
-Encodes a generic decoder, namely a function which takes an `unknown` input (usually a JSON object) and tries to decodes it, returning a `Right<A>` if it succeeds or a `Left<E>` otherwise.
+Encodes a generic decoder, namely a function which takes an `unknown` input (usually a JSON object) and tries to decode it, returning a `Right<A>` if it succeeds or a `Left<E>` otherwise.
 
 **Signature**
 
 ```ts
-export interface GenericDecoder<E, A> extends RE.ReaderEither<unknown, E, A> {}
+export interface GenericDecoder<E, A> extends ReaderEither<unknown, E, A> {}
 ```
 
 Added in v3.0.0
 
-## toDecoder
-
-Converts a `GenericDecoder<E, A>` into a `Decoder<A>`.
-
-**Signature**
-
-```ts
-export declare function toDecoder<E, A>(
-  dec: GenericDecoder<E, A>,
-  onLeft: (e: E) => Error
-): Decoder<A>;
-```
-
-Added in v3.0.0
+# combinators
 
 ## withDecoder
 
@@ -77,6 +66,23 @@ It automatically sets "JSON" request header's
 export declare function withDecoder<A, B>(
   decoder: Decoder<B>
 ): (req: Req<A>) => Req<B>;
+```
+
+Added in v3.0.0
+
+# helpers
+
+## toDecoder
+
+Converts a `GenericDecoder<E, A>` into a `Decoder<A>`.
+
+**Signature**
+
+```ts
+export declare function toDecoder<E, A>(
+  dec: GenericDecoder<E, A>,
+  onLeft: (e: E) => Error
+): Decoder<A>;
 ```
 
 Added in v3.0.0
