@@ -7,6 +7,15 @@
     "jest": true
   },
 
+  "rules": {
+    "jsdoc/check-tag-names": [
+      "error",
+      {
+        "definedTags": ["category"]
+      }
+    ]
+  },
+
   "overrides": [
     // --- Disable typescript rules for tests files
     {
