@@ -53,10 +53,10 @@ const getUsersPaginated = (page: number): Req<Payload> =>
   );
 
 const getTheRest = (resp: Resp<Payload>, users: User[] = []): Req<User[]> => {
-  const {data, page, total_pages} = resp.data; // eslint-disable-line @typescript-eslint/camelcase
+  const {data, page, total_pages} = resp.data; // eslint-disable-line camelcase
   const total = users.concat(data);
 
-  return page === total_pages // eslint-disable-line @typescript-eslint/camelcase
+  return page === total_pages // eslint-disable-line camelcase
     ? RTE.right({...resp, data: total})
     : pipe(
         getUsersPaginated(page + 1),
