@@ -1,8 +1,18 @@
 # Changelog
 
-## [3.0.0](https://github.com/contactlab/appy/releases/tag/3.0.0)
+## [3.0.1](https://github.com/contactlab/appy/releases/tag/3.0.1)
 
-[REF: [Milestone 3.0.0](https://github.com/contactlab/appy/milestone/5)]
+**Documentation:**
+
+- Use categories in docs ([#305](https://github.com/contactlab/appy/issues/305))
+- Make links absolute in docs ([#302](https://github.com/contactlab/appy/issues/302))
+- add io-ts Decoder example ([#303](https://github.com/contactlab/appy/pull/303)) - thanks to @enricopolanski
+
+**Internal:**
+
+- `[dependencies]` Upgrade ESLint to v7 ([#304](https://github.com/contactlab/appy/issues/304))
+
+## [3.0.0](https://github.com/contactlab/appy/releases/tag/3.0.0)
 
 This version introduces another **big** breaking change with previous API.
 
@@ -18,8 +28,6 @@ This release only fixes a NPM versioning issue
 
 ## [2.0.0](https://github.com/contactlab/appy/releases/tag/2.0.0)
 
-[REF: [Milestone 2.0.0](https://github.com/contactlab/appy/milestone/4)]
-
 **Breaking:**
 
 - Move fp-ts to version 2.x ([#220](https://github.com/contactlab/appy/issues/220))
@@ -31,8 +39,6 @@ This release only fixes a NPM versioning issue
 - set `fp-ts` version to be at least [1.9.0](https://github.com/gcanti/fp-ts/releases/tag/1.19.0) - this can lead to some deprecation warnings ([#183](https://github.com/contactlab/appy/pull/183))
 
 ## [1.3.0](https://github.com/contactlab/appy/releases/tag/1.3.0)
-
-[REF: [Milestone 1.3.0](https://github.com/contactlab/appy/milestone/3)]
 
 **Internal:**
 
@@ -105,8 +111,6 @@ This release only fixes a NPM versioning issue
 
 ## [1.2.0](https://github.com/contactlab/appy/releases/tag/1.2.0)
 
-[REF: [Milestone 1.2.0](https://github.com/contactlab/appy/milestone/2)]
-
 **Bug Fix:**
 
 - Change `USVString` type alias to string type ([#38](https://github.com/contactlab/appy/issues/38))
@@ -131,8 +135,6 @@ This release only fixes a NPM versioning issue
 - Update `fp-ts` to version 1.9.0 ([ab499bf](https://github.com/contactlab/appy/commit/ab499bf))
 
 ## [1.0.0](https://github.com/contactlab/appy/releases/tag/1.0.0)
-
-[REF: [Milestone 1.0.0](https://github.com/contactlab/appy/milestone/1)]
 
 This version introduces a huge and breaking change which affect the below main topics.
 
