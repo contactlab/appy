@@ -63,7 +63,7 @@ interface Resp<A> {
 
 `RequestError` represents a request error. It carries the generated `Error` and the input of the request (`RequestInfoInit` tuple).
 
-`ResponseError` represents a response error. It carriess the generated `Error` and the original `Response` object.
+`ResponseError` represents a response error. It carries the generated `Error` and the original `Response` object.
 
 ```ts
 type Err = RequestError | ResponseError;
@@ -97,7 +97,7 @@ users().then(
 );
 ```
 
-You can find other examples [here](examples).
+You can find other examples [here](https://github.com/contactlab/appy/tree/master/examples).
 
 ## Combinators
 
@@ -190,4 +190,4 @@ This command will execute `npm publish` directly in the `/dist` folder, where th
 
 ## License
 
-Released under the [Apache 2.0](LICENSE) license.
+Released under the [Apache 2.0](https://github.com/contactlab/appy/blob/master/LICENSE) license.
