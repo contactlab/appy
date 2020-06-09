@@ -4,7 +4,7 @@ nav_order: 2
 parent: Modules
 ---
 
-# decoder overview
+## decoder overview
 
 `Decoder` combinator: decodes `Resp` of a `Req<A>` and returns a `Req<B>`.
 
@@ -14,14 +14,17 @@ Added in v3.0.0
 
 <h2 class="text-delta">Table of contents</h2>
 
-- [Decoder (interface)](#decoder-interface)
-- [GenericDecoder (interface)](#genericdecoder-interface)
-- [toDecoder](#todecoder)
-- [withDecoder](#withdecoder)
+- [utils](#utils)
+  - [Decoder (interface)](#decoder-interface)
+  - [GenericDecoder (interface)](#genericdecoder-interface)
+  - [toDecoder](#todecoder)
+  - [withDecoder](#withdecoder)
 
 ---
 
-# Decoder (interface)
+# utils
+
+## Decoder (interface)
 
 A specialization of a `GenericDecoder` with `Left` type fixed to `Error`.
 
@@ -33,7 +36,7 @@ export interface Decoder<A> extends GenericDecoder<Error, A> {}
 
 Added in v3.0.0
 
-# GenericDecoder (interface)
+## GenericDecoder (interface)
 
 Encodes a generic decoder, namely a function which takes an `unknown` input (usually a JSON object) and tries to decodes it, returning a `Right<A>` if it succeeds or a `Left<E>` otherwise.
 
@@ -45,22 +48,22 @@ export interface GenericDecoder<E, A> extends RE.ReaderEither<unknown, E, A> {}
 
 Added in v3.0.0
 
-# toDecoder
+## toDecoder
 
 Converts a `GenericDecoder<E, A>` into a `Decoder<A>`.
 
 **Signature**
 
 ```ts
-export function toDecoder<E, A>(
+export declare function toDecoder<E, A>(
   dec: GenericDecoder<E, A>,
   onLeft: (e: E) => Error
-): Decoder<A> { ... }
+): Decoder<A>;
 ```
 
 Added in v3.0.0
 
-# withDecoder
+## withDecoder
 
 Applies `Decoder<B>` to the `Resp<A>` of a `Req` converting it to a `Resp<B>`.
 
@@ -71,9 +74,9 @@ It automatically sets "JSON" request header's
 **Signature**
 
 ```ts
-export function withDecoder<A, B>(
+export declare function withDecoder<A, B>(
   decoder: Decoder<B>
-): (req: Req<A>) => Req<B> { ... }
+): (req: Req<A>) => Req<B>;
 ```
 
 Added in v3.0.0
