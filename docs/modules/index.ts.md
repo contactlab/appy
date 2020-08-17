@@ -46,7 +46,7 @@ Added in v3.0.0
 **Signature**
 
 ```ts
-export type Err = RequestError | ResponseError;
+export type Err = RequestError | ResponseError
 ```
 
 Added in v3.0.0
@@ -59,9 +59,9 @@ Added in v3.0.0
 
 ```ts
 export interface RequestError {
-  type: 'RequestError';
-  error: Error;
-  input: RequestInfoInit;
+  type: 'RequestError'
+  error: Error
+  input: RequestInfoInit
 }
 ```
 
@@ -75,9 +75,9 @@ Added in v3.0.0
 
 ```ts
 export interface ResponseError {
-  type: 'ResponseError';
-  error: Error;
-  response: Response;
+  type: 'ResponseError'
+  error: Error
+  response: Response
 }
 ```
 
@@ -90,10 +90,7 @@ Creates a `RequestError` object.
 **Signature**
 
 ```ts
-export declare function toRequestError(
-  error: Error,
-  input: RequestInfoInit
-): RequestError;
+export declare function toRequestError(error: Error, input: RequestInfoInit): RequestError
 ```
 
 Added in v3.0.0
@@ -105,10 +102,7 @@ Creates a `ResponseError` object.
 **Signature**
 
 ```ts
-export declare function toResponseError(
-  error: Error,
-  response: Response
-): ResponseError;
+export declare function toResponseError(error: Error, response: Response): ResponseError
 ```
 
 Added in v3.0.0
@@ -136,7 +130,7 @@ Added in v3.0.0
 **Signature**
 
 ```ts
-export type ReqInput = RequestInfo | RequestInfoInit;
+export type ReqInput = RequestInfo | RequestInfoInit
 ```
 
 Added in v3.0.0
@@ -148,7 +142,7 @@ An alias for a tuple of `RequesInfo` and `RequestInit` (a.k.a. the `fetch()` par
 **Signature**
 
 ```ts
-export type RequestInfoInit = [RequestInfo, RequestInit];
+export type RequestInfoInit = [RequestInfo, RequestInit]
 ```
 
 Added in v3.0.0
@@ -160,7 +154,7 @@ Normalizes the input of a `Req` to a `RequestInfoInit` tuple even when only a si
 **Signature**
 
 ```ts
-export declare function normalizeReqInput(input: ReqInput): RequestInfoInit;
+export declare function normalizeReqInput(input: ReqInput): RequestInfoInit
 ```
 
 Added in v3.0.0
@@ -175,8 +169,8 @@ Added in v3.0.0
 
 ```ts
 export interface Resp<A> {
-  response: Response;
-  data: A;
+  response: Response
+  data: A
 }
 ```
 
@@ -191,7 +185,7 @@ Makes a request with the `method` set to `DELETE`.
 **Signature**
 
 ```ts
-export declare const del: Req<string>;
+export declare const del: Req<string>
 ```
 
 Added in v3.0.0
@@ -203,7 +197,7 @@ Makes a request with the `method` set to `GET`.
 **Signature**
 
 ```ts
-export declare const get: Req<string>;
+export declare const get: Req<string>
 ```
 
 Added in v3.0.0
@@ -215,7 +209,7 @@ Makes a request with the `method` set to `PATCH`.
 **Signature**
 
 ```ts
-export declare const patch: Req<string>;
+export declare const patch: Req<string>
 ```
 
 Added in v3.0.0
@@ -227,7 +221,7 @@ Makes a request with the `method` set to `POST`.
 **Signature**
 
 ```ts
-export declare const post: Req<string>;
+export declare const post: Req<string>
 ```
 
 Added in v3.0.0
@@ -239,7 +233,7 @@ Makes a request with the `method` set to `PUT`.
 **Signature**
 
 ```ts
-export declare const put: Req<string>;
+export declare const put: Req<string>
 ```
 
 Added in v3.0.0
@@ -253,24 +247,24 @@ The `data` in the returned `Resp` object is a `string` because the response's bo
 Example:
 
 ```ts
-import {request} from '@contactlab/appy';
-import {fold} from 'fp-ts/lib/Either';
+import { request } from '@contactlab/appy'
+import { fold } from 'fp-ts/lib/Either'
 
 // Default method is GET like original `fetch()`
-const users = request('https://reqres.in/api/users');
+const users = request('https://reqres.in/api/users')
 
 users().then(
   fold(
-    err => console.error(err),
-    data => console.log(data)
+    (err) => console.error(err),
+    (data) => console.log(data)
   )
-);
+)
 ```
 
 **Signature**
 
 ```ts
-export declare const request: Req<string>;
+export declare const request: Req<string>
 ```
 
 Added in v3.0.0

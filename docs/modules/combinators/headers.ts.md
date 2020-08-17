@@ -28,9 +28,7 @@ Merges provided `Headers` with `Req` ones and returns the updated `Req`.
 **Signature**
 
 ```ts
-export declare function withHeaders<A>(
-  headers: HeadersInit
-): (req: Req<A>) => Req<A>;
+export declare function withHeaders<A>(headers: HeadersInit): (req: Req<A>) => Req<A>
 ```
 
 Added in v3.0.0

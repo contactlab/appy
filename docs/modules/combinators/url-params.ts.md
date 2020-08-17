@@ -28,9 +28,7 @@ Adds provided url search parameters (as `Record<string, string>`) to `Req`'s inp
 **Signature**
 
 ```ts
-export declare function withUrlParams<A>(
-  params: Record<string, string>
-): (req: Req<A>) => Req<A>;
+export declare function withUrlParams<A>(params: Record<string, string>): (req: Req<A>) => Req<A>
 ```
 
 Added in v3.0.0
