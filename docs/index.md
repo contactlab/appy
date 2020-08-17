@@ -190,6 +190,8 @@ export const fromIots = <A>(d: D.Decoder<A>): Decoder<A> =>
 
 The Fetch API is available only on "modern" browsers: if you need to support legacy browsers (e.g. **Internet Explorer 11** or older) or you want to use it in a Nodejs script we recommend you the excellent [`cross-fetch`](https://www.npmjs.com/package/cross-fetch) package.
 
+**Be aware that Nodejs lacks of some classes and directives which have to be exposed to the global scope (check out the [tests setup file](https://github.com/contactlab/appy/blob/master/test/_setup.ts)).**
+
 ## Contributing
 
 Opening issues is always welcome.
