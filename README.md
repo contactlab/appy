@@ -174,11 +174,10 @@ Or, with the [Decoder](https://gcanti.github.io/io-ts/modules/Decoder.ts.html) m
 
 ```ts
 import * as D from 'io-ts/lib/Decoder';
-import { draw } from 'io-ts/lib/Tree';
 import {Decoder, toDecoder} from '@contactlab/appy/combinators/decoder';
 
 export const fromIots = <A>(d: D.Decoder<A>): Decoder<A> =>
-  toDecoder(d.decode, e => new Error(draw(e))
+  toDecoder(d.decode, e => new Error(D.draw(e))
 ```
 
 ## About `fetch()` compatibility
