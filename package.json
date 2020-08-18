@@ -45,6 +45,7 @@
     "@types/fetch-mock": "^7.3.2",
     "@types/jest": "^25.2.3",
     "@types/node": "^12.12.25",
+    "abort-controller": "^3.0.0",
     "cross-fetch": "^3.0.4",
     "docs-ts": "^0.5.1",
     "eslint": "^7.2.0",
