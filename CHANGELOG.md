@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.0.2](https://github.com/contactlab/appy/releases/tag/3.0.2)
+
+**Documentation:**
+
+- Fix io-ts integration example in README ([#312](https://github.com/contactlab/appy/issues/312))
+- Add reference to setup for Nodejs ([#311](<(https://github.com/contactlab/appy/issues/311)>))
+
 ## [3.0.1](https://github.com/contactlab/appy/releases/tag/3.0.1)
 
 **Documentation:**

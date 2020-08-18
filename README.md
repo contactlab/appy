@@ -186,14 +186,6 @@ The Fetch API is available only on "modern" browsers: if you need to support leg
 
 **Be aware that Nodejs lacks of some classes and directives which have to be exposed to the global scope (check out the [tests setup file](https://github.com/contactlab/appy/blob/master/test/_setup.ts)).**
 
-## Contributing
-
-Opening issues is always welcome.
-
-Then, fork the repository or create a new branch, write your code and send a pull request.
-
-This project uses [Prettier](https://prettier.io/) (automatically applied as pre-commit hook), [ESLint](https://eslint.org/) (with [TypeScript integration](https://github.com/typescript-eslint/typescript-eslint)) and [Jest](https://facebook.github.io/jest/en/).
-
 ### Publish a new version
 
 In order to keep the package's file structure as flat as possible, the "usual" npm `publish` command was disabled (via a `prepublishOnly` script) in favour of a `release` script:
