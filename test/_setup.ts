@@ -1,3 +1,4 @@
+import 'abort-controller/polyfill';
 import {fetch, Headers, Request, Response} from 'cross-fetch';
 
 (global as any).fetch = fetch;
