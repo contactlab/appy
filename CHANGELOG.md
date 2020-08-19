@@ -1,5 +1,11 @@
 # Changelog
 
+## [3.1.0](https://github.com/contactlab/appy/releases/tag/3.1.1)
+
+**Internal:**
+
+- Remove useless `clearTimeout` in `combinators/abort` ([#320](https://github.com/contactlab/appy/pull/320))
+
 ## [3.1.0](https://github.com/contactlab/appy/releases/tag/3.1.0)
 
 **New Feature:**
