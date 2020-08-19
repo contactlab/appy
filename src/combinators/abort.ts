@@ -1,7 +1,7 @@
 /**
  * `abort` combinators: cancel requests via `AbortController`.
  *
- * #### About `AbortController` compatibility
+ * **About `AbortController` compatibility**
  *
  * [`AbortController`](https://developer.mozilla.org/en-US/docs/Web/API/AbortController) is an experimental technology defined in the current DOM specification.
  *
@@ -78,15 +78,7 @@ export function withTimeout<A>(millis: number): (req: Req<A>) => Req<A> {
 
     return pipe(
       // --- First of all we start the timeout as an `IO` (weird... but we need a `timeoutID`)
-      RTE.rightIO(() => {
-        const timeoutID = setTimeout(() => {
-          clearTimeout(timeoutID);
-
-          controller.abort();
-        }, millis);
-
-        return timeoutID;
-      }),
+      RTE.rightIO(() => setTimeout(() => controller.abort(), millis)),
       // --- Then we make the request with the `AbortController` driven by the timeout
       RTE.chain(timeoutID =>
         pipe(
