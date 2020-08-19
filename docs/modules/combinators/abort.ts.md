@@ -8,7 +8,7 @@ parent: Modules
 
 `abort` combinators: cancel requests via `AbortController`.
 
-#### About `AbortController` compatibility
+**About `AbortController` compatibility**
 
 [`AbortController`](https://developer.mozilla.org/en-US/docs/Web/API/AbortController) is an experimental technology defined in the current DOM specification.
 
