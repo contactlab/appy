@@ -32,11 +32,14 @@ const User = t.type(
 interface Payload extends t.TypeOf<typeof Payload> {}
 const Payload = t.type(
   {
-    page: t.number,
-    per_page: t.number,
-    total: t.number,
-    total_pages: t.number,
-    data: t.array(User)
+    status: t.literal(200),
+    data: t.type({
+      page: t.number,
+      per_page: t.number,
+      total: t.number,
+      total_pages: t.number,
+      data: t.array(User)
+    })
   },
   'API Payload'
 );
@@ -53,7 +56,7 @@ const getUsersPaginated = (page: number): Req<Payload> =>
   );
 
 const getTheRest = (resp: Resp<Payload>, users: User[] = []): Req<User[]> => {
-  const {data, page, total_pages} = resp.data; // eslint-disable-line camelcase
+  const {data, page, total_pages} = resp.data.data; // eslint-disable-line camelcase
   const total = users.concat(data);
 
   return page === total_pages // eslint-disable-line camelcase

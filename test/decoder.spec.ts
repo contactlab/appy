@@ -11,7 +11,7 @@ afterEach(() => {
   fetchMock.reset();
 });
 
-test('withDecoder() should decodes `Resp` with provided decoder', async () => {
+test('withDecoder() should decode `Resp` with provided decoder', async () => {
   const response = new Response('{"id": 1234, "name": "foo bar"}');
   fetchMock.mock('http://localhost/api/resources', response);
 
@@ -27,7 +27,7 @@ test('withDecoder() should decodes `Resp` with provided decoder', async () => {
   );
 });
 
-test('withDecoder() should decodes `Resp` with provided decoder - response data is empty string', async () => {
+test('withDecoder() should decode `Resp` with provided decoder - response data is empty string', async () => {
   const response = new Response('');
   fetchMock.mock('http://localhost/api/resources', response);
 
@@ -61,7 +61,10 @@ test('withDecoder() should decodes `Resp` with provided decoder - response data 
   expect(result).toEqual(
     right({
       response,
-      data: {id: 5678, name: 'THIS IS BAAAZ!'}
+      data: {
+        status: 200,
+        data: {id: 5678, name: 'THIS IS BAAAZ!'}
+      }
     })
   );
 });
@@ -129,19 +132,24 @@ test('toDecoder() should convert a `GenericDecoder` into a `Decoder`', () => {
     e => new Error(failure(e).join('\n'))
   );
 
-  expect(d({id: 1234, name: 'foo bar', active: true})).toEqual(
+  expect(
+    d({status: 200, data: {id: 1234, name: 'foo bar', active: true}})
+  ).toEqual(
     right({
-      id: 1234,
-      name: 'foo bar',
-      active: true
+      status: 200,
+      data: {
+        id: 1234,
+        name: 'foo bar',
+        active: true
+      }
     })
   );
 
-  expect(d({id: false})).toEqual(
+  expect(d({status: 200, data: {id: false}})).toEqual(
     left(
       new Error(
-        `Invalid value false supplied to : Payload/id: number
-Invalid value undefined supplied to : Payload/name: string`
+        `Invalid value false supplied to : Payload/data: { id: number, name: string }/id: number
+Invalid value undefined supplied to : Payload/data: { id: number, name: string }/name: string`
       )
     )
   );
@@ -149,8 +157,8 @@ Invalid value undefined supplied to : Payload/name: string`
 
 // --- Helpers
 interface Payload {
-  id: number;
-  name: string;
+  status: 200;
+  data: {id: number; name: string};
 }
 
 const decoderOK: Decoder<Payload> = u => {
@@ -162,8 +170,11 @@ const decoderKO: Decoder<Payload> = _ => left(new Error('decoding failed'));
 
 const iotsPayload = t.type(
   {
-    id: t.number,
-    name: t.string
+    status: t.literal(200),
+    data: t.type({
+      id: t.number,
+      name: t.string
+    })
   },
   'Payload'
 );

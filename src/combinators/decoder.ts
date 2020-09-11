@@ -35,9 +35,9 @@ export interface Decoder<A> extends GenericDecoder<Error, A> {}
  * It automatically sets "JSON" request header's
  *
  * @category combinators
- * @since 3.0.0
+ * @since 4.0.0
  */
-export function withDecoder<A, B>(
+export function withDecoder<A, B extends {data: unknown; status: number}>(
   decoder: Decoder<B>
 ): (req: Req<A>) => Req<B> {
   return req =>
@@ -75,9 +75,12 @@ export function toDecoder<E, A>(
   return pipe(dec, mapLeft(onLeft));
 }
 
-function parseResponse<A>({data}: Resp<A>): E.Either<Error, unknown> {
+function parseResponse<A>({
+  data,
+  response: {status}
+}: Resp<A>): E.Either<Error, unknown> {
   if (typeof data === 'object') {
-    return E.right(data);
+    return E.right({data, status});
   }
 
   const asString = String(data);
