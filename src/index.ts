@@ -113,13 +113,6 @@ export const request: Req<string> = input => () => {
   return fetch(...reqInput)
     .then(
       async response => {
-        if (!response.ok) {
-          throw toResponseError(
-            new Error(`Request responded with status code ${response.status}`),
-            response
-          );
-        }
-
         const data = await response.text();
 
         return E.right({response, data});

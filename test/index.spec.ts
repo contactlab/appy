@@ -64,24 +64,6 @@ test('request() should return a left `RequestError` when request fails', async (
   );
 });
 
-test('request() should return a left `ResponseError` when response status is not ok', async () => {
-  const response = new Response('a list of resources', {
-    status: 503
-  });
-
-  fetchMock.mock('http://localhost/api/resources', response);
-
-  const r = await appy.request('http://localhost/api/resources')();
-
-  expect(r).toEqual(
-    left({
-      type: 'ResponseError',
-      response,
-      error: new Error(`Request responded with status code 503`)
-    })
-  );
-});
-
 test('get() should run a GET request', async () => {
   const response = new Response('a list of resources');
 
