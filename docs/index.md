@@ -5,7 +5,7 @@ nav_order: 1
 
 # @contactlab/appy
 
-![CI](https://github.com/contactlab/appy/workflows/CI/badge.svg?branch=master) ![npm (scoped)](https://img.shields.io/npm/v/@contactlab/appy?logo=npm) ![node-current (scoped)](https://img.shields.io/node/v/@contactlab/appy) ![GitHub package.json dependency version (dev dep on branch)](https://img.shields.io/github/package-json/dependency-version/contactlab/appy/dev/typescript) ![GitHub package.json dependency version (dev dep on branch)](https://img.shields.io/github/package-json/dependency-version/contactlab/appy/dev/fp-ts) ![GitHub](https://img.shields.io/github/license/contactlab/appy)
+![Node CI](https://github.com/contactlab/appy/workflows/Node%20CI/badge.svg) ![npm (scoped)](https://img.shields.io/npm/v/@contactlab/appy?logo=npm) ![node-current (scoped)](https://img.shields.io/node/v/@contactlab/appy) ![GitHub package.json dependency version (dev dep on branch)](https://img.shields.io/github/package-json/dependency-version/contactlab/appy/dev/typescript) ![GitHub package.json dependency version (dev dep on branch)](https://img.shields.io/github/package-json/dependency-version/contactlab/appy/dev/fp-ts) ![GitHub](https://img.shields.io/github/license/contactlab/appy)
 
 A functional wrapper around Fetch API.
 
