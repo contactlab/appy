@@ -1,6 +1,6 @@
 # Changelog
 
-## [3.1.0](https://github.com/contactlab/appy/releases/tag/3.1.1)
+## [3.1.1](https://github.com/contactlab/appy/releases/tag/3.1.1)
 
 **Internal:**
 
