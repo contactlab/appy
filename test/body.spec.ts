@@ -22,6 +22,39 @@ test('withBody() should set provided JSON body on `Req` (stringified)', async ()
   });
 });
 
+test('withBody() should set provided JSON body on `Req` (stringified) - multiple calls', async () => {
+  fetchMock.mock('http://localhost/api/resources', 200);
+
+  const body1 = {id: 123, name: 'foo bar'};
+  const body2 = {id: 456, name: 'baz aaa'};
+  const request = pipe(appy.post, withBody(body1), withBody(body2));
+
+  await request('http://localhost/api/resources')();
+
+  expect(fetchMock.lastOptions()).toEqual({
+    body: JSON.stringify(body2),
+    method: 'POST'
+  });
+});
+
+test('withBody() should set provided JSON body on `Req` (stringified) - but `Req` wins', async () => {
+  fetchMock.mock('http://localhost/api/resources', 200);
+
+  const body1 = {id: 123, name: 'foo bar'};
+  const body2 = {id: 456, name: 'baz aaa'};
+  const request = withBody(body1)(appy.post);
+
+  await request([
+    'http://localhost/api/resources',
+    {body: JSON.stringify(body2)}
+  ])();
+
+  expect(fetchMock.lastOptions()).toEqual({
+    body: JSON.stringify(body2),
+    method: 'POST'
+  });
+});
+
 test('withBody() should fail if provided JSON body throws error when stringified', async () => {
   fetchMock.mock('http://localhost/api/resources', 200);
 
