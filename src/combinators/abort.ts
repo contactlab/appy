@@ -12,6 +12,21 @@
  * - [abort-controller](https://www.npmjs.com/package/abort-controller)
  * - [abortcontroller-polyfill](https://www.npmjs.com/package/abortcontroller-polyfill)
  *
+ * **Warning:** the merging logic had to be "reversed" because of the contravariant nature of `Reader` and because the execution of combinators is from right to left (_function composition_).
+ *
+ * This leads to a "weird" behavior for which the signal provided when `Req` is run wins over the one set with the combinator.
+ *
+ * So, for example, if we have:
+ * ```ts
+ * const controller1 = new AbortController();
+ * const controller2 = new AbortController();
+ *
+ * const request = pipe(appy.get, withCancel(controller1));
+ *
+ * request(['http://some.endpoint', {signal: controller2.signal}])
+ * ```
+ * the `request` will be aborted only when **`controller2`** calls the `abort()` method.
+ *
  * @since 3.1.0
  */
 
@@ -96,7 +111,12 @@ function setSignal<A>(signal: AbortSignal): (req: Req<A>) => Req<A> {
   return RTE.local(input =>
     pipe(
       normalizeReqInput(input),
-      TU.mapLeft(init => ({...init, signal}))
+      // The "weird" merging is due to the mix of the contravariant nature of `Reader`
+      // and the function composition at the base of "combinators".
+      // Because combinators are applied from right to left, the merging has to be "reversed".
+      // This leads to another "weird" behavior for which the signal provided when `Req` is run
+      // wins over the one set with the combinator.
+      TU.mapLeft(init => Object.assign({}, {signal}, init))
     )
   );
 }

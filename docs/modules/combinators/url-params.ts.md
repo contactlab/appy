@@ -8,6 +8,20 @@ parent: Modules
 
 `URLSearchParams` combinator: sets query parameters to `Req`'s url and returns a `Req`.
 
+**Warning:** the merging logic had to be "reversed" because of the contravariant nature of `Reader` and because the execution of combinators is from right to left (_function composition_).
+
+This leads to a "weird" behavior for which the url's parameters provided when `Req` is run win over the ones set with the combinator.
+
+So, for example, if we have:
+
+```ts
+const request = pipe(appy.get, withUrlParams({ foo: 'bar', baz: String(null) }))
+
+request('http://some.endpoint?foo=aaa')
+```
+
+the url of `fetch` call will be `http://some.endpoint?foo=aaa&baz=null`.
+
 Added in v3.0.0
 
 ---
