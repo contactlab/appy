@@ -1,5 +1,11 @@
 # Changelog
 
+## [3.1.2](https://github.com/contactlab/appy/releases/tag/3.1.2)
+
+**Bug Fix:**
+
+- `[documentation]` Fix ReqInput merging strategy in combinators ([#326](https://github.com/contactlab/appy/pull/326))
+
 ## [3.1.1](https://github.com/contactlab/appy/releases/tag/3.1.1)
 
 **Internal:**
