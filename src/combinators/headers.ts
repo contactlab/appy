@@ -1,19 +1,31 @@
 /**
  * `Headers` combinator: sets headers on a `Req` and returns a `Req`.
  *
+ * **Warning:** the merging logic had to be "reversed" because of the contravariant nature of `Reader` and because the execution of combinators is from right to left (_function composition_).
+ *
+ * This leads to a "weird" behavior for which the headers provided when `Req` is run win over the ones set with the combinator.
+ *
+ * So, for example, if we have:
+ * ```ts
+ * const request = pipe(appy.get, withHeaders({'X-Foo': 'bar'}), withHeaders({'X-Foo': 'baz'}));
+ *
+ * request(['http://some.endpoint', {headers: {'X-Foo': 'foo'}}])
+ * ```
+ * when `request` is ran the underlying `fetch` call will be made with a `X-Foo = 'foo'` header.
+ *
  * @since 3.0.0
  */
 
-import {sequenceT} from 'fp-ts/lib/Apply';
-import * as E from 'fp-ts/lib/Either';
 import * as RTE from 'fp-ts/lib/ReaderTaskEither';
+import * as Rec from 'fp-ts/lib/Record';
+import {getLastSemigroup} from 'fp-ts/lib/Semigroup';
 import * as TU from 'fp-ts/lib/Tuple';
 import {pipe} from 'fp-ts/lib/pipeable';
-import {Req, normalizeReqInput, ReqInput, Err, toRequestError} from '../index';
+import {Req, normalizeReqInput} from '../index';
 
-const EMPTY: Headers = new Headers();
+type Hs = Record<string, string>;
 
-const sequenceTEither = sequenceT(E.either);
+const RML = Rec.getMonoid(getLastSemigroup<string>());
 
 /**
  * Merges provided `Headers` with `Req` ones and returns the updated `Req`.
@@ -22,50 +34,42 @@ const sequenceTEither = sequenceT(E.either);
  * @since 3.0.0
  */
 export function withHeaders<A>(headers: HeadersInit): (req: Req<A>) => Req<A> {
-  return req => pipe(merge(headers), RTE.chain(setHeaders(req)));
-}
-
-function merge(h: HeadersInit): RTE.ReaderTaskEither<ReqInput, Err, Headers> {
-  return pipe(
-    RTE.ask<ReqInput>(),
-    RTE.map(normalizeReqInput),
-    RTE.chain(input =>
-      RTE.fromEither(
-        pipe(
-          sequenceTEither(toHeaders(input[1].headers || EMPTY), toHeaders(h)),
-          E.bimap(
-            e => toRequestError(e, input),
-            hs => concat(...hs)
-          )
-        )
-      )
+  return RTE.local(input =>
+    pipe(
+      normalizeReqInput(input),
+      TU.mapLeft(init => merge(init, headers))
     )
   );
 }
 
-function toHeaders(h: HeadersInit): E.Either<Error, Headers> {
-  return E.tryCatch(() => new Headers(h), E.toError);
+function merge(init: RequestInit, h: HeadersInit): RequestInit {
+  // The "weird" `concat` is due to the mix of the contravariant nature of `Reader`
+  // and the function composition at the base of "combinators".
+  // Because combinators are applied from right to left, the merging has to be "reversed".
+  // This leads to another "weird" behavior for which the `Headers` provided when `Req` is run
+  // wins over the ones set with the combinator.
+  const headers =
+    typeof init.headers === 'undefined' ? toRecord(h) : concat(h, init.headers);
+
+  return {...init, headers};
 }
 
-function concat(x: Headers, y: Headers): Headers {
-  const result = new Headers(x);
-
-  y.forEach((v, k) => {
-    result.set(k, v);
-  });
-
-  return result;
+function concat(a: HeadersInit, b: HeadersInit): Hs {
+  return RML.concat(toRecord(a), toRecord(b));
 }
 
-function setHeaders<A>(req: Req<A>): (headers: Headers) => Req<A> {
-  return headers =>
-    pipe(
-      req,
-      RTE.local(input =>
-        pipe(
-          normalizeReqInput(input),
-          TU.mapLeft(init => ({...init, headers}))
-        )
-      )
-    );
+function toRecord(h: HeadersInit): Hs {
+  if (Array.isArray(h)) {
+    return h.reduce((acc, [k, v]) => ({...acc, [k]: v}), {});
+  }
+
+  if (h instanceof Headers) {
+    const result: Hs = {};
+
+    h.forEach((v, k) => (result[k] = v));
+
+    return result;
+  }
+
+  return h;
 }
