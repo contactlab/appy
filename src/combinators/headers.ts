@@ -17,7 +17,7 @@
  */
 
 import * as RTE from 'fp-ts/lib/ReaderTaskEither';
-import * as Rec from 'fp-ts/lib/Record';
+import {getMonoid} from 'fp-ts/lib/Record';
 import {getLastSemigroup} from 'fp-ts/lib/Semigroup';
 import * as TU from 'fp-ts/lib/Tuple';
 import {pipe} from 'fp-ts/lib/pipeable';
@@ -25,7 +25,7 @@ import {Req, normalizeReqInput} from '../index';
 
 type Hs = Record<string, string>;
 
-const RML = Rec.getMonoid(getLastSemigroup<string>());
+const RML = getMonoid(getLastSemigroup<string>());
 
 /**
  * Merges provided `Headers` with `Req` ones and returns the updated `Req`.
