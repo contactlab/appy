@@ -43,10 +43,7 @@ export function withDecoder<A, B>(
   return req =>
     pipe(
       req,
-      withHeaders({
-        Accept: 'application/json',
-        'Content-type': 'application/json'
-      }),
+      withHeaders({Accept: 'application/json'}),
       RTE.chain(resp =>
         RTE.fromEither(
           pipe(
