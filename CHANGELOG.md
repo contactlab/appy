@@ -1,5 +1,11 @@
 # Changelog
 
+## [3.1.3](https://github.com/contactlab/appy/releases/tag/3.1.3)
+
+**Bug Fix:**
+
+- Wrong headers definition in withDecoder ([#328](https://github.com/contactlab/appy/issues/328))
+
 ## [3.1.2](https://github.com/contactlab/appy/releases/tag/3.1.2)
 
 **Bug Fix:**
