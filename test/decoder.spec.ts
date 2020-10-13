@@ -5,6 +5,7 @@ import {pipe} from 'fp-ts/lib/pipeable';
 import * as t from 'io-ts';
 import {failure} from 'io-ts/lib/PathReporter';
 import {Decoder, toDecoder, withDecoder} from '../src/combinators/decoder';
+import {withHeaders} from '../src/combinators/headers';
 import * as appy from '../src/index';
 
 afterEach(() => {
@@ -25,6 +26,34 @@ test('withDecoder() should decodes `Resp` with provided decoder', async () => {
       data: {id: 1234, name: 'foo bar'}
     })
   );
+
+  expect(fetchMock.lastOptions()).toEqual({
+    headers: {Accept: 'application/json'},
+    method: 'GET'
+  });
+});
+
+test('withDecoder() should respect other headers provided in pipeline', async () => {
+  const response = new Response('{"id": 1234, "name": "foo bar"}');
+  fetchMock.mock('http://localhost/api/resources', response);
+
+  const request = pipe(
+    appy.get,
+    withHeaders({
+      'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+    }),
+    withDecoder(decoderOK)
+  );
+
+  await request('http://localhost/api/resources')();
+
+  expect(fetchMock.lastOptions()).toEqual({
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+    },
+    method: 'GET'
+  });
 });
 
 test('withDecoder() should decodes `Resp` with provided decoder - response data is empty string', async () => {
