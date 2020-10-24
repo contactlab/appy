@@ -4,12 +4,14 @@ import {pipe} from 'fp-ts/lib/pipeable';
 import {withCancel, withTimeout} from '../src/combinators/abort';
 import * as appy from '../src/index';
 
+const f = fetch as fetchMock.FetchMockSandbox;
+
 afterEach(() => {
-  fetchMock.reset();
+  f.reset();
 });
 
 test('withCancel() should set signal on `Req` and make request abortable', async () => {
-  fetchMock.mock('http://localhost/api/resources', 200);
+  f.mock('http://localhost/api/resources', 200);
 
   const controller = new AbortController();
 
@@ -29,7 +31,7 @@ test('withCancel() should set signal on `Req` and make request abortable', async
 });
 
 test('withCancel() should set signal on `Req` and make request abortable - multiple calls', async () => {
-  fetchMock.mock('http://localhost/api/resources', 200);
+  f.mock('http://localhost/api/resources', 200);
 
   const controller1 = new AbortController();
   const controller2 = new AbortController();
@@ -54,7 +56,7 @@ test('withCancel() should set signal on `Req` and make request abortable - multi
 });
 
 test('withCancel() should merge provided signal with `Req` one - but `Req` wins', async () => {
-  fetchMock.mock('http://localhost/api/resources', 200);
+  f.mock('http://localhost/api/resources', 200);
 
   const controller1 = new AbortController();
   const controller2 = new AbortController();
@@ -83,7 +85,7 @@ test('withTimeout() should succeed if we get a response within provided millisec
     headers: {}
   });
 
-  fetchMock.mock('http://localhost/api/resources', response, {delay: 500});
+  f.mock('http://localhost/api/resources', response, {delay: 500});
 
   const request = withTimeout(1000)(appy.request);
 
@@ -98,7 +100,7 @@ test('withTimeout() should succeed if we get a response within provided millisec
     headers: {}
   });
 
-  fetchMock.mock('http://localhost/api/resources', response, {delay: 500});
+  f.mock('http://localhost/api/resources', response, {delay: 500});
 
   const request = pipe(appy.request, withTimeout(250), withTimeout(1000));
 
@@ -108,7 +110,7 @@ test('withTimeout() should succeed if we get a response within provided millisec
 });
 
 test('withTimeout() should fail if we do not get a response within provided milliseconds', async () => {
-  fetchMock.mock('http://localhost/api/resources', 200, {delay: 1000});
+  f.mock('http://localhost/api/resources', 200, {delay: 1000});
 
   const request = withTimeout(500)(appy.request);
 
@@ -127,7 +129,7 @@ test('withTimeout() should fail if we do not get a response within provided mill
 });
 
 test('withTimeout() should fail if we do not get a response within provided milliseconds - multiple calls', async () => {
-  fetchMock.mock('http://localhost/api/resources', 200, {delay: 1000});
+  f.mock('http://localhost/api/resources', 200, {delay: 1000});
 
   const request = pipe(appy.request, withTimeout(1500), withTimeout(500));
 

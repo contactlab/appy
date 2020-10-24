@@ -8,13 +8,15 @@ import {Decoder, toDecoder, withDecoder} from '../src/combinators/decoder';
 import {withHeaders} from '../src/combinators/headers';
 import * as appy from '../src/index';
 
+const f = fetch as fetchMock.FetchMockSandbox;
+
 afterEach(() => {
-  fetchMock.reset();
+  f.reset();
 });
 
 test('withDecoder() should decodes `Resp` with provided decoder', async () => {
   const response = new Response('{"id": 1234, "name": "foo bar"}');
-  fetchMock.mock('http://localhost/api/resources', response);
+  f.mock('http://localhost/api/resources', response);
 
   const request = withDecoder(decoderOK)(appy.get);
 
@@ -27,7 +29,7 @@ test('withDecoder() should decodes `Resp` with provided decoder', async () => {
     })
   );
 
-  expect(fetchMock.lastOptions()).toEqual({
+  expect(f.lastOptions()).toEqual({
     headers: {Accept: 'application/json'},
     method: 'GET'
   });
@@ -35,7 +37,7 @@ test('withDecoder() should decodes `Resp` with provided decoder', async () => {
 
 test('withDecoder() should respect other headers provided in pipeline', async () => {
   const response = new Response('{"id": 1234, "name": "foo bar"}');
-  fetchMock.mock('http://localhost/api/resources', response);
+  f.mock('http://localhost/api/resources', response);
 
   const request = pipe(
     appy.get,
@@ -47,7 +49,7 @@ test('withDecoder() should respect other headers provided in pipeline', async ()
 
   await request('http://localhost/api/resources')();
 
-  expect(fetchMock.lastOptions()).toEqual({
+  expect(f.lastOptions()).toEqual({
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
@@ -58,7 +60,7 @@ test('withDecoder() should respect other headers provided in pipeline', async ()
 
 test('withDecoder() should decodes `Resp` with provided decoder - response data is empty string', async () => {
   const response = new Response('');
-  fetchMock.mock('http://localhost/api/resources', response);
+  f.mock('http://localhost/api/resources', response);
 
   const request = withDecoder(decoderOK)(appy.get);
 
@@ -74,7 +76,7 @@ test('withDecoder() should decodes `Resp` with provided decoder - response data 
 
 test('withDecoder() should decodes `Resp` with provided decoder - response data is an object', async () => {
   const response = new Response();
-  fetchMock.mock('http://localhost/api/resources', response);
+  f.mock('http://localhost/api/resources', response);
 
   const request = pipe(
     appy.get,
@@ -97,7 +99,7 @@ test('withDecoder() should decodes `Resp` with provided decoder - response data 
 
 test('withDecoder() should decodes `Resp` with provided decoder - response data stringified', async () => {
   const response = new Response();
-  fetchMock.mock('http://localhost/api/resources', response);
+  f.mock('http://localhost/api/resources', response);
 
   const request = pipe(
     appy.get,
@@ -120,7 +122,7 @@ test('withDecoder() should decodes `Resp` with provided decoder - response data 
 
 test('withDecoder() should fail if response data cannot be parsed', async () => {
   const response = new Response('{some: "bad", json: true}');
-  fetchMock.mock('http://localhost/api/resources', response);
+  f.mock('http://localhost/api/resources', response);
 
   const request = withDecoder(decoderOK)(appy.get);
 
@@ -137,7 +139,7 @@ test('withDecoder() should fail if response data cannot be parsed', async () => 
 
 test('withDecoder() should fail if decoding fails', async () => {
   const response = new Response('{"id": 1234, "name": "foo bar"}');
-  fetchMock.mock('http://localhost/api/resources', response);
+  f.mock('http://localhost/api/resources', response);
 
   const request = withDecoder(decoderKO)(appy.get);
 

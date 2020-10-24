@@ -4,25 +4,27 @@ import {pipe} from 'fp-ts/lib/pipeable';
 import {withHeaders} from '../src/combinators/headers';
 import {get} from '../src/index';
 
+const f = fetch as fetchMock.FetchMockSandbox;
+
 afterEach(() => {
-  fetchMock.reset();
+  f.reset();
 });
 
 test('withHeaders() should set provided headers on `Req`', async () => {
-  fetchMock.mock('http://localhost/api/resources', 200);
+  f.mock('http://localhost/api/resources', 200);
 
   const request = withHeaders({'Content-Type': 'application/json'})(get);
 
   await request('http://localhost/api/resources')();
 
-  expect(fetchMock.lastOptions()).toEqual({
+  expect(f.lastOptions()).toEqual({
     headers: {'Content-Type': 'application/json'},
     method: 'GET'
   });
 });
 
 test('withHeaders() should merge provided headers with `Req` ones - but `Req` wins', async () => {
-  fetchMock.mock('http://localhost/api/resources', 200);
+  f.mock('http://localhost/api/resources', 200);
 
   const request = withHeaders({
     Authorization: 'Bearer TOKEN',
@@ -34,7 +36,7 @@ test('withHeaders() should merge provided headers with `Req` ones - but `Req` wi
     {headers: {'Content-Type': 'text/html'}}
   ])();
 
-  expect(fetchMock.lastOptions()).toEqual({
+  expect(f.lastOptions()).toEqual({
     headers: {
       'Content-Type': 'text/html',
       Authorization: 'Bearer TOKEN'
@@ -44,7 +46,7 @@ test('withHeaders() should merge provided headers with `Req` ones - but `Req` wi
 });
 
 test('withHeaders() should merge provided headers with `Req` ones - multiple calls', async () => {
-  fetchMock.mock('http://localhost/api/resources', 200);
+  f.mock('http://localhost/api/resources', 200);
 
   const request = pipe(
     get,
@@ -57,7 +59,7 @@ test('withHeaders() should merge provided headers with `Req` ones - multiple cal
     {headers: {Authorization: 'Bearer TOKEN'}}
   ])();
 
-  expect(fetchMock.lastOptions()).toEqual({
+  expect(f.lastOptions()).toEqual({
     headers: {
       'Content-Type': 'application/json',
       Authorization: 'Bearer TOKEN'
@@ -67,7 +69,7 @@ test('withHeaders() should merge provided headers with `Req` ones - multiple cal
 });
 
 test('withHeaders() should merge provided headers with `Req` ones - as Headers object', async () => {
-  fetchMock.mock('http://localhost/api/resources', 200);
+  f.mock('http://localhost/api/resources', 200);
 
   const headers = new Headers({'Content-Type': 'application/json'});
 
@@ -78,7 +80,7 @@ test('withHeaders() should merge provided headers with `Req` ones - as Headers o
     {headers: {Authorization: 'Bearer TOKEN'}}
   ])();
 
-  expect(fetchMock.lastOptions()).toEqual({
+  expect(f.lastOptions()).toEqual({
     headers: {
       'content-type': 'application/json', // <-- because Headers keys are case-insensitive...
       Authorization: 'Bearer TOKEN'
@@ -88,7 +90,7 @@ test('withHeaders() should merge provided headers with `Req` ones - as Headers o
 });
 
 test('withHeaders() should merge provided headers with `Req` ones - as array of strings', async () => {
-  fetchMock.mock('http://localhost/api/resources', 200);
+  f.mock('http://localhost/api/resources', 200);
 
   const headers = [['Content-Type', 'application/json']];
   const request = withHeaders(headers)(get);
@@ -98,7 +100,7 @@ test('withHeaders() should merge provided headers with `Req` ones - as array of 
     {headers: {Authorization: 'Bearer TOKEN'}}
   ])();
 
-  expect(fetchMock.lastOptions()).toEqual({
+  expect(f.lastOptions()).toEqual({
     headers: {
       'Content-Type': 'application/json',
       Authorization: 'Bearer TOKEN'
