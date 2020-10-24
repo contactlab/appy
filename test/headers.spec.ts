@@ -110,6 +110,10 @@ test('withHeaders() should merge provided headers with `Req` ones - as array of 
 });
 
 test('withHeaders() should fail if provided headers has forbidden name', async () => {
+  const error = new TypeError('= is not a legal HTTP header name');
+
+  f.mock('http://localhost/api/resources', {throws: error});
+
   const request = withHeaders({'=': 'asdasd'})(get);
 
   const result = await request('http://localhost/api/resources')();
