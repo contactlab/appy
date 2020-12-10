@@ -19,7 +19,7 @@
 import * as RTE from 'fp-ts/lib/ReaderTaskEither';
 import * as TU from 'fp-ts/lib/Tuple';
 import {pipe} from 'fp-ts/lib/pipeable';
-import {Req, ReqInput, RequestInfoInit, normalizeReqInput} from '../index';
+import {Req, ReqInput, RequestInfoInit, normalizeReqInput} from '../request';
 
 /**
  * Adds provided url search parameters (as `Record<string, string>`) to `Req`'s input url and returns the updated `Req`.

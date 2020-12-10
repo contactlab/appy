@@ -8,7 +8,7 @@ import * as E from 'fp-ts/lib/Either';
 import {ReaderEither, mapLeft} from 'fp-ts/lib/ReaderEither';
 import * as RTE from 'fp-ts/lib/ReaderTaskEither';
 import {pipe} from 'fp-ts/lib/pipeable';
-import {Err, Req, Resp, toResponseError} from '../index';
+import {Err, Req, Resp, toResponseError} from '../request';
 import {withHeaders} from './headers';
 
 /**

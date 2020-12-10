@@ -23,7 +23,13 @@ import * as E from 'fp-ts/lib/Either';
 import * as RTE from 'fp-ts/lib/ReaderTaskEither';
 import * as TU from 'fp-ts/lib/Tuple';
 import {pipe} from 'fp-ts/lib/pipeable';
-import {Req, ReqInput, normalizeReqInput, toRequestError, Err} from '../index';
+import {
+  Req,
+  ReqInput,
+  normalizeReqInput,
+  toRequestError,
+  Err
+} from '../request';
 
 /**
  * Sets the provided `body` (automatically converted to string when JSON) on `Req` init object and returns the updated `Req`.

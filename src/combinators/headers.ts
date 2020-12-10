@@ -21,7 +21,7 @@ import {getMonoid} from 'fp-ts/lib/Record';
 import {getLastSemigroup} from 'fp-ts/lib/Semigroup';
 import * as TU from 'fp-ts/lib/Tuple';
 import {pipe} from 'fp-ts/lib/pipeable';
-import {Req, normalizeReqInput} from '../index';
+import {Req, normalizeReqInput} from '../request';
 
 type Hs = Record<string, string>;
 
