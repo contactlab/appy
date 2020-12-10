@@ -1,4 +1,4 @@
-import * as RTE from 'fp-ts/lib/ReaderTaskEither';
+import * as RTE from 'fp-ts/ReaderTaskEither';
 import {Program, run} from './helpers/program';
 
 interface AppEff<A> extends Program<unknown, A> {}

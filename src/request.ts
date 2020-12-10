@@ -12,8 +12,8 @@
  * @see {@link https://gcanti.github.io/fp-ts/ReaderTaskEither.html|ReaderTaskEither}
  */
 
-import * as E from 'fp-ts/lib/Either';
-import {ReaderTaskEither} from 'fp-ts/lib/ReaderTaskEither';
+import * as E from 'fp-ts/Either';
+import {ReaderTaskEither} from 'fp-ts/ReaderTaskEither';
 
 /**
  * `Req<A>` encodes a resource's request, or rather, an async operation that can fail or return a `Resp<A>`.
@@ -91,7 +91,7 @@ export interface ResponseError {
  * Example:
  * ```ts
  * import {request} from '@contactlab/appy';
- * import {fold} from 'fp-ts/lib/Either';
+ * import {fold} from 'fp-ts/Either';
  *
  * // Default method is GET like original `fetch()`
  * const users = request('https://reqres.in/api/users');

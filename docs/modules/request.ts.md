@@ -185,7 +185,7 @@ Example:
 
 ```ts
 import { request } from '@contactlab/appy'
-import { fold } from 'fp-ts/lib/Either'
+import { fold } from 'fp-ts/Either'
 
 // Default method is GET like original `fetch()`
 const users = request('https://reqres.in/api/users')

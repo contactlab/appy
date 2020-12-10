@@ -1,6 +1,6 @@
 import fetchMock from 'fetch-mock';
-import {left, mapLeft} from 'fp-ts/lib/Either';
-import {pipe} from 'fp-ts/lib/pipeable';
+import {left, mapLeft} from 'fp-ts/Either';
+import {pipe} from 'fp-ts/function';
 import {withBody} from '../src/combinators/body';
 import {post} from '../src/index';
 

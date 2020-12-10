@@ -16,9 +16,9 @@
  * @since 3.2.0
  */
 
-import * as RTE from 'fp-ts/lib/ReaderTaskEither';
-import * as TU from 'fp-ts/lib/Tuple';
-import {pipe} from 'fp-ts/lib/pipeable';
+import * as RTE from 'fp-ts/ReaderTaskEither';
+import * as TU from 'fp-ts/Tuple';
+import {pipe} from 'fp-ts/function';
 import {Req, normalizeReqInput} from '../request';
 
 /**

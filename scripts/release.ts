@@ -1,6 +1,6 @@
 import * as path from 'path';
-import * as TE from 'fp-ts/lib/TaskEither';
-import {pipe} from 'fp-ts/lib/pipeable';
+import * as TE from 'fp-ts/TaskEither';
+import {pipe} from 'fp-ts/function';
 import {Exec, execNode} from './helpers/exec';
 import {Logger, loggerConsole} from './helpers/logger';
 import {Program, run} from './helpers/program';

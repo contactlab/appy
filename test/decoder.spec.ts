@@ -1,9 +1,8 @@
 import fetchMock from 'fetch-mock';
-import {right, left} from 'fp-ts/lib/Either';
-import * as RTE from 'fp-ts/lib/ReaderTaskEither';
-import {pipe} from 'fp-ts/lib/pipeable';
-import * as t from 'io-ts';
-import {failure} from 'io-ts/lib/PathReporter';
+import {right, left} from 'fp-ts/Either';
+import * as RTE from 'fp-ts/ReaderTaskEither';
+import {pipe} from 'fp-ts/function';
+import * as D from 'io-ts/Decoder';
 import {Decoder, toDecoder, withDecoder} from '../src/combinators/decoder';
 import {withHeaders} from '../src/combinators/headers';
 import * as appy from '../src/index';
@@ -153,25 +152,21 @@ test('withDecoder() should fail if decoding fails', async () => {
 });
 
 test('toDecoder() should convert a `GenericDecoder` into a `Decoder`', () => {
-  const d = toDecoder(
-    iotsPayload.decode,
-    e => new Error(failure(e).join('\n'))
-  );
+  const d = toDecoder(iotsPayload.decode, e => new Error(D.draw(e)));
 
   expect(d({id: 1234, name: 'foo bar', active: true})).toEqual(
     right({
       id: 1234,
-      name: 'foo bar',
-      active: true
+      name: 'foo bar'
     })
   );
 
   expect(d({id: false})).toEqual(
     left(
-      new Error(
-        `Invalid value false supplied to : Payload/id: number
-Invalid value undefined supplied to : Payload/name: string`
-      )
+      new Error(`required property "id"
+└─ cannot decode false, should be number
+required property "name"
+└─ cannot decode undefined, should be string`)
     )
   );
 });
@@ -189,10 +184,7 @@ const decoderOK: Decoder<Payload> = u => {
 
 const decoderKO: Decoder<Payload> = _ => left(new Error('decoding failed'));
 
-const iotsPayload = t.type(
-  {
-    id: t.number,
-    name: t.string
-  },
-  'Payload'
-);
+const iotsPayload = D.type({
+  id: D.number,
+  name: D.string
+});

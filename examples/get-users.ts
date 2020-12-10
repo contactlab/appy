@@ -7,7 +7,7 @@
 
 import 'cross-fetch/polyfill';
 
-import * as E from 'fp-ts/lib/Either';
+import * as E from 'fp-ts/Either';
 import {get} from '../src/index';
 
 /**

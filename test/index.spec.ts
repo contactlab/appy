@@ -1,5 +1,5 @@
 import fetchMock from 'fetch-mock';
-import {right} from 'fp-ts/lib/Either';
+import {right} from 'fp-ts/Either';
 import * as appy from '../src/index';
 
 afterEach(() => {

@@ -9,9 +9,9 @@
 
 import 'cross-fetch/polyfill';
 
-import * as E from 'fp-ts/lib/Either';
-import * as RTE from 'fp-ts/lib/TaskEither';
-import {pipe} from 'fp-ts/lib/pipeable';
+import * as E from 'fp-ts/Either';
+import * as RTE from 'fp-ts/TaskEither';
+import {pipe} from 'fp-ts/function';
 import {get, put} from '../src/index';
 
 interface User {

@@ -1,6 +1,6 @@
 import fetchMock from 'fetch-mock';
-import {left, right} from 'fp-ts/lib/Either';
-import {pipe} from 'fp-ts/lib/pipeable';
+import {left, right} from 'fp-ts/Either';
+import {pipe} from 'fp-ts/function';
 import {withCancel, withTimeout} from '../src/combinators/abort';
 import * as appy from '../src/index';
 

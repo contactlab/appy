@@ -1,10 +1,10 @@
 import * as path from 'path';
-import {sequenceT} from 'fp-ts/lib/Apply';
-import {array} from 'fp-ts/lib/Array';
-import * as E from 'fp-ts/lib/Either';
-import * as RTE from 'fp-ts/lib/ReaderTaskEither';
-import * as TE from 'fp-ts/lib/TaskEither';
-import {pipe} from 'fp-ts/lib/pipeable';
+import {sequenceT} from 'fp-ts/Apply';
+import {array} from 'fp-ts/Array';
+import * as E from 'fp-ts/Either';
+import * as RTE from 'fp-ts/ReaderTaskEither';
+import * as TE from 'fp-ts/TaskEither';
+import {pipe} from 'fp-ts/function';
 import {FileSystem, fileSystemNode} from './helpers/fs';
 import {Logger, loggerConsole} from './helpers/logger';
 import {Eff, Program, run} from './helpers/program';

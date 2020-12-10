@@ -7,10 +7,10 @@
 
 import 'cross-fetch/polyfill';
 
-import * as E from 'fp-ts/lib/Either';
-import {randomBool} from 'fp-ts/lib/Random';
-import * as TE from 'fp-ts/lib/TaskEither';
-import {pipe} from 'fp-ts/lib/pipeable';
+import * as E from 'fp-ts/Either';
+import {randomBool} from 'fp-ts/Random';
+import * as TE from 'fp-ts/TaskEither';
+import {pipe} from 'fp-ts/function';
 import {withHeaders} from '../src/combinators/headers';
 import {get} from '../src/index';
 

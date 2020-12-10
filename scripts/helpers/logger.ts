@@ -1,5 +1,5 @@
-import {info, log} from 'fp-ts/lib/Console';
-import {rightIO} from 'fp-ts/lib/TaskEither';
+import {info, log} from 'fp-ts/Console';
+import {rightIO} from 'fp-ts/TaskEither';
 import {Eff} from './program';
 
 export interface Logger {

@@ -7,42 +7,35 @@
 
 import 'cross-fetch/polyfill';
 
-import * as E from 'fp-ts/lib/Either';
-import * as RTE from 'fp-ts/lib/ReaderTaskEither';
-import {pipe} from 'fp-ts/lib/pipeable';
-import * as t from 'io-ts';
-import {failure} from 'io-ts/lib/PathReporter';
+import * as E from 'fp-ts/Either';
+import * as RTE from 'fp-ts/ReaderTaskEither';
+import {pipe} from 'fp-ts/function';
+import * as D from 'io-ts/Decoder';
 import {Decoder, toDecoder, withDecoder} from '../src/combinators/decoder';
 import {withUrlParams} from '../src/combinators/url-params';
 import {get, Req, Resp} from '../src/index';
 
 // --- io-ts land
-interface User extends t.TypeOf<typeof User> {}
-const User = t.type(
-  {
-    id: t.number,
-    email: t.string,
-    first_name: t.string,
-    last_name: t.string,
-    avatar: t.string
-  },
-  'User'
-);
+interface User extends D.TypeOf<typeof User> {}
+const User = D.type({
+  id: D.number,
+  email: D.string,
+  first_name: D.string,
+  last_name: D.string,
+  avatar: D.string
+});
 
-interface Payload extends t.TypeOf<typeof Payload> {}
-const Payload = t.type(
-  {
-    page: t.number,
-    per_page: t.number,
-    total: t.number,
-    total_pages: t.number,
-    data: t.array(User)
-  },
-  'API Payload'
-);
+interface Payload extends D.TypeOf<typeof Payload> {}
+const Payload = D.type({
+  page: D.number,
+  per_page: D.number,
+  total: D.number,
+  total_pages: D.number,
+  data: D.array(User)
+});
 
-const fromIots = <A>(d: t.Decoder<unknown, A>): Decoder<A> =>
-  toDecoder(d.decode, e => new Error(failure(e).join('\n')));
+const fromIots = <A>(d: D.Decoder<unknown, A>): Decoder<A> =>
+  toDecoder(d.decode, e => new Error(D.draw(e)));
 // ---
 
 const getUsersPaginated = (page: number): Req<Payload> =>

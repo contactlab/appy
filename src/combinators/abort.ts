@@ -30,9 +30,9 @@
  * @since 3.1.0
  */
 
-import * as RTE from 'fp-ts/lib/ReaderTaskEither';
-import * as TU from 'fp-ts/lib/Tuple';
-import {pipe} from 'fp-ts/lib/pipeable';
+import * as RTE from 'fp-ts/ReaderTaskEither';
+import * as TU from 'fp-ts/Tuple';
+import {pipe} from 'fp-ts/function';
 import {Req, normalizeReqInput} from '../request';
 
 /**
@@ -42,8 +42,8 @@ import {Req, normalizeReqInput} from '../request';
  * ```ts
  * import {request} from '@contactlab/appy';
  * import {withCancel} from '@contactlab/appy/combinators/abort';
- * import {isLeft} from 'fp-ts/lib/Either';
- * import {pipe} from 'fp-ts/lib/pipeable';
+ * import {isLeft} from 'fp-ts/Either';
+ * import {pipe} from 'fp-ts/function';
  *
  * const controller = new AbortController();
  *
@@ -73,8 +73,8 @@ export function withCancel<A>(
  * ```ts
  * import {request} from '@contactlab/appy';
  * import {withTimeout} from '@contactlab/appy/combinators/abort';
- * import {isLeft} from 'fp-ts/lib/Either';
- * import {pipe} from 'fp-ts/lib/pipeable';
+ * import {isLeft} from 'fp-ts/Either';
+ * import {pipe} from 'fp-ts/function';
  *
  * const requestWithTimeout = pipe(request, withTimeout(500));
  * const users = requestWithTimeout('https://reqres.in/api/users');

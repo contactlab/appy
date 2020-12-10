@@ -4,20 +4,20 @@
  * @since 3.0.0
  */
 
-import * as E from 'fp-ts/lib/Either';
-import {ReaderEither, mapLeft} from 'fp-ts/lib/ReaderEither';
-import * as RTE from 'fp-ts/lib/ReaderTaskEither';
-import {pipe} from 'fp-ts/lib/pipeable';
+import * as E from 'fp-ts/Either';
+import {ReaderEither, mapLeft} from 'fp-ts/ReaderEither';
+import * as RTE from 'fp-ts/ReaderTaskEither';
+import {pipe} from 'fp-ts/function';
 import {Err, Req, Resp, toResponseError} from '../request';
 import {withHeaders} from './headers';
 
 /**
- * Encodes a generic decoder, namely a function which takes an `unknown` input (usually a JSON object) and tries to decode it, returning a `Right<A>` if it succeeds or a `Left<E>` otherwise.
+ * Encodes a generic decoder, namely a function which takes an `unknown` input (usually a JSON object) and tries to decode it, returning a `Right<A>` if it succeeds or a `Left<L>` otherwise.
  *
  * @category Decoder
  * @since 3.0.0
  */
-export interface GenericDecoder<E, A> extends ReaderEither<unknown, E, A> {}
+export interface GenericDecoder<L, A> extends ReaderEither<unknown, L, A> {}
 
 /**
  * A specialization of a `GenericDecoder` with `Left` type fixed to `Error`.
@@ -60,14 +60,14 @@ export function withDecoder<A, B>(
 }
 
 /**
- * Converts a `GenericDecoder<E, A>` into a `Decoder<A>`.
+ * Converts a `GenericDecoder<L, A>` into a `Decoder<A>`.
  *
  * @category helpers
  * @since 3.0.0
  */
-export function toDecoder<E, A>(
-  dec: GenericDecoder<E, A>,
-  onLeft: (e: E) => Error
+export function toDecoder<L, A>(
+  dec: GenericDecoder<L, A>,
+  onLeft: (e: L) => Error
 ): Decoder<A> {
   return pipe(dec, mapLeft(onLeft));
 }

@@ -59,8 +59,8 @@ Example:
 ```ts
 import { request } from '@contactlab/appy'
 import { withCancel } from '@contactlab/appy/combinators/abort'
-import { isLeft } from 'fp-ts/lib/Either'
-import { pipe } from 'fp-ts/lib/pipeable'
+import { isLeft } from 'fp-ts/Either'
+import { pipe } from 'fp-ts/function'
 
 const controller = new AbortController()
 
@@ -91,8 +91,8 @@ Example:
 ```ts
 import { request } from '@contactlab/appy'
 import { withTimeout } from '@contactlab/appy/combinators/abort'
-import { isLeft } from 'fp-ts/lib/Either'
-import { pipe } from 'fp-ts/lib/pipeable'
+import { isLeft } from 'fp-ts/Either'
+import { pipe } from 'fp-ts/function'
 
 const requestWithTimeout = pipe(request, withTimeout(500))
 const users = requestWithTimeout('https://reqres.in/api/users')

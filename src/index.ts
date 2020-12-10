@@ -12,7 +12,7 @@
  * @see {@link https://gcanti.github.io/fp-ts/ReaderTaskEither.html|ReaderTaskEither}
  */
 
-import {pipe} from 'fp-ts/lib/pipeable';
+import {pipe} from 'fp-ts/function';
 import {withMethod} from './combinators/method';
 import {Req, request} from './request';
 
