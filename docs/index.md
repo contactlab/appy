@@ -168,7 +168,7 @@ In order to use it with the `Decoder` combinator you can write a simple helper l
 
 ```ts
 import * as t from 'io-ts';
-import {failure} from 'io-ts/lib/PathReporter';
+import {failure} from 'io-ts/PathReporter';
 import {Decoder, toDecoder} from '@contactlab/appy/combinators/decoder';
 
 export const fromIots = <A>(d: t.Decoder<unknown, A>): Decoder<A> =>
@@ -178,10 +178,10 @@ export const fromIots = <A>(d: t.Decoder<unknown, A>): Decoder<A> =>
 Or, with the [Decoder](https://gcanti.github.io/io-ts/modules/Decoder.ts.html) module:
 
 ```ts
-import * as D from 'io-ts/lib/Decoder';
+import * as D from 'io-ts/Decoder';
 import {Decoder, toDecoder} from '@contactlab/appy/combinators/decoder';
 
-export const fromIots = <A>(d: D.Decoder<A>): Decoder<A> =>
+export const fromIots = <A>(d: D.Decoder<unknown, A>): Decoder<A> =>
   toDecoder(d.decode, e => new Error(D.draw(e))
 ```
 
