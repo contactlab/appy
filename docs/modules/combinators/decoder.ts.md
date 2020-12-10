@@ -40,12 +40,12 @@ Added in v3.0.0
 
 ## GenericDecoder (interface)
 
-Encodes a generic decoder, namely a function which takes an `unknown` input (usually a JSON object) and tries to decode it, returning a `Right<A>` if it succeeds or a `Left<E>` otherwise.
+Encodes a generic decoder, namely a function which takes an `unknown` input (usually a JSON object) and tries to decode it, returning a `Right<A>` if it succeeds or a `Left<L>` otherwise.
 
 **Signature**
 
 ```ts
-export interface GenericDecoder<E, A> extends ReaderEither<unknown, E, A> {}
+export interface GenericDecoder<L, A> extends ReaderEither<unknown, L, A> {}
 ```
 
 Added in v3.0.0
@@ -72,12 +72,12 @@ Added in v3.0.0
 
 ## toDecoder
 
-Converts a `GenericDecoder<E, A>` into a `Decoder<A>`.
+Converts a `GenericDecoder<L, A>` into a `Decoder<A>`.
 
 **Signature**
 
 ```ts
-export declare function toDecoder<E, A>(dec: GenericDecoder<E, A>, onLeft: (e: E) => Error): Decoder<A>
+export declare function toDecoder<L, A>(dec: GenericDecoder<L, A>, onLeft: (e: L) => Error): Decoder<A>
 ```
 
 Added in v3.0.0
