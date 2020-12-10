@@ -19,7 +19,7 @@
 import * as RTE from 'fp-ts/lib/ReaderTaskEither';
 import * as TU from 'fp-ts/lib/Tuple';
 import {pipe} from 'fp-ts/lib/pipeable';
-import {Req, normalizeReqInput} from '../index';
+import {Req, normalizeReqInput} from '../request';
 
 /**
  * Sets provided method on `Req` and returns the updated `Req`.

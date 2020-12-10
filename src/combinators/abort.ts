@@ -33,7 +33,7 @@
 import * as RTE from 'fp-ts/lib/ReaderTaskEither';
 import * as TU from 'fp-ts/lib/Tuple';
 import {pipe} from 'fp-ts/lib/pipeable';
-import {Req, normalizeReqInput} from '../index';
+import {Req, normalizeReqInput} from '../request';
 
 /**
  * Sets `signal` on `Req` in order to make request cancellable through `AbortController`.
