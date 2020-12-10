@@ -30,6 +30,8 @@ Added in v3.0.0
 
 - [combinators](#combinators)
   - [withUrlParams](#withurlparams)
+- [utils](#utils)
+  - [Params (type alias)](#params-type-alias)
 
 ---
 
@@ -46,3 +48,15 @@ export declare function withUrlParams<A>(params: Record<string, string>): (req: 
 ```
 
 Added in v3.0.0
+
+# utils
+
+## Params (type alias)
+
+**Signature**
+
+```ts
+export type Params = Record<string, string>
+```
+
+Added in v4.0.0

@@ -13,7 +13,7 @@
  * ```
  * when `request` is ran the underlying `fetch` call will be made with `POST` method.
  *
- * @since 3.2.0
+ * @since 4.0.0
  */
 
 import * as RTE from 'fp-ts/ReaderTaskEither';
@@ -25,7 +25,7 @@ import {Req, normalizeReqInput} from '../request';
  * Sets provided method on `Req` and returns the updated `Req`.
  *
  * @category combinators
- * @since 3.2.0
+ * @since 4.0.0
  */
 export function withMethod<A>(method: string): (req: Req<A>) => Req<A> {
   return RTE.local(input =>

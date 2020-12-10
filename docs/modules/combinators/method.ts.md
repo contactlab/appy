@@ -22,7 +22,7 @@ request(['http://some.endpoint', { method: 'POST' }])
 
 when `request` is ran the underlying `fetch` call will be made with `POST` method.
 
-Added in v3.2.0
+Added in v4.0.0
 
 ---
 
@@ -45,4 +45,4 @@ Sets provided method on `Req` and returns the updated `Req`.
 export declare function withMethod<A>(method: string): (req: Req<A>) => Req<A>
 ```
 
-Added in v3.2.0
+Added in v4.0.0
