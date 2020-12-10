@@ -7,8 +7,8 @@
 
 import 'cross-fetch/polyfill';
 
-import * as E from 'fp-ts/lib/Either';
-import {pipe} from 'fp-ts/lib/pipeable';
+import * as E from 'fp-ts/Either';
+import {pipe} from 'fp-ts/function';
 import {withBody} from '../src/combinators/body';
 import {withHeaders} from '../src/combinators/headers';
 import {post} from '../src/index';

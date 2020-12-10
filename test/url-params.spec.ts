@@ -1,5 +1,5 @@
 import fetchMock from 'fetch-mock';
-import {pipe} from 'fp-ts/lib/pipeable';
+import {pipe} from 'fp-ts/function';
 import {withUrlParams} from '../src/combinators/url-params';
 import * as appy from '../src/index';
 

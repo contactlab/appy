@@ -1,5 +1,5 @@
 import fetchMock from 'fetch-mock';
-import {pipe} from 'fp-ts/lib/pipeable';
+import {pipe} from 'fp-ts/function';
 import {withMethod} from '../src/combinators/method';
 import {request} from '../src/index';
 

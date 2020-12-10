@@ -1,7 +1,7 @@
 import fetchMock from 'fetch-mock';
-import {right, left} from 'fp-ts/lib/Either';
-import * as RTE from 'fp-ts/lib/ReaderTaskEither';
-import {pipe} from 'fp-ts/lib/pipeable';
+import {right, left} from 'fp-ts/Either';
+import * as RTE from 'fp-ts/ReaderTaskEither';
+import {pipe} from 'fp-ts/function';
 import * as D from 'io-ts/Decoder';
 import {Decoder, toDecoder, withDecoder} from '../src/combinators/decoder';
 import {withHeaders} from '../src/combinators/headers';

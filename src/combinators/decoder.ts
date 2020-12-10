@@ -4,10 +4,10 @@
  * @since 3.0.0
  */
 
-import * as E from 'fp-ts/lib/Either';
-import {ReaderEither, mapLeft} from 'fp-ts/lib/ReaderEither';
-import * as RTE from 'fp-ts/lib/ReaderTaskEither';
-import {pipe} from 'fp-ts/lib/pipeable';
+import * as E from 'fp-ts/Either';
+import {ReaderEither, mapLeft} from 'fp-ts/ReaderEither';
+import * as RTE from 'fp-ts/ReaderTaskEither';
+import {pipe} from 'fp-ts/function';
 import {Err, Req, Resp, toResponseError} from '../request';
 import {withHeaders} from './headers';
 

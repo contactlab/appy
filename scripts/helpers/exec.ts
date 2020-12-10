@@ -1,5 +1,5 @@
 import * as childProcess from 'child_process';
-import * as E from 'fp-ts/lib/Either';
+import * as E from 'fp-ts/Either';
 import {Eff} from './program';
 
 export interface Exec {

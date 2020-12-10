@@ -16,11 +16,11 @@
  * @since 3.0.0
  */
 
-import * as RTE from 'fp-ts/lib/ReaderTaskEither';
-import {getMonoid} from 'fp-ts/lib/Record';
-import {getLastSemigroup} from 'fp-ts/lib/Semigroup';
-import * as TU from 'fp-ts/lib/Tuple';
-import {pipe} from 'fp-ts/lib/pipeable';
+import * as RTE from 'fp-ts/ReaderTaskEither';
+import {getMonoid} from 'fp-ts/Record';
+import {getLastSemigroup} from 'fp-ts/Semigroup';
+import * as TU from 'fp-ts/Tuple';
+import {pipe} from 'fp-ts/function';
 import {Req, normalizeReqInput} from '../request';
 
 type Hs = Record<string, string>;

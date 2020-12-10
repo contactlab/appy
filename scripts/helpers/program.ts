@@ -1,7 +1,7 @@
 import chalk from 'chalk';
-import {fold} from 'fp-ts/lib/Either';
-import * as RTE from 'fp-ts/lib/ReaderTaskEither';
-import * as TE from 'fp-ts/lib/TaskEither';
+import {fold} from 'fp-ts/Either';
+import * as RTE from 'fp-ts/ReaderTaskEither';
+import * as TE from 'fp-ts/TaskEither';
 
 export interface Eff<A> extends TE.TaskEither<string, A> {}
 

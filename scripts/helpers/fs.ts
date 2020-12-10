@@ -1,7 +1,6 @@
 import * as fs from 'fs';
-import {mapLeft, taskify} from 'fp-ts/lib/TaskEither';
-import {flow} from 'fp-ts/lib/function';
-import {pipe} from 'fp-ts/lib/pipeable';
+import {mapLeft, taskify} from 'fp-ts/TaskEither';
+import {flow, pipe} from 'fp-ts/function';
 import Glob from 'glob';
 import {Eff} from './program';
 

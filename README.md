@@ -89,7 +89,7 @@ interface ResponseError {
 
 ```ts
 import {get} from '@contactlab/appy';
-import {fold} from 'fp-ts/lib/Either';
+import {fold} from 'fp-ts/Either';
 
 const users = get('https://reqres.in/api/users');
 
@@ -112,7 +112,7 @@ So, for example, decoding the response body as JSON:
 ```ts
 import {get} from '@contactlab/appy';
 import {withDecoder, Decoder} from '@contactlab/appy/combinators/decoder';
-import {pipe} from 'fp-ts/lib/pipeable';
+import {pipe} from 'fp-ts/function';
 
 interface User {
   id: number;
@@ -145,7 +145,7 @@ or setting request's body (for `POST`s or `PUT`s):
 ```ts
 import {post} from '@contactlab/appy';
 import {withBody} from '@contactlab/appy/combinators/body';
-import {pipe} from 'fp-ts/lib/pipeable';
+import {pipe} from 'fp-ts/function';
 
 const send = pipe(
   post,

@@ -7,9 +7,9 @@
 
 import 'cross-fetch/polyfill';
 
-import * as E from 'fp-ts/lib/Either';
-import * as RTE from 'fp-ts/lib/ReaderTaskEither';
-import {pipe} from 'fp-ts/lib/pipeable';
+import * as E from 'fp-ts/Either';
+import * as RTE from 'fp-ts/ReaderTaskEither';
+import {pipe} from 'fp-ts/function';
 import * as D from 'io-ts/Decoder';
 import {Decoder, toDecoder, withDecoder} from '../src/combinators/decoder';
 import {withUrlParams} from '../src/combinators/url-params';

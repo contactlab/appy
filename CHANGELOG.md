@@ -1,5 +1,9 @@
 # Changelog
 
+## [3.2.0](https://github.com/contactlab/appy/releases/tag/3.2.0)
+
+**This version requires `fp-ts` v2.8.0 (minimum). Even if it is a _non-breaking_ change it could lead to unexpected errors: please check accurately your code.**
+
 ## [3.1.3](https://github.com/contactlab/appy/releases/tag/3.1.3)
 
 **Bug Fix:**
