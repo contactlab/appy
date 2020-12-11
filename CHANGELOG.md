@@ -6,6 +6,23 @@
 
 - Drop support for Nodejs <12
 
+**Bug Fix:**
+
+- Handle invalid URLs in withUrlParams ([#331](https://github.com/contactlab/appy/issues/331))
+- Fix method for "get", "post", "put", "patch" and "del" request creators ([#332](https://github.com/contactlab/appy/issues/332))
+
+**New Feature:**
+
+- `withMethod` combinator to set `method` on `Request` ([#335](https://github.com/contactlab/appy/pull/335))
+
+**Dependencies:**
+
+- `[internal]` Upgrade fp-ts (and other dependencies) ([#333](https://github.com/contactlab/appy/issues/333))
+
+**Documentation:**
+
+- `[internal]` Changelog in documentation ([#334](https://github.com/contactlab/appy/issues/334))
+
 ## [3.1.3](https://github.com/contactlab/appy/releases/tag/3.1.3)
 
 **Bug Fix:**
