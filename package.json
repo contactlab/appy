@@ -36,7 +36,7 @@
     "release": "ts-node scripts/release",
     "docs": "docs-ts",
     "docs:update": "npm run docs && git add docs",
-    "postdocs": "ts-node scripts/docs-index"
+    "postdocs": "ts-node scripts/docs"
   },
   "peerDependencies": {
     "fp-ts": "^2.8.0"
