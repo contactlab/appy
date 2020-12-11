@@ -28,28 +28,14 @@ Added in v3.0.0
 
 <h2 class="text-delta">Table of contents</h2>
 
+- [URLSearchParams](#urlsearchparams)
+  - [Params (type alias)](#params-type-alias)
 - [combinators](#combinators)
   - [withUrlParams](#withurlparams)
-- [utils](#utils)
-  - [Params (type alias)](#params-type-alias)
 
 ---
 
-# combinators
-
-## withUrlParams
-
-Adds provided url search parameters (as `Record<string, string>`) to `Req`'s input url and returns the updated `Req`.
-
-**Signature**
-
-```ts
-export declare function withUrlParams<A>(params: Record<string, string>): (req: Req<A>) => Req<A>
-```
-
-Added in v3.0.0
-
-# utils
+# URLSearchParams
 
 ## Params (type alias)
 
@@ -60,3 +46,17 @@ export type Params = Record<string, string>
 ```
 
 Added in v4.0.0
+
+# combinators
+
+## withUrlParams
+
+Adds provided url search parameters (as `Record<string, string>`) to `Req`'s input url and returns the updated `Req`.
+
+**Signature**
+
+```ts
+export declare function withUrlParams<A>(params: Params): (req: Req<A>) => Req<A>
+```
+
+Added in v3.0.0

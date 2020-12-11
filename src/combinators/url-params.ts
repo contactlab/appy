@@ -16,10 +16,23 @@
  * @since 3.0.0
  */
 
+import * as E from 'fp-ts/Either';
 import * as RTE from 'fp-ts/ReaderTaskEither';
-import * as TU from 'fp-ts/Tuple';
-import {pipe} from 'fp-ts/function';
-import {Req, ReqInput, RequestInfoInit, normalizeReqInput} from '../request';
+import {flow, pipe} from 'fp-ts/function';
+import {
+  Err,
+  Req,
+  ReqInput,
+  RequestInfoInit,
+  normalizeReqInput,
+  toRequestError
+} from '../request';
+
+/**
+ * @category URLSearchParams
+ * @since 4.0.0
+ */
+export type Params = Record<string, string>;
 
 /**
  * Adds provided url search parameters (as `Record<string, string>`) to `Req`'s input url and returns the updated `Req`.
@@ -27,36 +40,62 @@ import {Req, ReqInput, RequestInfoInit, normalizeReqInput} from '../request';
  * @category combinators
  * @since 3.0.0
  */
-export function withUrlParams<A>(
-  params: Record<string, string>
-): (req: Req<A>) => Req<A> {
-  return RTE.local(setURLParams(params));
+export function withUrlParams<A>(params: Params): (req: Req<A>) => Req<A> {
+  return req => pipe(prepare(params), RTE.chain(setURLParams(req)));
 }
 
-function setURLParams(
-  params: Record<string, string>
-): (input: ReqInput) => RequestInfoInit {
-  const urlParams = new URLSearchParams(params);
-
+function setURLParams<A>(req: Req<A>): (input: RequestInfoInit) => Req<A> {
   return input =>
     pipe(
-      normalizeReqInput(input),
-      TU.map(info => {
-        const url = getURL(info);
-        // The "weird" merging is due to the mix of the contravariant nature of `Reader`
-        // and the function composition at the base of "combinators".
-        // Because combinators are applied from right to left, the merging has to be "reversed".
-        // This leads to another "weird" behavior for which the url's params provided when `Req` is run
-        // win over the ones set with the combinator.
-        const p = merge(urlParams, url.searchParams);
-
-        return setParams(p, url).toString();
-      })
+      req,
+      RTE.local(() => input)
     );
 }
 
-function getURL(info: RequestInfo): URL {
-  return new URL(new Request(info).url);
+interface RTEInfoInit
+  extends RTE.ReaderTaskEither<ReqInput, Err, RequestInfoInit> {}
+
+function prepare(params: Params): RTEInfoInit {
+  return pipe(RTE.ask<ReqInput>(), RTE.chain(applyParams(params)));
+}
+
+function applyParams(params: Params): (input: ReqInput) => RTEInfoInit {
+  return flow(
+    normalizeReqInput,
+    ([info, init]) =>
+      pipe(
+        getURL(info),
+        E.chain(url =>
+          // The "weird" merging is due to the mix of the contravariant nature of `Reader`
+          // and the function composition at the base of "combinators".
+          // Because combinators are applied from right to left, the merging has to be "reversed".
+          // This leads to another "weird" behavior for which the url's params provided when `Req` is run
+          // win over the ones set with the combinator.
+          setParams(merge(new URLSearchParams(params), url.searchParams), url)
+        ),
+        E.bimap(
+          err => toRequestError(err, [info, init]),
+          (url): RequestInfoInit => [url.toString(), init]
+        )
+      ),
+    RTE.fromEither
+  );
+}
+
+type MaybeURL = E.Either<Error, URL>;
+
+function getURL(info: RequestInfo): MaybeURL {
+  return E.tryCatch(() => new URL(new Request(info).url), E.toError);
+}
+
+function setParams(params: URLSearchParams, url: URL): MaybeURL {
+  return E.tryCatch(() => {
+    const u = new URL(url.toString());
+
+    u.search = params.toString();
+
+    return u;
+  }, E.toError);
 }
 
 function merge(
@@ -70,12 +109,4 @@ function merge(
   });
 
   return result;
-}
-
-function setParams(params: URLSearchParams, url: URL): URL {
-  const u = new URL(url.toString());
-
-  u.search = params.toString();
-
-  return u;
 }
