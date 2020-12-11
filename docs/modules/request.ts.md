@@ -10,7 +10,7 @@ parent: Modules
 
 **Note:**: this module has been designed for internal use; please prefer the re-exported version of `appy/index`.
 
-Added in v3.2.0
+Added in v4.0.0
 
 ---
 
@@ -46,7 +46,7 @@ Added in v3.2.0
 export type Err = RequestError | ResponseError
 ```
 
-Added in v3.2.0
+Added in v4.0.0
 
 ## RequestError (interface)
 
@@ -62,7 +62,7 @@ export interface RequestError {
 }
 ```
 
-Added in v3.2.0
+Added in v4.0.0
 
 ## ResponseError (interface)
 
@@ -78,7 +78,7 @@ export interface ResponseError {
 }
 ```
 
-Added in v3.2.0
+Added in v4.0.0
 
 ## toRequestError
 
@@ -90,7 +90,7 @@ Creates a `RequestError` object.
 export declare function toRequestError(error: Error, input: RequestInfoInit): RequestError
 ```
 
-Added in v3.2.0
+Added in v4.0.0
 
 ## toResponseError
 
@@ -102,7 +102,7 @@ Creates a `ResponseError` object.
 export declare function toResponseError(error: Error, response: Response): ResponseError
 ```
 
-Added in v3.2.0
+Added in v4.0.0
 
 # Request
 
@@ -118,7 +118,7 @@ The request is expressed in terms of `ReaderTaskEither` - a function that takes 
 export interface Req<A> extends ReaderTaskEither<ReqInput, Err, Resp<A>> {}
 ```
 
-Added in v3.2.0
+Added in v4.0.0
 
 ## ReqInput (type alias)
 
@@ -130,7 +130,7 @@ Added in v3.2.0
 export type ReqInput = RequestInfo | RequestInfoInit
 ```
 
-Added in v3.2.0
+Added in v4.0.0
 
 ## RequestInfoInit (type alias)
 
@@ -142,7 +142,7 @@ An alias for a tuple of `RequesInfo` and `RequestInit` (a.k.a. the `fetch()` par
 export type RequestInfoInit = [RequestInfo, RequestInit]
 ```
 
-Added in v3.2.0
+Added in v4.0.0
 
 ## normalizeReqInput
 
@@ -154,7 +154,7 @@ Normalizes the input of a `Req` to a `RequestInfoInit` tuple even when only a si
 export declare function normalizeReqInput(input: ReqInput): RequestInfoInit
 ```
 
-Added in v3.2.0
+Added in v4.0.0
 
 # Response
 
@@ -171,7 +171,7 @@ export interface Resp<A> {
 }
 ```
 
-Added in v3.2.0
+Added in v4.0.0
 
 # creators
 
@@ -204,4 +204,4 @@ users().then(
 export declare const request: Req<string>
 ```
 
-Added in v3.2.0
+Added in v4.0.0
