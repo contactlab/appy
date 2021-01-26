@@ -9,6 +9,7 @@ import {ReaderEither, mapLeft} from 'fp-ts/ReaderEither';
 import * as RTE from 'fp-ts/ReaderTaskEither';
 import {pipe} from 'fp-ts/function';
 import {Err, Req, Resp, toResponseError} from '../request';
+import {cloneResponse} from '../response';
 import {withHeaders} from './headers';
 
 /**
@@ -50,7 +51,8 @@ export function withDecoder<A, B>(
             parseResponse(resp),
             E.chain(decoder),
             E.bimap(
-              (e): Err => toResponseError(e, resp.response),
+              (e): Err =>
+                toResponseError(e, cloneResponse(resp.response, resp.data)),
               data => ({...resp, data})
             )
           )

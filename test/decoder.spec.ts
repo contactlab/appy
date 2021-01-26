@@ -118,8 +118,9 @@ test('withDecoder() should decodes `Resp` with provided decoder - response data 
 });
 
 test('withDecoder() should fail if response data cannot be parsed', async () => {
-  const response = new Response('{some: "bad", json: true}');
-  fetchMock.mock('http://localhost/api/resources', response);
+  const content = '{some: "bad", json: true}';
+
+  fetchMock.mock('http://localhost/api/resources', new Response(content));
 
   const request = withDecoder(decoderOK)(appy.get);
 
@@ -128,15 +129,21 @@ test('withDecoder() should fail if response data cannot be parsed', async () => 
   expect(result).toEqual(
     left({
       type: 'ResponseError',
-      error: new Error('Unexpected token s in JSON at position 1'),
-      response
+      error: new SyntaxError('Unexpected token s in JSON at position 1'),
+      response: new Response(content) // <-- cloned
     })
   );
+
+  // --- ResponseError `response` content is readable
+  const txt = await (result as any).left.response.text();
+
+  expect(txt).toBe(content);
 });
 
 test('withDecoder() should fail if decoding fails', async () => {
-  const response = new Response('{"id": 1234, "name": "foo bar"}');
-  fetchMock.mock('http://localhost/api/resources', response);
+  const content = '{"id": 1234, "name": "foo bar"}';
+
+  fetchMock.mock('http://localhost/api/resources', new Response(content));
 
   const request = withDecoder(decoderKO)(appy.get);
 
@@ -146,9 +153,14 @@ test('withDecoder() should fail if decoding fails', async () => {
     left({
       type: 'ResponseError',
       error: new Error('decoding failed'),
-      response
+      response: new Response(content) // <-- cloned
     })
   );
+
+  // --- ResponseError `response` content is readable
+  const txt = await (result as any).left.response.text();
+
+  expect(txt).toBe(content);
 });
 
 test('toDecoder() should convert a `GenericDecoder` into a `Decoder`', () => {
