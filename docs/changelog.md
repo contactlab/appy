@@ -5,6 +5,12 @@ nav_order: 2
 
 # Changelog
 
+## [4.0.1](https://github.com/contactlab/appy/releases/tag/4.0.1)
+
+**Bug Fix:**
+
+- `[internal]` Response in ResponseError of withDecoder combinator cannot be consumed ([#360](https://github.com/contactlab/appy/issues/360))
+
 ## [4.0.0](https://github.com/contactlab/appy/releases/tag/4.0.0)
 
 **Breaking:**
