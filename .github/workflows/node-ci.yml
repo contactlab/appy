@@ -15,10 +15,10 @@ jobs:
     # --- Ubuntu agent
     runs-on: ubuntu-latest
 
-    # --- Execute the job with 2 different versions of Node
+    # --- Execute the job with 3 different versions of Node
     strategy:
       matrix:
-        node-version: [12.x, 14.x]
+        node-version: [12.x, 14.x, 15.x]
 
     # --- Job tasks
     steps:
