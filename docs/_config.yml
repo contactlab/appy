@@ -6,4 +6,4 @@ search_enabled: true
 # Aux links for the upper right navigation
 aux_links:
   '@contactlab/appy on GitHub':
-    - 'https://github.com/contactlab/appy#readme'
+    - 'https://contactlab.github.io/appy'
