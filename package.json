@@ -52,7 +52,7 @@
     "docs-ts": "^0.6.3",
     "eslint": "^7.15.0",
     "eslint-config-contactlab": "^6.0.0",
-    "eslint-config-prettier": "^7.0.0",
+    "eslint-config-prettier": "^8.0.0",
     "fetch-mock": "^9.11.0",
     "fp-ts": "^2.8.0",
     "glob": "^7.1.6",
