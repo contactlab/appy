@@ -49,7 +49,7 @@
     "@types/node": "^14.14.25",
     "abort-controller": "^3.0.0",
     "cross-fetch": "^3.0.6",
-    "docs-ts": "^0.6.3",
+    "docs-ts": "^0.6.4",
     "eslint": "^7.15.0",
     "eslint-config-contactlab": "^6.0.0",
     "eslint-config-prettier": "^8.0.0",
