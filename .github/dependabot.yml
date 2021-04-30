@@ -1,32 +1,19 @@
 version: 2
-registries:
-  npm-registry-clab-dev-pkgs-visualstudio-com-packaging-frontend-n:
-    type: npm-registry
-    url: https://clab-dev.pkgs.visualstudio.com/_packaging/Frontend/npm/registry
-    username: "${{secrets.NPM_REGISTRY_CLAB_DEV_PKGS_VISUALSTUDIO_COM_PACKAGING_FRONTEND_N_USERNAME}}"
-    password: "${{secrets.NPM_REGISTRY_CLAB_DEV_PKGS_VISUALSTUDIO_COM_PACKAGING_FRONTEND_N_PASSWORD}}"
 
 updates:
-- package-ecosystem: npm
-  directory: "/"
-  schedule:
-    interval: weekly
-    time: "07:00"
-    timezone: Europe/Rome
-  open-pull-requests-limit: 10
-  reviewers:
-  - StefanoMagrassi
-  assignees:
-  - StefanoMagrassi
-  labels:
-  - dependencies
-  versioning-strategy: increase-if-necessary
-  ignore:
-  - dependency-name: "@types/node"
-    versions:
-    - ">= 13.a, < 14"
-  - dependency-name: "@types/node"
-    versions:
-    - 12.19.16
-  registries:
-  - npm-registry-clab-dev-pkgs-visualstudio-com-packaging-frontend-n
+  - package-ecosystem: npm
+    directory: '/'
+    schedule:
+      interval: weekly
+      time: '07:00'
+      timezone: Europe/Rome
+    open-pull-requests-limit: 10
+    reviewers:
+      - StefanoMagrassi
+    assignees:
+      - StefanoMagrassi
+    labels:
+      - dependencies
+    versioning-strategy: increase-if-necessary
+    registries:
+      - npm-registry-clab-dev-pkgs-visualstudio-com-packaging-frontend-n
