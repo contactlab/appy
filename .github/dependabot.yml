@@ -1,0 +1,17 @@
+version: 2
+
+updates:
+  - package-ecosystem: npm
+    directory: '/'
+    schedule:
+      interval: weekly
+      time: '07:00'
+      timezone: Europe/Rome
+    open-pull-requests-limit: 10
+    reviewers:
+      - StefanoMagrassi
+    assignees:
+      - StefanoMagrassi
+    labels:
+      - dependencies
+    versioning-strategy: increase-if-necessary
