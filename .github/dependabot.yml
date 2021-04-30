@@ -15,5 +15,3 @@ updates:
     labels:
       - dependencies
     versioning-strategy: increase-if-necessary
-    registries:
-      - npm-registry-clab-dev-pkgs-visualstudio-com-packaging-frontend-n
