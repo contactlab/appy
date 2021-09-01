@@ -18,14 +18,14 @@
 
 import * as RTE from 'fp-ts/ReaderTaskEither';
 import {getMonoid} from 'fp-ts/Record';
-import {getLastSemigroup} from 'fp-ts/Semigroup';
+import {last} from 'fp-ts/Semigroup';
 import * as TU from 'fp-ts/Tuple';
 import {pipe} from 'fp-ts/function';
 import {Req, normalizeReqInput} from '../request';
 
 type Hs = Record<string, string>;
 
-const RML = getMonoid(getLastSemigroup<string>());
+const RML = getMonoid(last<string>());
 
 /**
  * Merges provided `Headers` with `Req` ones and returns the updated `Req`.
@@ -37,7 +37,7 @@ export function withHeaders<A>(headers: HeadersInit): (req: Req<A>) => Req<A> {
   return RTE.local(input =>
     pipe(
       normalizeReqInput(input),
-      TU.mapLeft(init => merge(init, headers))
+      TU.mapSnd(init => merge(init, headers))
     )
   );
 }

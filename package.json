@@ -51,7 +51,7 @@
     "cross-fetch": "^3.0.6",
     "docs-ts": "^0.6.4",
     "eslint": "^7.15.0",
-    "eslint-config-contactlab": "^6.0.0",
+    "eslint-config-contactlab": "^7.0.0",
     "eslint-config-prettier": "^8.0.0",
     "fetch-mock": "^9.11.0",
     "fp-ts": "^2.8.0",

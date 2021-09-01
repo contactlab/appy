@@ -36,7 +36,7 @@ export function withMethod<A>(method: string): (req: Req<A>) => Req<A> {
       // Because combinators are applied from right to left, the merging has to be "reversed".
       // This leads to another "weird" behavior for which the `method` provided when `Req` is run
       // wins over the one set with the combinator.
-      TU.mapLeft(init => ({method, ...init}))
+      TU.mapSnd(init => ({method, ...init}))
     )
   );
 }

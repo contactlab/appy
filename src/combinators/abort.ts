@@ -116,7 +116,7 @@ function setSignal<A>(signal: AbortSignal): (req: Req<A>) => Req<A> {
       // Because combinators are applied from right to left, the merging has to be "reversed".
       // This leads to another "weird" behavior for which the signal provided when `Req` is run
       // wins over the one set with the combinator.
-      TU.mapLeft(init => Object.assign({}, {signal}, init))
+      TU.mapSnd(init => Object.assign({}, {signal}, init))
     )
   );
 }

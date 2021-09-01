@@ -17,7 +17,7 @@ import {get, Req, Resp} from '../src/index';
 
 // --- io-ts land
 interface User extends D.TypeOf<typeof User> {}
-const User = D.type({
+const User = D.struct({
   id: D.number,
   email: D.string,
   first_name: D.string,
@@ -26,7 +26,7 @@ const User = D.type({
 });
 
 interface Payload extends D.TypeOf<typeof Payload> {}
-const Payload = D.type({
+const Payload = D.struct({
   page: D.number,
   per_page: D.number,
   total: D.number,

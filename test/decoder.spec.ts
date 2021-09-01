@@ -196,7 +196,7 @@ const decoderOK: Decoder<Payload> = u => {
 
 const decoderKO: Decoder<Payload> = _ => left(new Error('decoding failed'));
 
-const iotsPayload = D.type({
+const iotsPayload = D.struct({
   id: D.number,
   name: D.string
 });

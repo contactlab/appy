@@ -5,6 +5,7 @@
  */
 
 import * as E from 'fp-ts/Either';
+import {parse} from 'fp-ts/Json';
 import {ReaderEither, mapLeft} from 'fp-ts/ReaderEither';
 import * as RTE from 'fp-ts/ReaderTaskEither';
 import {pipe} from 'fp-ts/function';
@@ -82,5 +83,5 @@ function parseResponse<A>({data}: Resp<A>): E.Either<Error, unknown> {
   const asString = String(data);
   const prepared = asString.length === 0 ? '{}' : asString;
 
-  return E.parseJSON(prepared, E.toError);
+  return pipe(parse(prepared), E.mapLeft(E.toError));
 }
