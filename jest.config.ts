@@ -18,6 +18,7 @@ const config: Config.InitialOptions = {
   preset: 'ts-jest',
   roots: ['<rootDir>/test/'],
   setupFiles: ['<rootDir>/test/_setup.ts'],
+  testEnvironment: 'jsdom',
   testMatch: undefined,
   testRegex: '(\\.|/)spec\\.ts$'
 };

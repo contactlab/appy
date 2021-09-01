@@ -11,9 +11,12 @@ export interface FileSystem {
   readonly glob: (pattern: string) => Eff<string[]>;
 }
 
-const readFileTE = taskify<fs.PathLike, string, NodeJS.ErrnoException, string>(
-  fs.readFile
-);
+const readFileTE = taskify<
+  fs.PathLike,
+  BufferEncoding,
+  NodeJS.ErrnoException,
+  string
+>(fs.readFile);
 const writeFileTE = taskify<fs.PathLike, string, NodeJS.ErrnoException, void>(
   fs.writeFile
 );

@@ -20,6 +20,7 @@
  */
 
 import * as E from 'fp-ts/Either';
+import {stringify} from 'fp-ts/Json';
 import * as RTE from 'fp-ts/ReaderTaskEither';
 import * as TU from 'fp-ts/Tuple';
 import {pipe} from 'fp-ts/function';
@@ -53,7 +54,7 @@ function setBody<A>(req: Req<A>): (body: BodyInit) => Req<A> {
           // Because combinators are applied from right to left, the merging has to be "reversed".
           // This leads to another "weird" behavior for which the body provided when `Req` is run
           // wins over the one set with the combinator.
-          TU.mapLeft(init => Object.assign({}, {body}, init))
+          TU.mapSnd(init => Object.assign({}, {body}, init))
         )
       )
     );
@@ -80,5 +81,5 @@ function toStringWhenJSON(body: unknown): E.Either<Error, BodyInit> {
     return E.right(body as BodyInit); // type assertion mandatory...
   }
 
-  return E.stringifyJSON(body, E.toError);
+  return pipe(stringify(body), E.mapLeft(E.toError));
 }

@@ -9,7 +9,17 @@
       "problemMatcher": ["$tsc"],
       "group": "test",
       "presentation": {
-        "clear": true
+        "clear": true,
+        "revealProblems": "onProblem"
+      }
+    },
+    {
+      "type": "npm",
+      "script": "lint",
+      "problemMatcher": ["$eslint-stylish"],
+      "presentation": {
+        "clear": true,
+        "revealProblems": "onProblem"
       }
     }
   ]
