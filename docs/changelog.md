@@ -5,6 +5,18 @@ nav_order: 2
 
 # Changelog
 
+## [4.0.2](https://github.com/contactlab/appy/releases/tag/4.0.2)
+
+**Dependencies:**
+
+- Bump typescript from 4.3.5 to 4.4.2 (#469)
+- [Security] Bump path-parse from 1.0.6 to 1.0.7 (#463)
+- [Security] Bump glob-parent from 5.1.1 to 5.1.2 (#437)
+- [Security] Bump ws from 7.4.1 to 7.4.6 (#429)
+- [Security] Bump hosted-git-info from 2.8.8 to 2.8.9 (#416)
+- [Security] Bump lodash from 4.17.20 to 4.17.21 (#415)
+- Fix README typo (#406)
+
 ## [4.0.1](https://github.com/contactlab/appy/releases/tag/4.0.1)
 
 **Bug Fix:**
