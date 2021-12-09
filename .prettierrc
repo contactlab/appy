@@ -2,7 +2,7 @@
   "printWidth": 80,
   "singleQuote": true,
   "bracketSpacing": false,
-  "jsxBracketSameLine": false,
+  "bracketSameLine": false,
   "arrowParens": "avoid",
   "trailingComma": "none"
 }
