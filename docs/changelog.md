@@ -5,6 +5,12 @@ nav_order: 2
 
 # Changelog
 
+## [4.0.3](https://github.com/contactlab/appy/releases/tag/4.0.3)
+
+**Dependencies**
+
+[Security] Bump ansi-regex from 5.0.0 to 5.0.1 (#482)
+
 ## [4.0.2](https://github.com/contactlab/appy/releases/tag/4.0.2)
 
 **Dependencies:**
