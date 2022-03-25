@@ -1,6 +1,6 @@
 {
   "name": "@contactlab/appy",
-  "version": "4.0.3",
+  "version": "4.0.4",
   "description": "A functional wrapper around Fetch API",
   "main": "./index.js",
   "module": "./_es6/index.js",
