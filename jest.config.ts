@@ -11,9 +11,11 @@ const config: Config.InitialOptions = {
   coverageReporters: ['text'],
   globals: {
     'ts-jest': {
-      diagnostics: true
+      diagnostics: true,
+      isolatedModules: true
     }
   },
+  maxWorkers: '50%',
   moduleFileExtensions: ['js', 'json', 'node', 'ts'],
   preset: 'ts-jest',
   roots: ['<rootDir>/test/'],
