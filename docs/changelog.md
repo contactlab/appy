@@ -11,11 +11,15 @@ nav_order: 2
 
 - `request()` can return non `Err` errors ([#557](https://github.com/contactlab/appy/issues/557))
 
+**Dependencies**
+
+- [Security] Bump minimist from 1.2.5 to 1.2.6 (#559)
+
 ## [4.0.3](https://github.com/contactlab/appy/releases/tag/4.0.3)
 
 **Dependencies**
 
-[Security] Bump ansi-regex from 5.0.0 to 5.0.1 (#482)
+- [Security] Bump ansi-regex from 5.0.0 to 5.0.1 (#482)
 
 ## [4.0.2](https://github.com/contactlab/appy/releases/tag/4.0.2)
 
