@@ -5,6 +5,12 @@ nav_order: 2
 
 # Changelog
 
+## [4.0.3](https://github.com/contactlab/appy/releases/tag/4.0.4)
+
+**Bug Fix:**
+
+- `request()` can return non `Err` errors ([#557](https://github.com/contactlab/appy/issues/557))
+
 ## [4.0.3](https://github.com/contactlab/appy/releases/tag/4.0.3)
 
 **Dependencies**
