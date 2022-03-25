@@ -111,24 +111,21 @@ export const request: Req<string> = input => () => {
   const reqInput = normalizeReqInput(input);
 
   return fetch(...reqInput)
-    .then(
-      async response => {
-        if (!response.ok) {
-          throw toResponseError(
+    .then(async response => {
+      if (!response.ok) {
+        return E.left(
+          toResponseError(
             new Error(`Request responded with status code ${response.status}`),
             response
-          );
-        }
-
-        const data = await response.text();
-
-        return E.right({response, data});
-      },
-      e => {
-        throw toRequestError(e, reqInput);
+          )
+        );
       }
-    )
-    .catch(e => E.left(e));
+
+      const data = await response.text();
+
+      return E.right({response, data});
+    })
+    .catch(e => E.left(toRequestError(e, reqInput)));
 };
 
 /**
