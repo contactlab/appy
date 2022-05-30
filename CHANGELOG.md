@@ -1,6 +1,12 @@
 # Changelog
 
-## [4.0.3](https://github.com/contactlab/appy/releases/tag/4.0.4)
+## [5.0.0](https://github.com/contactlab/appy/releases/tag/5.0.0)
+
+**Breaking:**
+
+- Drop support for Nodejs <14
+
+## [4.0.4](https://github.com/contactlab/appy/releases/tag/4.0.4)
 
 **Bug Fix:**
 
