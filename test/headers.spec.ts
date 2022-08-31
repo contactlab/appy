@@ -90,8 +90,7 @@ test('withHeaders() should merge provided headers with `Req` ones - as Headers o
 test('withHeaders() should merge provided headers with `Req` ones - as array of strings', async () => {
   fetchMock.mock('http://localhost/api/resources', 200);
 
-  const headers = [['Content-Type', 'application/json']];
-  const request = withHeaders(headers)(get);
+  const request = withHeaders([['Content-Type', 'application/json']])(get);
 
   await request([
     'http://localhost/api/resources',
