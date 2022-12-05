@@ -1,6 +1,7 @@
 version: 2
 
 updates:
+  # --- NPM
   - package-ecosystem: npm
     directory: '/'
     schedule:
@@ -15,3 +16,11 @@ updates:
     labels:
       - dependencies
     versioning-strategy: increase-if-necessary
+  
+  # --- GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: weekly
+      time: '07:00'
+      timezone: Europe/Rome
