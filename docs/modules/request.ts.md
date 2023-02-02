@@ -31,6 +31,7 @@ Added in v4.0.0
   - [Resp (interface)](#resp-interface)
 - [creators](#creators)
   - [request](#request)
+  - [requestAs](#requestas)
 
 ---
 
@@ -185,13 +186,13 @@ Example:
 
 ```ts
 import { request } from '@contactlab/appy'
-import { fold } from 'fp-ts/Either'
+import { match } from 'fp-ts/Either'
 
 // Default method is GET like original `fetch()`
 const users = request('https://reqres.in/api/users')
 
 users().then(
-  fold(
+  match(
     (err) => console.error(err),
     (data) => console.log(data)
   )
@@ -205,3 +206,36 @@ export declare const request: Req<string>
 ```
 
 Added in v4.0.0
+
+## requestAs
+
+Return a `Req` which will be executed using `fetch()` under the hood.
+
+The `data` in the returned `Resp` object is of the type specified in the `type` parameter which is one of [supported `Request` methods](https://developer.mozilla.org/en-US/docs/Web/API/Response#instance_methods).
+
+Example:
+
+```ts
+import { requestAs } from '@contactlab/appy'
+import { match } from 'fp-ts/Either'
+
+// Default method is GET like original `fetch()`
+const users = requestAs('json')('https://reqres.in/api/users')
+
+users().then(
+  match(
+    (err) => console.error(err),
+    (data) => console.log(data)
+  )
+)
+```
+
+**Signature**
+
+```ts
+export declare const requestAs: <K extends 'arrayBuffer' | 'blob' | 'formData' | 'json' | 'text'>(
+  type: K
+) => Req<BodyTypeData<K>>
+```
+
+Added in v5.1.0

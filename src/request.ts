@@ -83,6 +83,69 @@ export interface ResponseError {
   response: Response;
 }
 
+type BodyTypeKey = {
+  [K in keyof Response]-?: Response[K] extends () => Promise<unknown>
+    ? K
+    : never;
+}[keyof Response] &
+  string;
+
+type BodyTypeData<K extends BodyTypeKey> = ReturnType<
+  Response[K]
+> extends Promise<infer _A>
+  ? _A
+  : never;
+
+/**
+ * Return a `Req` which will be executed using `fetch()` under the hood.
+ *
+ * The `data` in the returned `Resp` object is of the type specified in the `type` parameter which is one of [supported `Request` methods](https://developer.mozilla.org/en-US/docs/Web/API/Response#instance_methods).
+ *
+ * Example:
+ * ```ts
+ * import {requestAs} from '@contactlab/appy';
+ * import {match} from 'fp-ts/Either';
+ *
+ * // Default method is GET like original `fetch()`
+ * const users = requestAs('json')('https://reqres.in/api/users');
+ *
+ * users().then(
+ *   match(
+ *     err => console.error(err),
+ *     data => console.log(data)
+ *   )
+ * );
+ * ```
+ *
+ * @category creators
+ * @since 5.1.0
+ */
+export const requestAs =
+  <K extends BodyTypeKey>(type: K): Req<BodyTypeData<K>> =>
+  input =>
+  () => {
+    const reqInput = normalizeReqInput(input);
+
+    return fetch(...reqInput)
+      .then(async response => {
+        if (!response.ok) {
+          return E.left(
+            toResponseError(
+              new Error(
+                `Request responded with status code ${response.status}`
+              ),
+              response
+            )
+          );
+        }
+
+        const data = await response[type]();
+
+        return E.right({response, data});
+      })
+      .catch(e => E.left(toRequestError(e, reqInput)));
+  };
+
 /**
  * Makes a request using `fetch()` under the hood.
  *
@@ -91,13 +154,13 @@ export interface ResponseError {
  * Example:
  * ```ts
  * import {request} from '@contactlab/appy';
- * import {fold} from 'fp-ts/Either';
+ * import {match} from 'fp-ts/Either';
  *
  * // Default method is GET like original `fetch()`
  * const users = request('https://reqres.in/api/users');
  *
  * users().then(
- *   fold(
+ *   match(
  *     err => console.error(err),
  *     data => console.log(data)
  *   )
@@ -107,26 +170,7 @@ export interface ResponseError {
  * @category creators
  * @since 4.0.0
  */
-export const request: Req<string> = input => () => {
-  const reqInput = normalizeReqInput(input);
-
-  return fetch(...reqInput)
-    .then(async response => {
-      if (!response.ok) {
-        return E.left(
-          toResponseError(
-            new Error(`Request responded with status code ${response.status}`),
-            response
-          )
-        );
-      }
-
-      const data = await response.text();
-
-      return E.right({response, data});
-    })
-    .catch(e => E.left(toRequestError(e, reqInput)));
-};
+export const request: Req<string> = requestAs('text');
 
 /**
  * Creates a `RequestError` object.
