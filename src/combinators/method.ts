@@ -19,7 +19,7 @@
 import * as RTE from 'fp-ts/ReaderTaskEither';
 import * as TU from 'fp-ts/Tuple';
 import {pipe} from 'fp-ts/function';
-import {Req, normalizeReqInput} from '../request';
+import {type Combinator, normalizeReqInput} from '../request';
 
 /**
  * Sets provided method on `Req` and returns the updated `Req`.
@@ -27,8 +27,8 @@ import {Req, normalizeReqInput} from '../request';
  * @category combinators
  * @since 4.0.0
  */
-export function withMethod<A>(method: string): (req: Req<A>) => Req<A> {
-  return RTE.local(input =>
+export const withMethod = (method: string): Combinator =>
+  RTE.local(input =>
     pipe(
       normalizeReqInput(input),
       // The "weird" MERGING is due to the mix of the contravariant nature of `Reader`
@@ -39,4 +39,3 @@ export function withMethod<A>(method: string): (req: Req<A>) => Req<A> {
       TU.mapSnd(init => ({method, ...init}))
     )
   );
-}

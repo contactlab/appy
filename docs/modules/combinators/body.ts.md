@@ -45,7 +45,7 @@ Sets the provided `body` (automatically converted to string when JSON) on `Req` 
 **Signature**
 
 ```ts
-export declare function withBody<A>(body: unknown): (req: Req<A>) => Req<A>
+export declare const withBody: (body: unknown) => Combinator
 ```
 
 Added in v3.0.0

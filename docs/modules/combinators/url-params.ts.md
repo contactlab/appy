@@ -56,7 +56,7 @@ Adds provided url search parameters (as `Record<string, string>`) to `Req`'s inp
 **Signature**
 
 ```ts
-export declare function withUrlParams<A>(params: Params): (req: Req<A>) => Req<A>
+export declare const withUrlParams: (params: Params) => Combinator
 ```
 
 Added in v3.0.0

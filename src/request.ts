@@ -41,6 +41,14 @@ export type ReqInput = RequestInfo | RequestInfoInit;
 export type RequestInfoInit = [RequestInfo, RequestInit];
 
 /**
+ * A combinator is a function to transform/operate on a `Req`.
+ *
+ * @category Request
+ * @since 5.1.0
+ */
+export type Combinator = <A>(req: Req<A>) => Req<A>;
+
+/**
  * `Resp<A>` is an object that carries the original `Response` from a `fetch()` call and the actual retrieved `data` (of type `A`).
  *
  * @category Response
@@ -178,12 +186,10 @@ export const request: Req<string> = requestAs('text');
  * @category Error
  * @since 4.0.0
  */
-export function toRequestError(
+export const toRequestError = (
   error: Error,
   input: RequestInfoInit
-): RequestError {
-  return {type: 'RequestError', error, input};
-}
+): RequestError => ({type: 'RequestError', error, input});
 
 /**
  * Creates a `ResponseError` object.
@@ -191,12 +197,10 @@ export function toRequestError(
  * @category Error
  * @since 4.0.0
  */
-export function toResponseError(
+export const toResponseError = (
   error: Error,
   response: Response
-): ResponseError {
-  return {type: 'ResponseError', response, error};
-}
+): ResponseError => ({type: 'ResponseError', response, error});
 
 /**
  * Normalizes the input of a `Req` to a `RequestInfoInit` tuple even when only a single `RequestInfo` is provided.
@@ -204,6 +208,5 @@ export function toResponseError(
  * @category Request
  * @since 4.0.0
  */
-export function normalizeReqInput(input: ReqInput): RequestInfoInit {
-  return Array.isArray(input) ? input : [input, {}];
-}
+export const normalizeReqInput = (input: ReqInput): RequestInfoInit =>
+  Array.isArray(input) ? input : [input, {}];

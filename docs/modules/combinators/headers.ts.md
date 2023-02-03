@@ -42,7 +42,7 @@ Merges provided `Headers` with `Req` ones and returns the updated `Req`.
 **Signature**
 
 ```ts
-export declare function withHeaders<A>(headers: HeadersInit): (req: Req<A>) => Req<A>
+export declare const withHeaders: (headers: HeadersInit) => Combinator
 ```
 
 Added in v3.0.0

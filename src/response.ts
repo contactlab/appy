@@ -13,7 +13,7 @@
  * @category helpers
  * @since 4.0.1
  */
-export function cloneResponse<A>(from: Response, content: A): Response {
+export const cloneResponse = <A>(from: Response, content: A): Response => {
   let body: BodyInit | null;
 
   try {
@@ -28,4 +28,4 @@ export function cloneResponse<A>(from: Response, content: A): Response {
     status: from.status,
     statusText: from.statusText
   });
-}
+};

@@ -23,6 +23,7 @@ Added in v4.0.0
   - [toRequestError](#torequesterror)
   - [toResponseError](#toresponseerror)
 - [Request](#request)
+  - [Combinator (type alias)](#combinator-type-alias)
   - [Req (interface)](#req-interface)
   - [ReqInput (type alias)](#reqinput-type-alias)
   - [RequestInfoInit (type alias)](#requestinfoinit-type-alias)
@@ -88,7 +89,7 @@ Creates a `RequestError` object.
 **Signature**
 
 ```ts
-export declare function toRequestError(error: Error, input: RequestInfoInit): RequestError
+export declare const toRequestError: (error: Error, input: RequestInfoInit) => RequestError
 ```
 
 Added in v4.0.0
@@ -100,12 +101,24 @@ Creates a `ResponseError` object.
 **Signature**
 
 ```ts
-export declare function toResponseError(error: Error, response: Response): ResponseError
+export declare const toResponseError: (error: Error, response: Response) => ResponseError
 ```
 
 Added in v4.0.0
 
 # Request
+
+## Combinator (type alias)
+
+A combinator is a function to transform/operate on a `Req`.
+
+**Signature**
+
+```ts
+export type Combinator = <A>(req: Req<A>) => Req<A>
+```
+
+Added in v5.1.0
 
 ## Req (interface)
 
@@ -152,7 +165,7 @@ Normalizes the input of a `Req` to a `RequestInfoInit` tuple even when only a si
 **Signature**
 
 ```ts
-export declare function normalizeReqInput(input: ReqInput): RequestInfoInit
+export declare const normalizeReqInput: (input: ReqInput) => RequestInfoInit
 ```
 
 Added in v4.0.0

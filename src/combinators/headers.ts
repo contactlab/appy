@@ -21,7 +21,7 @@ import {getMonoid} from 'fp-ts/Record';
 import {last} from 'fp-ts/Semigroup';
 import * as TU from 'fp-ts/Tuple';
 import {pipe} from 'fp-ts/function';
-import {Req, normalizeReqInput} from '../request';
+import {type Combinator, normalizeReqInput} from '../request';
 
 type Hs = Record<string, string>;
 
@@ -33,16 +33,15 @@ const RML = getMonoid(last<string>());
  * @category combinators
  * @since 3.0.0
  */
-export function withHeaders<A>(headers: HeadersInit): (req: Req<A>) => Req<A> {
-  return RTE.local(input =>
+export const withHeaders = (headers: HeadersInit): Combinator =>
+  RTE.local(input =>
     pipe(
       normalizeReqInput(input),
       TU.mapSnd(init => merge(init, headers))
     )
   );
-}
 
-function merge(init: RequestInit, h: HeadersInit): RequestInit {
+const merge = (init: RequestInit, h: HeadersInit): RequestInit => {
   // The "weird" `concat` is due to the mix of the contravariant nature of `Reader`
   // and the function composition at the base of "combinators".
   // Because combinators are applied from right to left, the merging has to be "reversed".
@@ -52,13 +51,12 @@ function merge(init: RequestInit, h: HeadersInit): RequestInit {
     typeof init.headers === 'undefined' ? toRecord(h) : concat(h, init.headers);
 
   return {...init, headers};
-}
+};
 
-function concat(a: HeadersInit, b: HeadersInit): Hs {
-  return RML.concat(toRecord(a), toRecord(b));
-}
+const concat = (a: HeadersInit, b: HeadersInit): Hs =>
+  RML.concat(toRecord(a), toRecord(b));
 
-function toRecord(h: HeadersInit): Hs {
+const toRecord = (h: HeadersInit): Hs => {
   if (Array.isArray(h)) {
     return h.reduce((acc, [k, v]) => ({...acc, [k]: v}), {});
   }
@@ -72,4 +70,4 @@ function toRecord(h: HeadersInit): Hs {
   }
 
   return h;
-}
+};

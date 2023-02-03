@@ -63,7 +63,7 @@ It automatically sets "JSON" request header's
 **Signature**
 
 ```ts
-export declare function withDecoder<A, B>(decoder: Decoder<B>): (req: Req<A>) => Req<B>
+export declare const withDecoder: <B>(decoder: Decoder<B>) => <A>(req: Req<A>) => Req<B>
 ```
 
 Added in v3.0.0
@@ -77,7 +77,7 @@ Converts a `GenericDecoder<L, A>` into a `Decoder<A>`.
 **Signature**
 
 ```ts
-export declare function toDecoder<L, A>(dec: GenericDecoder<L, A>, onLeft: (e: L) => Error): Decoder<A>
+export declare const toDecoder: <L, A>(dec: GenericDecoder<L, A>, onLeft: (e: L) => Error) => Decoder<A>
 ```
 
 Added in v3.0.0

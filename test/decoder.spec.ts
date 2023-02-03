@@ -3,7 +3,7 @@ import {right, left} from 'fp-ts/Either';
 import * as RTE from 'fp-ts/ReaderTaskEither';
 import {pipe} from 'fp-ts/function';
 import * as D from 'io-ts/Decoder';
-import {Decoder, toDecoder, withDecoder} from '../src/combinators/decoder';
+import {type Decoder, toDecoder, withDecoder} from '../src/combinators/decoder';
 import {withHeaders} from '../src/combinators/headers';
 import * as appy from '../src/index';
 

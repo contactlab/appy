@@ -42,7 +42,7 @@ Sets provided method on `Req` and returns the updated `Req`.
 **Signature**
 
 ```ts
-export declare function withMethod<A>(method: string): (req: Req<A>) => Req<A>
+export declare const withMethod: (method: string) => Combinator
 ```
 
 Added in v4.0.0

@@ -9,7 +9,7 @@ import {parse} from 'fp-ts/Json';
 import {ReaderEither, mapLeft} from 'fp-ts/ReaderEither';
 import * as RTE from 'fp-ts/ReaderTaskEither';
 import {pipe} from 'fp-ts/function';
-import {Err, Req, Resp, toResponseError} from '../request';
+import {type Err, type Req, type Resp, toResponseError} from '../request';
 import {cloneResponse} from '../response';
 import {withHeaders} from './headers';
 
@@ -39,10 +39,9 @@ export interface Decoder<A> extends GenericDecoder<Error, A> {}
  * @category combinators
  * @since 3.0.0
  */
-export function withDecoder<A, B>(
-  decoder: Decoder<B>
-): (req: Req<A>) => Req<B> {
-  return req =>
+export const withDecoder =
+  <B>(decoder: Decoder<B>) =>
+  <A>(req: Req<A>): Req<B> =>
     pipe(
       req,
       withHeaders({Accept: 'application/json'}),
@@ -60,7 +59,6 @@ export function withDecoder<A, B>(
         )
       )
     );
-}
 
 /**
  * Converts a `GenericDecoder<L, A>` into a `Decoder<A>`.
@@ -68,14 +66,12 @@ export function withDecoder<A, B>(
  * @category helpers
  * @since 3.0.0
  */
-export function toDecoder<L, A>(
+export const toDecoder = <L, A>(
   dec: GenericDecoder<L, A>,
   onLeft: (e: L) => Error
-): Decoder<A> {
-  return pipe(dec, mapLeft(onLeft));
-}
+): Decoder<A> => pipe(dec, mapLeft(onLeft));
 
-function parseResponse<A>({data}: Resp<A>): E.Either<Error, unknown> {
+const parseResponse = <A>({data}: Resp<A>): E.Either<Error, unknown> => {
   if (typeof data === 'object') {
     return E.right(data);
   }
@@ -84,4 +80,4 @@ function parseResponse<A>({data}: Resp<A>): E.Either<Error, unknown> {
   const prepared = asString.length === 0 ? '{}' : asString;
 
   return pipe(parse(prepared), E.mapLeft(E.toError));
-}
+};

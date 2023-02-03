@@ -77,7 +77,7 @@ users().then((result) => {
 **Signature**
 
 ```ts
-export declare function withCancel<A>(controller: AbortController): (req: Req<A>) => Req<A>
+export declare const withCancel: (controller: AbortController) => Combinator
 ```
 
 Added in v3.1.0
@@ -105,7 +105,7 @@ users().then((result) => {
 **Signature**
 
 ```ts
-export declare function withTimeout<A>(millis: number): (req: Req<A>) => Req<A>
+export declare const withTimeout: (millis: number) => <A>(req: Req<A>) => Req<A>
 ```
 
 Added in v3.1.0
