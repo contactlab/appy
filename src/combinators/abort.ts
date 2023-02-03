@@ -33,7 +33,7 @@
 import * as RTE from 'fp-ts/ReaderTaskEither';
 import * as TU from 'fp-ts/Tuple';
 import {pipe} from 'fp-ts/function';
-import {Req, normalizeReqInput} from '../request';
+import {type Req, type Combinator, normalizeReqInput} from '../request';
 
 /**
  * Sets `signal` on `Req` in order to make request cancellable through `AbortController`.
@@ -60,11 +60,8 @@ import {Req, normalizeReqInput} from '../request';
  * @category combinators
  * @since 3.1.0
  */
-export function withCancel<A>(
-  controller: AbortController
-): (req: Req<A>) => Req<A> {
-  return setSignal(controller.signal);
-}
+export const withCancel = (controller: AbortController): Combinator =>
+  setSignal(controller.signal);
 
 /**
  * Aborts the request if it does not respond within provided milliseconds.
@@ -87,8 +84,9 @@ export function withCancel<A>(
  * @category combinators
  * @since 3.1.0
  */
-export function withTimeout<A>(millis: number): (req: Req<A>) => Req<A> {
-  return req => {
+export const withTimeout =
+  (millis: number) =>
+  <A>(req: Req<A>): Req<A> => {
     const controller = new AbortController();
 
     return pipe(
@@ -105,10 +103,9 @@ export function withTimeout<A>(millis: number): (req: Req<A>) => Req<A> {
       )
     );
   };
-}
 
-function setSignal<A>(signal: AbortSignal): (req: Req<A>) => Req<A> {
-  return RTE.local(input =>
+const setSignal = (signal: AbortSignal): Combinator =>
+  RTE.local(input =>
     pipe(
       normalizeReqInput(input),
       // The "weird" merging is due to the mix of the contravariant nature of `Reader`
@@ -119,4 +116,3 @@ function setSignal<A>(signal: AbortSignal): (req: Req<A>) => Req<A> {
       TU.mapSnd(init => Object.assign({}, {signal}, init))
     )
   );
-}

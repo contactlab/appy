@@ -25,11 +25,12 @@ import * as RTE from 'fp-ts/ReaderTaskEither';
 import * as TU from 'fp-ts/Tuple';
 import {pipe} from 'fp-ts/function';
 import {
-  Req,
-  ReqInput,
+  type Req,
+  type ReqInput,
+  type Err,
+  type Combinator,
   normalizeReqInput,
-  toRequestError,
-  Err
+  toRequestError
 } from '../request';
 
 /**
@@ -38,12 +39,14 @@ import {
  * @category combinators
  * @since 3.0.0
  */
-export function withBody<A>(body: unknown): (req: Req<A>) => Req<A> {
-  return req => pipe(toBodyInit(body), RTE.chain(setBody(req)));
-}
+export const withBody =
+  (body: unknown): Combinator =>
+  req =>
+    pipe(toBodyInit(body), RTE.chain(setBody(req)));
 
-function setBody<A>(req: Req<A>): (body: BodyInit) => Req<A> {
-  return body =>
+const setBody =
+  <A>(req: Req<A>) =>
+  (body: BodyInit): Req<A> =>
     pipe(
       req,
       RTE.local(input =>
@@ -58,12 +61,11 @@ function setBody<A>(req: Req<A>): (body: BodyInit) => Req<A> {
         )
       )
     );
-}
 
-function toBodyInit(
+const toBodyInit = (
   body: unknown
-): RTE.ReaderTaskEither<ReqInput, Err, BodyInit> {
-  return pipe(
+): RTE.ReaderTaskEither<ReqInput, Err, BodyInit> =>
+  pipe(
     RTE.ask<ReqInput>(),
     RTE.chain(input =>
       RTE.fromEither(
@@ -74,12 +76,11 @@ function toBodyInit(
       )
     )
   );
-}
 
-function toStringWhenJSON(body: unknown): E.Either<Error, BodyInit> {
+const toStringWhenJSON = (body: unknown): E.Either<Error, BodyInit> => {
   if (Object.getPrototypeOf(body).constructor.name !== 'Object') {
     return E.right(body as BodyInit); // type assertion mandatory...
   }
 
   return pipe(stringify(body), E.mapLeft(E.toError));
-}
+};

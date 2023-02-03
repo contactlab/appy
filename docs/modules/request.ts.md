@@ -23,6 +23,7 @@ Added in v4.0.0
   - [toRequestError](#torequesterror)
   - [toResponseError](#toresponseerror)
 - [Request](#request)
+  - [Combinator (type alias)](#combinator-type-alias)
   - [Req (interface)](#req-interface)
   - [ReqInput (type alias)](#reqinput-type-alias)
   - [RequestInfoInit (type alias)](#requestinfoinit-type-alias)
@@ -31,6 +32,7 @@ Added in v4.0.0
   - [Resp (interface)](#resp-interface)
 - [creators](#creators)
   - [request](#request)
+  - [requestAs](#requestas)
 
 ---
 
@@ -87,7 +89,7 @@ Creates a `RequestError` object.
 **Signature**
 
 ```ts
-export declare function toRequestError(error: Error, input: RequestInfoInit): RequestError
+export declare const toRequestError: (error: Error, input: RequestInfoInit) => RequestError
 ```
 
 Added in v4.0.0
@@ -99,12 +101,24 @@ Creates a `ResponseError` object.
 **Signature**
 
 ```ts
-export declare function toResponseError(error: Error, response: Response): ResponseError
+export declare const toResponseError: (error: Error, response: Response) => ResponseError
 ```
 
 Added in v4.0.0
 
 # Request
+
+## Combinator (type alias)
+
+A combinator is a function to transform/operate on a `Req`.
+
+**Signature**
+
+```ts
+export type Combinator = <A>(req: Req<A>) => Req<A>
+```
+
+Added in v5.1.0
 
 ## Req (interface)
 
@@ -151,7 +165,7 @@ Normalizes the input of a `Req` to a `RequestInfoInit` tuple even when only a si
 **Signature**
 
 ```ts
-export declare function normalizeReqInput(input: ReqInput): RequestInfoInit
+export declare const normalizeReqInput: (input: ReqInput) => RequestInfoInit
 ```
 
 Added in v4.0.0
@@ -185,13 +199,13 @@ Example:
 
 ```ts
 import { request } from '@contactlab/appy'
-import { fold } from 'fp-ts/Either'
+import { match } from 'fp-ts/Either'
 
 // Default method is GET like original `fetch()`
 const users = request('https://reqres.in/api/users')
 
 users().then(
-  fold(
+  match(
     (err) => console.error(err),
     (data) => console.log(data)
   )
@@ -205,3 +219,36 @@ export declare const request: Req<string>
 ```
 
 Added in v4.0.0
+
+## requestAs
+
+Return a `Req` which will be executed using `fetch()` under the hood.
+
+The `data` in the returned `Resp` object is of the type specified in the `type` parameter which is one of [supported `Request` methods](https://developer.mozilla.org/en-US/docs/Web/API/Response#instance_methods).
+
+Example:
+
+```ts
+import { requestAs } from '@contactlab/appy'
+import { match } from 'fp-ts/Either'
+
+// Default method is GET like original `fetch()`
+const users = requestAs('json')('https://reqres.in/api/users')
+
+users().then(
+  match(
+    (err) => console.error(err),
+    (data) => console.log(data)
+  )
+)
+```
+
+**Signature**
+
+```ts
+export declare const requestAs: <K extends 'arrayBuffer' | 'blob' | 'formData' | 'json' | 'text'>(
+  type: K
+) => Req<BodyTypeData<K>>
+```
+
+Added in v5.1.0

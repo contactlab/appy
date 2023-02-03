@@ -5,6 +5,16 @@ nav_order: 2
 
 # Changelog
 
+## [5.1.0](https://github.com/contactlab/appy/releases/tag/5.1.0)
+
+**New Feature:**
+
+- Make non-textual requests (#665)
+
+**Dependencies:**
+
+- [Security] Bump json5 from 1.0.1 to 1.0.2 (#656)
+
 ## [5.0.0](https://github.com/contactlab/appy/releases/tag/5.0.0)
 
 **Breaking:**

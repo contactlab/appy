@@ -30,7 +30,7 @@ Clones a `Response` object with the provided content as body.
 **Signature**
 
 ```ts
-export declare function cloneResponse<A>(from: Response, content: A): Response
+export declare const cloneResponse: <A>(from: Response, content: A) => Response
 ```
 
 Added in v4.0.1
