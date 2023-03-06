@@ -55,7 +55,7 @@
     "eslint-config-prettier": "^8.0.0",
     "fetch-mock": "^9.11.0",
     "fp-ts": "^2.8.0",
-    "glob": "^8.0.1",
+    "glob": "^9.2.1",
     "husky": "^8.0.0",
     "io-ts": "^2.2.13",
     "jest": "^27.1.0",
