@@ -44,7 +44,6 @@
   },
   "devDependencies": {
     "@types/fetch-mock": "^7.3.3",
-    "@types/glob": "^8.0.0",
     "@types/jest": "^27.0.1",
     "@types/node": "^16.11.12",
     "abort-controller": "^3.0.0",
@@ -55,7 +54,6 @@
     "eslint-config-prettier": "^8.0.0",
     "fetch-mock": "^9.11.0",
     "fp-ts": "^2.8.0",
-    "glob": "^8.0.1",
     "husky": "^8.0.0",
     "io-ts": "^2.2.13",
     "jest": "^27.1.0",

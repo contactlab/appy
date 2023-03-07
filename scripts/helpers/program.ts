@@ -1,5 +1,5 @@
 import chalk from 'chalk';
-import {fold} from 'fp-ts/Either';
+import * as E from 'fp-ts/Either';
 import * as RTE from 'fp-ts/ReaderTaskEither';
 import * as TE from 'fp-ts/TaskEither';
 
@@ -10,7 +10,7 @@ export interface Program<C, A> extends RTE.ReaderTaskEither<C, string, A> {}
 export function run<A>(eff: Eff<A>): void {
   eff()
     .then(
-      fold(
+      E.fold(
         e => {
           throw e;
         },
