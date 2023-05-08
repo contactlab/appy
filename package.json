@@ -45,7 +45,7 @@
   "devDependencies": {
     "@types/fetch-mock": "^7.3.3",
     "@types/jest": "^27.0.1",
-    "@types/node": "^16.11.12",
+    "@types/node": "^20.1.0",
     "abort-controller": "^3.0.0",
     "cross-fetch": "^3.0.6",
     "docs-ts": "^0.7.0",
