@@ -1,6 +1,6 @@
-import type {Config} from '@jest/types';
+import type {JestConfigWithTsJest} from 'ts-jest';
 
-const config: Config.InitialOptions = {
+const config: JestConfigWithTsJest = {
   automock: false,
   bail: true,
   clearMocks: true,
@@ -10,12 +10,6 @@ const config: Config.InitialOptions = {
     '<rootDir>/node_modules/'
   ],
   coverageReporters: ['text'],
-  globals: {
-    'ts-jest': {
-      diagnostics: true,
-      isolatedModules: true
-    }
-  },
   maxWorkers: '50%',
   moduleFileExtensions: ['js', 'json', 'node', 'ts'],
   preset: 'ts-jest',
@@ -23,7 +17,16 @@ const config: Config.InitialOptions = {
   setupFiles: ['<rootDir>/test/_setup.ts'],
   testEnvironment: 'jsdom',
   testMatch: undefined,
-  testRegex: '(\\.|/)spec\\.ts$'
+  testRegex: '(\\.|/)spec\\.ts$',
+  transform: {
+    '^.+\\.tsx?$': [
+      'ts-jest',
+      {
+        diagnostics: true,
+        isolatedModules: true
+      }
+    ]
+  }
 };
 
 export default config;
