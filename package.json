@@ -27,7 +27,7 @@
     "postinstall": "husky install",
     "check": "tsc",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
-    "pretest": "npm run lint && npm run check",
+    "pretest": "npm run check && npm run lint",
     "test": "jest --runInBand",
     "prebuild": "rm -rf ./dist",
     "build": "tsc -p ./tsconfig.build.json && tsc -p ./tsconfig.build-es6.json",

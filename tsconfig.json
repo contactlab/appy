@@ -5,6 +5,7 @@
     "module": "commonjs",
     "moduleResolution": "node",
     "esModuleInterop": true,
+    "skipLibCheck": true,
     "lib": ["es6", "dom"],
     "sourceMap": true,
     "declaration": true,
