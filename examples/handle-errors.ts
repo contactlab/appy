@@ -26,32 +26,34 @@ const randomRequest = pipe(
   TE.chain(b => (b ? requestWithResponseError : requestWithRequestError))
 );
 
-randomRequest().then(
-  E.fold(
-    err => {
-      switch (err.type) {
-        case 'RequestError':
-          console.error('[TYPE ]', 'Request error');
-          console.error('[ERROR]', err.error.message);
-          console.debug('[DEBUG]', err.input);
+randomRequest()
+  .then(
+    E.fold(
+      err => {
+        switch (err.type) {
+          case 'RequestError':
+            console.error('[TYPE ]', 'Request error');
+            console.error('[ERROR]', err.error.message);
+            console.debug('[DEBUG]', err.input);
 
-          return;
+            return;
 
-        case 'ResponseError':
-          const {status, statusText, url, headers} = err.response;
+          case 'ResponseError':
+            const {status, statusText, url, headers} = err.response;
 
-          console.error('[TYPE ]', 'Response error');
-          console.error('[ERROR]', err.error.message);
-          console.debug('[DEBUG]', {
-            status,
-            statusText,
-            url,
-            headers
-          });
+            console.error('[TYPE ]', 'Response error');
+            console.error('[ERROR]', err.error.message);
+            console.debug('[DEBUG]', {
+              status,
+              statusText,
+              url,
+              headers
+            });
 
-          return;
-      }
-    },
-    resp => console.log(resp.data)
+            return;
+        }
+      },
+      resp => console.log(resp.data)
+    )
   )
-);
+  .catch(console.error);

@@ -50,13 +50,15 @@ const parsePkgJson = (data: string): E.Either<string, unknown> =>
   pipe(parse(data), E.mapLeft(errMsg));
 
 const distPkgJson = (data: unknown): E.Either<string, string> => {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-assignment
   const clone = Object.assign({}, data) as any;
 
+  /* eslint-disable @typescript-eslint/no-unsafe-member-access */
   delete clone.files;
   delete clone.scripts;
   delete clone.jest;
   delete clone.husky;
+  /* eslint-enable */
 
   return pipe(stringify(clone), E.mapLeft(errMsg));
 };
