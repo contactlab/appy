@@ -32,7 +32,7 @@ interface Payload {
 
 const URL = 'https://reqres.in/api/users';
 
-const parseResp = (data: string): Payload => JSON.parse(data); // this is not safe ;)
+const parseResp = (data: string): Payload => JSON.parse(data) as Payload; // this is not safe ;)
 
 const request = pipe(
   get(URL),

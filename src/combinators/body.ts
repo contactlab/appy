@@ -78,6 +78,7 @@ const toBodyInit = (
   );
 
 const toStringWhenJSON = (body: unknown): E.Either<Error, BodyInit> => {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
   if (Object.getPrototypeOf(body).constructor.name !== 'Object') {
     return E.right(body as BodyInit); // type assertion mandatory...
   }

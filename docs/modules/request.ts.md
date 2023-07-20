@@ -246,9 +246,7 @@ users().then(
 **Signature**
 
 ```ts
-export declare const requestAs: <K extends 'arrayBuffer' | 'blob' | 'formData' | 'json' | 'text'>(
-  type: K
-) => Req<BodyTypeData<K>>
+export declare const requestAs: <K extends BodyTypeKey>(type: K) => Req<BodyTypeData<K>>
 ```
 
 Added in v5.1.0

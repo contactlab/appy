@@ -95,8 +95,7 @@ type BodyTypeKey = {
   [K in keyof Response]-?: Response[K] extends () => Promise<unknown>
     ? K
     : never;
-}[keyof Response] &
-  string;
+}[keyof Response];
 
 type BodyTypeData<K extends BodyTypeKey> = ReturnType<
   Response[K]
@@ -147,11 +146,11 @@ export const requestAs =
           );
         }
 
-        const data = await response[type]();
+        const data = (await response[type]()) as BodyTypeData<K>;
 
         return E.right({response, data});
       })
-      .catch(e => E.left(toRequestError(e, reqInput)));
+      .catch(e => E.left(toRequestError(E.toError(e), reqInput)));
   };
 
 /**

@@ -20,7 +20,7 @@ export function run<A>(eff: Eff<A>): void {
       )
     )
     .catch(e => {
-      console.error(chalk.red('[ERROR]', e)); // eslint-disable-line no-console
+      console.error(chalk.red('[ERROR]', String(e))); // eslint-disable-line no-console
 
       process.exitCode = 1;
     });
