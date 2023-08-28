@@ -1,5 +1,5 @@
 import fetchMock from 'fetch-mock';
-import {right, left} from 'fp-ts/Either';
+import {right, left, isLeft, Left} from 'fp-ts/Either';
 import * as RTE from 'fp-ts/ReaderTaskEither';
 import {pipe} from 'fp-ts/function';
 import * as D from 'io-ts/Decoder';
@@ -126,13 +126,14 @@ test('withDecoder() should fail if response data cannot be parsed', async () => 
 
   const result = await request('http://localhost/api/resources')();
 
-  expect(result).toEqual(
-    left({
-      type: 'ResponseError',
-      error: new SyntaxError('Unexpected token s in JSON at position 1'),
-      response: new Response(content) // <-- cloned
-    })
-  );
+  // --- we need thi trick because `SyntaxError` messages are not consistent between platform versions
+  expect(isLeft(result)).toBe(true);
+
+  const {type, error, response} = (result as Left<appy.ResponseError>).left;
+
+  expect(type).toBe('ResponseError');
+  expect(error.name).toBe('SyntaxError');
+  expect(response).toEqual(new Response(content)); // <-- cloned
 
   // --- ResponseError `response` content is readable
   const txt = await (result as any).left.response.text();
