@@ -52,7 +52,11 @@ export const withDecoder =
             E.chain(decoder),
             E.bimap(
               (e): Err =>
-                toResponseError(e, cloneResponse(resp.response, resp.data)),
+                toResponseError(
+                  e,
+                  cloneResponse(resp.response, resp.data),
+                  resp.input
+                ),
               data => ({...resp, data})
             )
           )

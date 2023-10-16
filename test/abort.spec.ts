@@ -4,6 +4,8 @@ import {pipe} from 'fp-ts/function';
 import {withCancel, withTimeout} from '../src/combinators/abort';
 import * as appy from '../src/index';
 
+type Resp = appy.Resp<string>;
+
 afterEach(() => {
   fetchMock.reset();
 });
@@ -19,13 +21,13 @@ test('withCancel() should set signal on `Req` and make request abortable', async
 
   const result = await request('http://localhost/api/resources')();
 
-  expect(result).toEqual(
-    left({
-      type: 'RequestError',
-      error: new AbortError(),
-      input: ['http://localhost/api/resources', {signal: controller.signal}]
-    })
-  );
+  const err: appy.Err = {
+    type: 'RequestError',
+    error: new AbortError(),
+    input: ['http://localhost/api/resources', {signal: controller.signal}]
+  };
+
+  expect(result).toEqual(left(err));
 });
 
 test('withCancel() should set signal on `Req` and make request abortable - multiple calls', async () => {
@@ -44,13 +46,13 @@ test('withCancel() should set signal on `Req` and make request abortable - multi
 
   const result = await request('http://localhost/api/resources')();
 
-  expect(result).toEqual(
-    left({
-      type: 'RequestError',
-      error: new AbortError(),
-      input: ['http://localhost/api/resources', {signal: controller2.signal}]
-    })
-  );
+  const err: appy.Err = {
+    type: 'RequestError',
+    error: new AbortError(),
+    input: ['http://localhost/api/resources', {signal: controller2.signal}]
+  };
+
+  expect(result).toEqual(left(err));
 });
 
 test('withCancel() should merge provided signal with `Req` one - but `Req` wins', async () => {
@@ -68,13 +70,13 @@ test('withCancel() should merge provided signal with `Req` one - but `Req` wins'
     {signal: controller2.signal}
   ])();
 
-  expect(result).toEqual(
-    left({
-      type: 'RequestError',
-      error: new AbortError(),
-      input: ['http://localhost/api/resources', {signal: controller2.signal}]
-    })
-  );
+  const err: appy.Err = {
+    type: 'RequestError',
+    error: new AbortError(),
+    input: ['http://localhost/api/resources', {signal: controller2.signal}]
+  };
+
+  expect(result).toEqual(left(err));
 });
 
 test('withTimeout() should succeed if we get a response within provided milliseconds', async () => {
@@ -89,7 +91,16 @@ test('withTimeout() should succeed if we get a response within provided millisec
 
   const result = await request('http://localhost/api/resources')();
 
-  expect(result).toEqual(right({response, data: 'a list of resources'}));
+  const resp: Resp = {
+    response,
+    data: 'a list of resources',
+    input: [
+      'http://localhost/api/resources',
+      {signal: new AbortController().signal}
+    ]
+  };
+
+  expect(result).toEqual(right(resp));
 });
 
 test('withTimeout() should succeed if we get a response within provided milliseconds - multiple calls', async () => {
@@ -104,7 +115,16 @@ test('withTimeout() should succeed if we get a response within provided millisec
 
   const result = await request('http://localhost/api/resources')();
 
-  expect(result).toEqual(right({response, data: 'a list of resources'}));
+  const resp: Resp = {
+    response,
+    data: 'a list of resources',
+    input: [
+      'http://localhost/api/resources',
+      {signal: new AbortController().signal}
+    ]
+  };
+
+  expect(result).toEqual(right(resp));
 });
 
 test('withTimeout() should fail if we do not get a response within provided milliseconds', async () => {
@@ -114,16 +134,16 @@ test('withTimeout() should fail if we do not get a response within provided mill
 
   const result = await request('http://localhost/api/resources')();
 
-  expect(result).toEqual(
-    left({
-      type: 'RequestError',
-      error: new AbortError(),
-      input: [
-        'http://localhost/api/resources',
-        {signal: new AbortController().signal}
-      ]
-    })
-  );
+  const err: appy.Err = {
+    type: 'RequestError',
+    error: new AbortError(),
+    input: [
+      'http://localhost/api/resources',
+      {signal: new AbortController().signal}
+    ]
+  };
+
+  expect(result).toEqual(left(err));
 });
 
 test('withTimeout() should fail if we do not get a response within provided milliseconds - multiple calls', async () => {
@@ -133,16 +153,16 @@ test('withTimeout() should fail if we do not get a response within provided mill
 
   const result = await request('http://localhost/api/resources')();
 
-  expect(result).toEqual(
-    left({
-      type: 'RequestError',
-      error: new AbortError(),
-      input: [
-        'http://localhost/api/resources',
-        {signal: new AbortController().signal}
-      ]
-    })
-  );
+  const err: appy.Err = {
+    type: 'RequestError',
+    error: new AbortError(),
+    input: [
+      'http://localhost/api/resources',
+      {signal: new AbortController().signal}
+    ]
+  };
+
+  expect(result).toEqual(left(err));
 });
 
 // --- Helpers

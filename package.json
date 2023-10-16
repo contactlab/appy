@@ -64,11 +64,6 @@
     "ts-node": "^10.0.0",
     "typescript": "^5.1.6"
   },
-  "overrides": {
-    "eslint-config-contactlab": {
-      "typescript": "$typescript"
-    }
-  },
   "lint-staged": {
     "*": "prettier --ignore-unknown --write"
   }

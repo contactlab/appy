@@ -77,6 +77,7 @@ export interface ResponseError {
   type: 'ResponseError'
   error: Error
   response: Response
+  input?: RequestInfoInit
 }
 ```
 
@@ -101,7 +102,11 @@ Creates a `ResponseError` object.
 **Signature**
 
 ```ts
-export declare const toResponseError: (error: Error, response: Response) => ResponseError
+export declare const toResponseError: (
+  error: Error,
+  response: Response,
+  input?: RequestInfoInit | undefined
+) => ResponseError
 ```
 
 Added in v4.0.0
@@ -182,6 +187,7 @@ Added in v4.0.0
 export interface Resp<A> {
   response: Response
   data: A
+  input?: RequestInfoInit
 }
 ```
 

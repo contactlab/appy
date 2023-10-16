@@ -82,6 +82,7 @@ interface ResponseError {
   type: 'ResponseError';
   error: Error;
   response: Response;
+  input?: RequestInfoInit;
 }
 ```
 
@@ -177,7 +178,7 @@ import * as D from 'io-ts/Decoder';
 import {Decoder, toDecoder} from '@contactlab/appy/combinators/decoder';
 
 export const fromIots = <A>(d: D.Decoder<unknown, A>): Decoder<A> =>
-  toDecoder(d.decode, e => new Error(D.draw(e)))
+  toDecoder(d.decode, e => new Error(D.draw(e)));
 ```
 
 ## About `fetch()` compatibility

@@ -57,6 +57,7 @@ export type Combinator = <A>(req: Req<A>) => Req<A>;
 export interface Resp<A> {
   response: Response;
   data: A;
+  input?: RequestInfoInit;
 }
 
 /**
@@ -89,6 +90,7 @@ export interface ResponseError {
   type: 'ResponseError';
   error: Error;
   response: Response;
+  input?: RequestInfoInit;
 }
 
 type BodyTypeKey = {
@@ -141,14 +143,16 @@ export const requestAs =
               new Error(
                 `Request responded with status code ${response.status}`
               ),
-              response
+              response,
+              reqInput
             )
           );
         }
 
         const data = (await response[type]()) as BodyTypeData<K>;
+        const result: Resp<BodyTypeData<K>> = {response, data, input: reqInput};
 
-        return E.right({response, data});
+        return E.right(result);
       })
       .catch(e => E.left(toRequestError(E.toError(e), reqInput)));
   };
@@ -198,8 +202,9 @@ export const toRequestError = (
  */
 export const toResponseError = (
   error: Error,
-  response: Response
-): ResponseError => ({type: 'ResponseError', response, error});
+  response: Response,
+  input?: RequestInfoInit
+): ResponseError => ({type: 'ResponseError', response, error, input});
 
 /**
  * Normalizes the input of a `Req` to a `RequestInfoInit` tuple even when only a single `RequestInfo` is provided.
