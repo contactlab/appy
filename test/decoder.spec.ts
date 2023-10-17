@@ -19,12 +19,16 @@ test('withDecoder() should decodes `Resp` with provided decoder', async () => {
 
   const result = await request('http://localhost/api/resources')();
 
-  expect(result).toEqual(
-    right({
-      response,
-      data: {id: 1234, name: 'foo bar'}
-    })
-  );
+  const resp: appy.Resp<Payload> = {
+    response,
+    data: {id: 1234, name: 'foo bar'},
+    input: [
+      'http://localhost/api/resources',
+      {headers: {Accept: 'application/json'}, method: 'GET'}
+    ]
+  };
+
+  expect(result).toEqual(right(resp));
 
   expect(fetchMock.lastOptions()).toEqual({
     headers: {Accept: 'application/json'},
@@ -63,12 +67,16 @@ test('withDecoder() should decodes `Resp` with provided decoder - response data 
 
   const result = await request('http://localhost/api/resources')();
 
-  expect(result).toEqual(
-    right({
-      response,
-      data: {}
-    })
-  );
+  const resp: appy.Resp<unknown> = {
+    response,
+    data: {},
+    input: [
+      'http://localhost/api/resources',
+      {headers: {Accept: 'application/json'}, method: 'GET'}
+    ]
+  };
+
+  expect(result).toEqual(right(resp));
 });
 
 test('withDecoder() should decodes `Resp` with provided decoder - response data is an object', async () => {
@@ -86,12 +94,12 @@ test('withDecoder() should decodes `Resp` with provided decoder - response data 
 
   const result = await request('http://localhost/api/resources')();
 
-  expect(result).toEqual(
-    right({
-      response,
-      data: {id: 5678, name: 'THIS IS BAAAZ!'}
-    })
-  );
+  const resp: appy.Resp<Payload> = {
+    response,
+    data: {id: 5678, name: 'THIS IS BAAAZ!'}
+  };
+
+  expect(result).toEqual(right(resp));
 });
 
 test('withDecoder() should decodes `Resp` with provided decoder - response data stringified', async () => {
@@ -109,12 +117,12 @@ test('withDecoder() should decodes `Resp` with provided decoder - response data 
 
   const result = await request('http://localhost/api/resources')();
 
-  expect(result).toEqual(
-    right({
-      response,
-      data: 12345678
-    })
-  );
+  const resp: appy.Resp<number> = {
+    response,
+    data: 12345678
+  };
+
+  expect(result).toEqual(right(resp));
 });
 
 test('withDecoder() should fail if response data cannot be parsed', async () => {
@@ -150,13 +158,17 @@ test('withDecoder() should fail if decoding fails', async () => {
 
   const result = await request('http://localhost/api/resources')();
 
-  expect(result).toEqual(
-    left({
-      type: 'ResponseError',
-      error: new Error('decoding failed'),
-      response: new Response(content) // <-- cloned
-    })
-  );
+  const err: appy.Err = {
+    type: 'ResponseError',
+    error: new Error('decoding failed'),
+    response: new Response(content), // <-- cloned
+    input: [
+      'http://localhost/api/resources',
+      {headers: {Accept: 'application/json'}, method: 'GET'}
+    ]
+  };
+
+  expect(result).toEqual(left(err));
 
   // --- ResponseError `response` content is readable
   const txt = await (result as any).left.response.text();

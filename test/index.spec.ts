@@ -2,6 +2,8 @@ import fetchMock from 'fetch-mock';
 import {right} from 'fp-ts/Either';
 import * as appy from '../src/index';
 
+type Resp = appy.Resp<string>;
+
 afterEach(() => {
   fetchMock.reset();
 });
@@ -13,7 +15,13 @@ test('get() should run a GET request', async () => {
 
   const r = await appy.get('http://localhost/api/resources')();
 
-  expect(r).toEqual(right({response, data: 'a list of resources'}));
+  const resp: Resp = {
+    response,
+    data: 'a list of resources',
+    input: ['http://localhost/api/resources', {method: 'GET'}]
+  };
+
+  expect(r).toEqual(right(resp));
 
   expect(fetchMock.called('http://localhost/api/resources', 'GET')).toBe(true);
 });
@@ -28,7 +36,13 @@ test('post() should run a POST request', async () => {
     {body: 'foo'}
   ])();
 
-  expect(r).toEqual(right({response, data: 'a list of resources'}));
+  const resp: Resp = {
+    response,
+    data: 'a list of resources',
+    input: ['http://localhost/api/resources', {method: 'POST', body: 'foo'}]
+  };
+
+  expect(r).toEqual(right(resp));
 
   expect(fetchMock.called('http://localhost/api/resources', 'POST')).toBe(true);
 });
@@ -40,7 +54,13 @@ test('put() should run a PUT request', async () => {
 
   const r = await appy.put(['http://localhost/api/resources', {body: 'foo'}])();
 
-  expect(r).toEqual(right({response, data: 'a list of resources'}));
+  const resp: Resp = {
+    response,
+    data: 'a list of resources',
+    input: ['http://localhost/api/resources', {method: 'PUT', body: 'foo'}]
+  };
+
+  expect(r).toEqual(right(resp));
 
   expect(fetchMock.called('http://localhost/api/resources', 'PUT')).toBe(true);
 });
@@ -55,7 +75,13 @@ test('patch() should run a PATCH request', async () => {
     {body: 'foo'}
   ])();
 
-  expect(r).toEqual(right({response, data: 'a list of resources'}));
+  const resp: Resp = {
+    response,
+    data: 'a list of resources',
+    input: ['http://localhost/api/resources', {method: 'PATCH', body: 'foo'}]
+  };
+
+  expect(r).toEqual(right(resp));
 
   expect(fetchMock.called('http://localhost/api/resources', 'PATCH')).toBe(
     true
@@ -69,7 +95,13 @@ test('del() should run a DELETE request', async () => {
 
   const r = await appy.del('http://localhost/api/resources')();
 
-  expect(r).toEqual(right({response, data: ''}));
+  const resp: Resp = {
+    response,
+    data: '',
+    input: ['http://localhost/api/resources', {method: 'DELETE'}]
+  };
+
+  expect(r).toEqual(right(resp));
 
   expect(fetchMock.called('http://localhost/api/resources', 'DELETE')).toBe(
     true
