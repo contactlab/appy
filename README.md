@@ -50,12 +50,13 @@ type ReqInput = RequestInfo | RequestInfoInit;
 type RequestInfoInit = [RequestInfo, RequestInit];
 ```
 
-`Resp<A>` is an object that carries the original `Response` from a `fetch()` call and the actual retrieved `data` (of type `A`).
+`Resp<A>` is an object that carries the original `Response` from a `fetch()` call, the actual retrieved `data` (of type `A`) and the request's input (optional).
 
 ```ts
 interface Resp<A> {
   response: Response;
   data: A;
+  input?: RequestInfoInit;
 }
 ```
 
@@ -75,7 +76,7 @@ interface RequestError {
 }
 ```
 
-`ResponseError` represents a response error. It carries the generated `Error` and the original `Response` object.
+`ResponseError` represents a response error. It carries the generated `Error`, the original `Response` object and the request's input (optional).
 
 ```ts
 interface ResponseError {
