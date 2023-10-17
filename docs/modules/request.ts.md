@@ -68,7 +68,7 @@ Added in v4.0.0
 
 ## ResponseError (interface)
 
-`ResponseError` represents a response error. It carriess the generated `Error` and the original `Response` object.
+`ResponseError` represents a response error. It carriess the generated `Error`, the original `Response` object and the request's input (optional).
 
 **Signature**
 
@@ -179,7 +179,7 @@ Added in v4.0.0
 
 ## Resp (interface)
 
-`Resp<A>` is an object that carries the original `Response` from a `fetch()` call and the actual retrieved `data` (of type `A`).
+`Resp<A>` is an object that carries the original `Response` from a `fetch()` call, the actual retrieved `data` (of type `A`) and the request's input (optional).
 
 **Signature**
 

@@ -5,6 +5,12 @@ nav_order: 2
 
 # Changelog
 
+## [5.2.0](https://github.com/contactlab/appy/releases/tag/5.2.0)
+
+**New Feature:**
+
+- Forward `RequestInfoInit` to `ResponseError` (#743)
+
 ## [5.1.0](https://github.com/contactlab/appy/releases/tag/5.1.0)
 
 **New Feature:**
